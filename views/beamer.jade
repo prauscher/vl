@@ -1,3 +1,5 @@
+div#waiting Bitte warten…
+
 #short-id= ''
 h1#title= ''
 
@@ -9,7 +11,11 @@ script(type='text/javascript')
    var timer = null;
    var timeout = null;
    
-   var socket = io.connect('/');
+   var socket = io.connect();
+   socket.on('connect', function () {
+      $('#waiting').hide();
+   });
+
    socket.on('current', function (data) {
       $('#short-id').text(data.id);
       $('#title').text(data.title);
