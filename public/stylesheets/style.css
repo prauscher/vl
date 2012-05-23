@@ -1,0 +1,29 @@
+html {
+   background: lightgray;
+}
+
+body {
+   margin: 25px;
+   padding: 25px;
+   border-radius: 15px;
+   background: white;
+}
+
+th { padding: 5px; border: 1px solid silver }
+
+th {
+   text-align: left
+}
+
+.id-col {
+   text-align: right;
+   color: darkgray;
+   font-family: Monospace;
+}
+
+#short-id {
+   float: right;
+   font: 150% monospace;
+   font-weight: bold;
+   color: teal
+}

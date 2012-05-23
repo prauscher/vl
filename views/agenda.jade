@@ -1,0 +1,37 @@
+h1 Tagesordnung
+table
+   thead
+      tr
+         th.id-col #
+         th Titel
+         th &nbsp;
+   tbody
+      - for item in items
+         tr
+            td.id-col= item.short
+            td= item.title
+            td
+               button.agenda-call(data-id=item.id) Aufrufen
+
+script(type='text/javascript')
+   $('.agenda-call').click(function(ev) {
+      var id = $(ev.target).attr('data-id');
+      $.ajax({
+         type: 'PUT',
+         url: '/current',
+         data: { id: id },
+         success: function(data, status) {
+            $(ev.target).attr('style', 'background-color: green');
+         }
+      });
+   });
+
+button#timer-reset Redezeit rücksetzen
+
+script(type='text/javascript')
+   $('#timer-reset').click(function (ev) {
+      $.ajax({
+         type: 'POST',
+         url: '/reset'
+      });
+   });

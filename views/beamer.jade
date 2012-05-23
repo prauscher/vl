@@ -1,0 +1,33 @@
+#short-id= ''
+h1#title= ''
+
+script(type='text/javascript')
+
+span#timer
+
+script(type='text/javascript')
+   var timer = null;
+   var timeout = null;
+   
+   var socket = io.connect('/');
+   socket.on('current', function (data) {
+      $('#short-id').text(data.id);
+      $('#title').text(data.title);
+   });
+
+   socket.on('timer', function (data) {
+      timer = data;
+      $('#timer').text(timer);
+      clearTimeout(timeout);
+      timeout = setTimeout(updatetimer, 1000);
+   });
+
+   function updatetimer() {
+      if (timer != null) {
+         timer = timer + 1;
+         $('#timer').text(timer);
+      } else
+         $('#timer').text('--:--');
+
+      timeout = setTimeout(updatetimer, 1000);
+   }
