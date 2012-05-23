@@ -10,7 +10,8 @@ span#timer
 script(type='text/javascript')
    var timer = null;
    var timeout = null;
-   
+
+   io.set('connect timeout', 1000);
    var socket = io.connect();
    socket.on('connect', function () {
       $('#waiting').hide();
