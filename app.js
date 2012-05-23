@@ -5,10 +5,11 @@
 var express = require('express'),
     routes = require('./routes'),
     redis = require('redis'),
-    db = require('./db.js');
+    socketio = require('socket.io');
 
-var app = module.exports = express.createServer(),
-    io = require('socket.io').listen(app);
+var app = module.exports = express.createServer();
+global.db = redis.createClient();
+global.io = socketio.listen(app);
 
 // Configuration
 
@@ -19,6 +20,10 @@ app.configure(function() {
    app.use(express.methodOverride());
    app.use(app.router);
    app.use(express.static(__dirname + '/public'));
+});
+
+io.configure(function() {
+   io.set('store', new socketio.RedisStore());
 });
 
 app.configure('development', function(){
@@ -39,6 +44,8 @@ app.put('/current', routes.current);
 app.post('/reset', routes.reset);
 
 io.sockets.on('connection', function(socket) {
+   console.log('NEW CONNECTION!!!');
+
    // inform about current agenda item
    db.get('current', function(err, current) {
       db.hget("top:" + current, 'title', function(err, title) {
@@ -52,22 +59,6 @@ io.sockets.on('connection', function(socket) {
       // between server and client don't affect the timer
       var timer = Math.floor((new Date().getTime() - new Date(lastreset).getTime()) / 1000);
       socket.emit('timer', timer);
-   });
-
-   var listener = redis.createClient();
-   listener.subscribe('current');
-   listener.subscribe('lastreset');
-
-   listener.on('message', function(channel, message) {
-      if (channel == "current") {
-         var current = message;
-         db.hget("top:" + current, 'title', function(err, title) {
-            socket.emit('current', { id: current, title: title });
-         });
-      } else if (channel == 'lastreset') {
-         var timer = Math.floor((new Date().getTime() - new Date(message).getTime()) / 1000);
-         socket.emit('timer', timer);
-      }
    });
 });
 

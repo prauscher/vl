@@ -3,10 +3,10 @@
    "version": "0.0.1",
    "private": true,
    "dependencies": {
-      "express": "",
-      "jade": "",
-      "socket.io": "",
       "redis": "",
-      "ws": ""
+      "jade": "",
+      "express": "",
+      "ws": "",
+      "socket.io": ""
    }
 }

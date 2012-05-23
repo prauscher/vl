@@ -1,5 +1,3 @@
-var db = require('../db.js');
-
 exports.index = function(req, res) {
    res.render('index', { title: 'Express' });
 };
@@ -12,7 +10,7 @@ exports.agenda = function(req, res) {
          db.hget('top:'+id, 'title', function(err, title) {
             items[n] = { id: id, title: title };
             if (n == items.length - 1)
-               res.render('agenda', { items: items });
+            res.render('agenda', { items: items });
          });
       });
    });
@@ -23,17 +21,19 @@ exports.beamer = function(req, res) {
 };
 
 exports.current = function(req, res) {
-   db.set('current', req.body.id, function(err) {
-      db.publish('current', req.body.id, function(err) {
+   var current = req.body.id;
+   db.set('current', current, function(err) {
+      db.hget("top:" + current, 'title', function(err, title) {
+         io.sockets.emit('current', { id: current, title: title });
          res.send(200);
       });
    });
 };
 
 exports.reset = function(req, res) {
-   db.set('lastreset', new Date(), function(err) {
-      db.publish('lastreset', new Date(), function(err) {
-         res.send(200);
-      });
+   var now = new Date();
+   db.set('lastreset', now, function(err) {
+      io.sockets.emit('timer', 0);
+      res.send(200);
    });
 };
