@@ -12,8 +12,25 @@ table
             td= item.title
             td
                button.agenda-call(data-id=item.id) ▶
+   tfoot
+      tr
+         td
+            input#item-id
+         td
+            input#item-title
+         td
+            button#submit-item(style='font-weight:bold') +
 
 script(type='text/javascript')
+   $('#submit-item').click(function(ev) {
+      var item = { id: $('#item-id').val(), title: $('#item-title').val() };
+      $.ajax({
+         type: 'PUT',
+         url: '/agenda/' + item.id,
+         data: item
+      });
+   });
+
    $('.agenda-call').click(function(ev) {
       var id = $(ev.target).attr('data-id');
       $.ajax({

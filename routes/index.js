@@ -1,8 +1,8 @@
 exports.index = function(req, res) {
-   res.render('index', { title: 'Express' });
+   res.render('index');
 };
 
-exports.agenda = function(req, res) {
+exports.get_agenda = function(req, res) {
    db.lrange('agenda', 0, -1, function(err, item_ids) {
       var items = new Array(item_ids.length);
 
@@ -12,6 +12,14 @@ exports.agenda = function(req, res) {
             if (n == items.length - 1)
             res.render('agenda', { items: items });
          });
+      });
+   });
+};
+
+exports.put_agenda_item = function(req, res) {
+   db.hset('top:' + req.params.id, 'title', req.body.title, function(err, title) {
+      db.rpush('agenda', req.params.id, function(err) {
+         res.send(200);
       });
    });
 };

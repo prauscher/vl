@@ -37,10 +37,12 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/agenda', routes.agenda);
+app.get('/agenda', routes.get_agenda);
 app.get('/beamer', routes.beamer);
 
 app.put('/current', routes.current);
+app.put('/agenda/:id', routes.put_agenda_item);
+
 app.post('/reset', routes.reset);
 
 io.sockets.on('connection', function(socket) {
