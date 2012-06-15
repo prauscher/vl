@@ -31,15 +31,15 @@ block content
 			socket.emit('registertimers', {});
 		});
 
-		socket.on('beamer-goto:#{beamerid}', function (data) {
+		socket.on('beamer-change:#{beamerid}', function (data) {
 			if (currentSlideID != null) {
 				socket.emit('slide-close', { slideid : currentSlideID });
 			}
-			socket.emit('slide-open', { slideid : data.slideid });
+			socket.emit('slide-open', { slideid : data.beamer.currentslideid });
 			socket.on('slide-change:' + data.slideid, function(changeData) {
 				setBeamerContent(data.slideid, changeData.slide);
 			});
-			setBeamerContent(data.slideid, data.slide);
+			setBeamerContent(data.beamer.currentslideid, data.currentslide);
 		});
 
 		socket.on('beamer-flash:#{beamerid}', function (data) {

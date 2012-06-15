@@ -17,13 +17,13 @@ exports.listen = function (redis, app) {
 		});
 
 		socket.on('registerbeamer', function (data) {
-			socketDb.subscribe('beamer-goto:' + data.beamerid);
+			socketDb.subscribe('beamer-change:' + data.beamerid);
 			socketDb.subscribe('beamer-flash:' + data.beamerid);
 
 			// Initialize Beamerstate
-			db.hget('beamer:' + data.beamerid, 'currentslideid', function (err, currentslideid) {
-				db.hgetall('slides:' + currentslideid, function (err, currentslide) {
-					socket.emit('beamer-goto:' + data.beamerid, {slideid : currentslideid, slide: currentslide});
+			db.hgetall('beamer:' + data.beamerid, function (err, beamer) {
+				db.hgetall('slides:' + beamer.currentslideid, function (err, currentslide) {
+					socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
 				});
 			});
 		});

@@ -3,11 +3,13 @@
  */
 
 var express = require('express'),
-    redis = require('redis'),
+    redis = require('redis');
+    backend = require('./backend');
     socket = require('./socket.js');
 
 var app = module.exports = express.createServer();
 global.db = redis.createClient();
+global.backend = backend;
 global.io = socket.listen(redis, app);
 
 // Configuration

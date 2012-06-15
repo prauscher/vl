@@ -1,13 +1,15 @@
-exports.current_slide = function(req, res) {
-	db.hgetall('slides:' + req.body.slideid, function (err, slide) {
-		db.hset('beamer:' + req.params.beamerid, 'currentslideid', req.body.slideid, function (err) {
-			db.publish('beamer-goto:' + req.params.beamerid, JSON.stringify({ slideid : req.body.slideid, slide: slide }));
-			res.send(200);
-		});
+exports.save = function(req, res) {
+	db.exists('beamer:' + req.params.beamerid, function (err, exists) {
+		if (! exists) {
+			backend.beamer.add(req.params.beamerid, req.body.beamer);
+		} else {
+			backend.beamer.save(req.params.beamerid, req.body.beamer);
+		}
 	});
 };
 
 exports.flash = function (req, res) {
-	db.publish('beamer-flash:' + req.params.beamerid, JSON.stringify({ flash : req.body.flash }));	
-	res.send(200);
+	backend.beamer.flash(req.params.beamerid, req.body.flash, function () {
+		res.send(200);
+	});
 };

@@ -71,7 +71,7 @@ html
 				div.modal-footer
 					button.btn.btn-primary#save-slide Speichern
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-danger.modify-slide#delete-slide Löschen
+					button.btn.btn-danger#delete-slide Löschen
 
 		div#timers.container
 			div#timeroptions.btn-group
@@ -83,7 +83,18 @@ html
 					th Restzeit
 					th Optionen
 
-			div#options.modal
+			div#timer-options.modal
+				div.modal-header
+					button.close(data-dismatch="modal") ×
+					h3 Timer anlegen
+				form.form-horizontal.modal-body
+					input(type="text")#title
+					input(type="text")#color
+					input(type="text")#value.span1
+				div.modal-footer
+					button.btn.btn-primary#save-timer Speichern
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-danger#delete-timer Löschen
 
 		script(type="text/javascript")
 			$(".navbar .nav li").removeClass("active");
@@ -103,7 +114,7 @@ html
 			});
 
 			$("#new-timer").click(function () {
-				showTimerOptions(numm, {});
+				showTimerOptions(null, {});
 			});
 
 			$("#new-flash").click(function () {
@@ -134,9 +145,11 @@ html
 			function showSlideOptions(slideid, slide) {
 				if (slideid == null) {
 					slideid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
-					$("#agenda #options .modify-slide").hide();
+					slide.hidden = true;
+					slide.isdone = false;
+					$("#agenda #options #delete-slide").hide();
 				} else {
-					$("#agenda #options .modify-slide").show();
+					$("#agenda #options #delete-slide").show();
 				}
 
 				$("#agenda #options input#title").val(slide.title);
@@ -144,13 +157,8 @@ html
 				$("#agenda #options #save-slide").unbind("click");
 				$("#agenda #options #save-slide").click(function() {
 					slide.title = $("#agenda #options #title").val();
-					$.ajax({
-						type: 'PUT',
-						url: '/agenda/' + slideid + '/save',
-						data: { slide : slide },
-						success: function() {
-							$("#agenda #options").modal('hide');
-						}
+					saveSlide(slideid, slide, function() {
+						$("#agenda #options").modal('hide')
 					});
 				});
 				$("#agenda #options #delete-slide").unbind("click");
@@ -167,10 +175,29 @@ html
 				$("#agenda #options").modal();
 			}
 
+			function saveSlide(slideid, slide, callbackSuccess) {
+				$.ajax({
+					type: 'PUT',
+					url: '/agenda/' + slideid + '/save',
+					data: { slide : slide },
+					success: callbackSuccess
+				});
+			}
+
 			function updateSlideData(slideid, slide) {
 				$("#agenda #slide-" + slideid + " .title").text(slide.title);
-				$("#agenda #slide-" + slideid + " .isdone").toggleClass("checked", slide.isdone == "true");
-				$("#agenda #slide-" + slideid + " .ishidden").toggleClass("checked", slide.hidden == "true");
+
+				$("#agenda #slide-" + slideid + " .isdone").unbind("click");
+				$("#agenda #slide-" + slideid + " .isdone").toggleClass("checked", slide.isdone == "true").click(function () {
+					slide.isdone = ! $(this).hasClass("checked");
+					saveSlide(slideid, slide);
+				});
+
+				$("#agenda #slide-" + slideid + " .ishidden").unbind("click");
+				$("#agenda #slide-" + slideid + " .ishidden").toggleClass("checked", slide.hidden == "true").click(function () {
+					slide.hidden = ! $(this).hasClass("checked");
+					saveSlide(slideid, slide);
+				});
 
 				$("#agenda #slide-" + slideid + " .title").unbind("click");
 				$("#agenda #slide-" + slideid + " .title").click(function() {
@@ -178,17 +205,30 @@ html
 				});
 			}
 
+			function showTimerOptions(timerid, timer) {
+				
+				$("#timers #timer-options").modal();
+			}
+
 			function updateBeamerData(beamerid, beamer) {
 				$("#agenda .select-beamer-" + beamerid).css("background-color", beamer.color);
+				$("#agenda .select-beamer-" + beamerid).removeClass("active");
+				$("#agenda #slide-" + beamer.currentslideid + " .select-beamer-" + beamerid).addClass("active");
+			}
+
+			function saveBeamer(beamerid, beamer, callbackSuccess) {
+				$.ajax({
+					type: 'PUT',
+					url: '/beamer/' + beamerid + "/save",
+					data: { beamer : beamer },
+					success: callbackSuccess
+				});
 			}
 
 			function generateSelectBeamerButton(beamerid, slideid) {
 				return $("<img>").addClass("select-beamer").addClass("select-beamer-" + beamerid).css("background-color", beamers[beamerid].color).attr("title","Beamer: " + beamerid).click(function () {
-					$.ajax({
-						type: 'POST',
-						url: '/beamer/' + beamerid + "/current_slide",
-						data: { slideid: slideid }
-					});
+					beamers[beamerid].currentslideid = slideid;
+					saveBeamer(beamerid, beamers[beamerid]);
 				});
 			}
 
@@ -206,10 +246,6 @@ html
 			socket.on('beamer-add', function (data) {
 				socket.on('beamer-change:' + data.beamerid, function (changeData) {
 					updateBeamerData(data.beamerid, changeData.beamer);
-				});
-				socket.on('beamer-goto:' + data.beamerid, function (changeData) {
-					$("#agenda .select-beamer-" + data.beamerid).removeClass("active");
-					$("#agenda #slide-" + changeData.slideid + " .select-beamer-" + data.beamerid).addClass("active");
 				});
 				socket.emit('registerbeamer', { beamerid : data.beamerid });
 				if (! beamers[data.beamerid]) {
@@ -252,20 +288,8 @@ html
 						selectBeamers.append(generateSelectBeamerButton(beamerid, data.slideid));
 					}
 					var options = $("<td>");
-					options.append($("<img>").addClass("isdone").attr("title","Erledigt").click(function() {
-						$.ajax({
-							type: 'POST',
-							url: '/agenda/' + data.slideid + '/isdone',
-							data: { isdone : ! $(this).hasClass("checked") }
-						});
-					}));
-					options.append($("<img>").addClass("ishidden").attr("title","Versteckt").click(function () {
-						$.ajax({
-							type: 'POST',
-							url: '/agenda/' + data.slideid + '/hidden',
-							data: { hidden : ! $(this).hasClass("checked") }
-						});
-					}));
+					options.append($("<img>").addClass("isdone").attr("title","Erledigt"));
+					options.append($("<img>").addClass("ishidden").attr("title","Versteckt"));
 
 					item.append(selectMarker);
 					item.append($("<td>").addClass("title"));
