@@ -11,11 +11,13 @@ html
 			div.navbar-inner
 				div.container
 					a.brand Versammlungsleiter
-					div.nav
+					ul.nav
 						li.agenda.active
 							a#nav-agenda(href="#agenda") Tagesordnung
 						li.timers
 							a#nav-timers(href="#timers") Timer
+					div.pull-right.nav
+						a#new-flash.btn.btn-danger.btn Info
 
 		script(type="text/javascript")
 			$("#nav-agenda").click(function() {
@@ -30,6 +32,25 @@ html
 				$("body>.container").hide();
 				$("body>#timers").show();
 			});
+
+		div#flash-options.modal
+			div.modal-header
+				button.close(data-dismiss="modal") ×
+				h3 Bekanntmachung erstellen
+			form.form-horizontal.modal-body
+				textarea#text
+				label
+					input(type="text",value="30")#timeout.span1
+					| Sekunden
+				label
+					select#type
+						option(value="danger") Error or danger
+						option(value="information") Information
+						option(value="success") Success
+				div#select-beamers
+			div.modal-footer
+				button.btn.btn-primary#save-flash Anzeigen
+				button.btn(data-dismiss="modal") Abbrechen
 
 		div#agenda.container
 			div#slideoptions.btn-group
@@ -83,6 +104,31 @@ html
 
 			$("#new-timer").click(function () {
 				showTimerOptions(numm, {});
+			});
+
+			$("#new-flash").click(function () {
+				$("#flash-options #select-beamers").empty();
+				for (var beamerid in beamers) {
+					var beamerSelect = $("<label>").append($("<input>").attr("type", "checkbox").val(beamerid).attr("checked", "checked")).append(beamerid);
+					$("#flash-options #select-beamers").append(beamerSelect);
+				}
+
+				$("#flash-options #save-flash").unbind("click");
+				$("#flash-options #save-flash").click(function () {
+					var flash = { text : $("#flash-options #text").val(), type : $("#flash-options #type option:selected").val(), timeout : $("#flash-options #timeout").val() };
+					$("#flash-options #select-beamers input").each(function (n, beamerCheckbox) {
+						$.ajax({
+							type: 'POST',
+							url: '/beamer/' + $(beamerCheckbox).val() + '/flash',
+							data: { flash: flash },
+							success: function() {
+								$("#flash-options").modal('hide');
+							}
+						});
+					});
+				});
+
+				$("#flash-options").modal();
 			});
 
 			function showSlideOptions(slideid, slide) {

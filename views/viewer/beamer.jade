@@ -42,6 +42,6 @@ block content
 			setBeamerContent(data.slideid, data.slide);
 		});
 
-		socket.on('beamer-flash', function (data) {
-			alert(data.text);
+		socket.on('beamer-flash:#{beamerid}', function (data) {
+			alert(data.flash.text);
 		});

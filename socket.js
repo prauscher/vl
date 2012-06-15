@@ -18,7 +18,7 @@ exports.listen = function (redis, app) {
 
 		socket.on('registerbeamer', function (data) {
 			socketDb.subscribe('beamer-goto:' + data.beamerid);
-			socketDb.subscribe('beamer-flash');
+			socketDb.subscribe('beamer-flash:' + data.beamerid);
 
 			// Initialize Beamerstate
 			db.hget('beamer:' + data.beamerid, 'currentslideid', function (err, currentslideid) {
@@ -29,9 +29,9 @@ exports.listen = function (redis, app) {
 		});
 
 		socket.on('registertimers', function (data) {
-			socketDb.subscribe('timer-init');
-			socketDb.subscribe('timer-start');
-			socketDb.subscribe('timer-stop');
+			socketDb.subscribe('timer-add');
+			socketDb.subscribe('timer-change');
+			socketDb.subscribe('timer-delete');
 		});
 
 		socket.on('registeragenda', function (data) {

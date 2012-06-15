@@ -6,3 +6,8 @@ exports.current_slide = function(req, res) {
 		});
 	});
 };
+
+exports.flash = function (req, res) {
+	db.publish('beamer-flash:' + req.params.beamerid, JSON.stringify({ flash : req.body.flash }));	
+	res.send(200);
+};
