@@ -1,0 +1,14 @@
+.select-beamer
+	{width:16px; height:16px; opacity:0.5;}
+.select-beamer.active
+	{opacity:1;}
+
+.isdone
+	{width:16px; height:16px; opacity:0.5; background-color:#2233cc;}
+.isdone.checked
+	{opacity:1;}
+
+.ishidden
+	{width:16px; height:16px; opacity:0.5; background-color:#cc3322;}
+.ishidden.checked
+	{opacity:1;}

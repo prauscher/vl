@@ -1,0 +1,47 @@
+extends layout
+
+block content
+	div#waiting Bitte warten…
+
+	h1#title= ''
+	div#content= ''
+
+	script(type='text/javascript')
+		var currentSlideID = null;
+
+		function setBeamerContent(slideid, slide) {
+			currentSlideID = slideid;
+			$('#title').text(slide.title);
+			if (slide.type == 'text') {
+				$('#content').text(slide.text);
+			} else if (slide.type == 'html') {
+				$('#content').html(slide.html);
+			} else if (slide.type == 'agenda') {
+				$('#content').text("OHAI!");
+			} else {
+				$('#content').text("");
+			}	
+		}
+
+	script(type='text/javascript')
+		var socket = io.connect();
+		socket.on('connect', function () {
+			$('#waiting').hide();
+			socket.emit('registerbeamer', {beamerid: '#{beamerid}'});
+			socket.emit('registertimers', {});
+		});
+
+		socket.on('beamer-goto:#{beamerid}', function (data) {
+			if (currentSlideID != null) {
+				socket.emit('slide-close', { slideid : currentSlideID });
+			}
+			socket.emit('slide-open', { slideid : data.slideid });
+			socket.on('slide-change:' + data.slideid, function(changeData) {
+				setBeamerContent(data.slideid, changeData.slide);
+			});
+			setBeamerContent(data.slideid, data.slide);
+		});
+
+		socket.on('beamer-flash', function (data) {
+			alert(data.text);
+		});
