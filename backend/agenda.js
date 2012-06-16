@@ -1,9 +1,13 @@
 exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
-		db.publish('slide-add', JSON.stringify({ slideid : slideid, slide : slide }));
-		db.zadd('slides:' + slide.parentid + ":children", slidecount + 1, slideid, function (err) {});
+		exports.save(slideid, slide, function() {
+			db.publish('slide-add', JSON.stringify({ slideid : slideid, slide : slide }));
+			db.zadd('slides:' + slide.parentid + ":children", slidecount + 1, slideid, function (err) {});
 
-		exports.save(slideid, slide, callbackSuccess);
+			if (callbackSuccess) {
+				callbackSuccess();
+			}
+		});
 	});
 }
 
