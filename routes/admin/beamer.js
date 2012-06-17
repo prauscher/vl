@@ -1,5 +1,5 @@
 exports.save = function(req, res) {
-	db.exists('beamer:' + req.params.beamerid, function (err, exists) {
+	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {
 			backend.beamer.add(req.params.beamerid, req.body.beamer);
 		} else {

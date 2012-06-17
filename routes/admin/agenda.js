@@ -1,15 +1,15 @@
 exports.save = function (req, res) {
 	var slide = req.body.slide;
 
-	db.exists('slides:' + req.params.slideid, function (err, exists) {
+	backend.agenda.exists(req.params.slideid, function (exists) {
 		if (! exists) {
-			db.get('rootslideid', function (err, rootslideid) {
-				db.exists('slides:' + rootslideid, function (err, parentexists) {
+			backend.agenda.getRootSlideID(function (rootslideid) {
+				backend.agenda.exists(rootslideid, function (parentexists) {
 					if (parentexists) {
 						slide.parentid = rootslideid;
 					} else {
 						delete slide.parentid;
-						db.set('rootslideid', req.params.slideid);
+						backend.agenda.setRootSlideID(req.params.slideid);
 					}
 					backend.agenda.add(req.params.slideid, slide, function() {
 						res.send(200);

@@ -7,7 +7,7 @@ exports.beamer = function(req,res) {
 };
 
 exports.beamer_default = function(req,res) {
-	db.get('defaultbeamerid', function(err,beamerid) {
+	backend.beamer.getDefaultBeamerID(function (beamerid) {
 		res.render('viewer/beamer', { beamerid : beamerid });
 	});
 };

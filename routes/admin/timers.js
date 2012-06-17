@@ -1,5 +1,5 @@
 exports.save = function (req, res) {
-	db.exists('timers:' + req.params.timerid, function (err, exists) {
+	backend.timers.exists(req.params.timerid, function (exists) {
 		if (! exists) {
 			backend.timers.add(req.params.timerid, req.body.timer, function () {
 				res.send(200);

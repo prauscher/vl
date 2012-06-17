@@ -1,3 +1,9 @@
+exports.exists = function (timerid, callback) {
+	db.exists('timers:' + timerid, function (err, exists) {
+		callback(exists);
+	});
+}
+
 exports.get = function(timerid, callback) {
 	db.hgetall('timers:' + timerid, function(err, timer) {
 		callback(sanitizeTimer(timer));

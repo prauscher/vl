@@ -1,3 +1,23 @@
+exports.getRootSlideID = function (callback) {
+	db.get('rootslideid', function (err, rootslideid) {
+		callback(rootslideid);
+	});
+}
+
+exports.setRootSlideID = function (rootslideid, callbackSuccess) {
+	db.set('rootslideid', rootslideid, function () {
+		if (callbackSuccess) {
+			callbackSuccess();
+		}
+	});
+}
+
+exports.exists = function (slideid, callback) {
+	db.exists('slides:' + slideid, function (err, exists) {
+		callback(exists);
+	});
+}
+
 exports.get = function(slideid, callback) {
 	db.hgetall('slides:' + slideid, function (err, slide) {
 		callback(slide);
