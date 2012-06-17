@@ -13,3 +13,19 @@ exports.flash = function (req, res) {
 		res.send(200);
 	});
 };
+
+exports.showtimer = function (req, res) {
+	backend.timers.get(req.body.timerid, function (timer) {
+		backend.beamer.showtimer(req.params.beamerid, req.body.timerid, timer, function() {
+			res.send(200);
+		});
+	});
+}
+
+exports.hidetimer = function (req, res) {
+	backend.timers.get(req.body.timerid, function (timer) {
+		backend.beamer.hidetimer(req.params.beamerid, req.body.timerid, timer, function() {
+			res.send(200);
+		});
+	});
+}

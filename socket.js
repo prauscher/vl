@@ -19,11 +19,21 @@ exports.listen = function (redis, app) {
 		socket.on('registerbeamer', function (data) {
 			socketDb.subscribe('beamer-change:' + data.beamerid);
 			socketDb.subscribe('beamer-flash:' + data.beamerid);
+			socketDb.subscribe('beamer-showtimer:' + data.beamerid);
+			socketDb.subscribe('beamer-hidetimer:' + data.beamerid);
 
 			// Initialize Beamerstate
 			db.hgetall('beamer:' + data.beamerid, function (err, beamer) {
 				db.hgetall('slides:' + beamer.currentslideid, function (err, currentslide) {
 					socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
+				});
+			});
+
+			db.smembers('beamer:' + data.beamerid + ':timers', function(err, timerids) {
+				timerids.forEach(function (timerid, n) {
+					backend.timers.get(timerid, function (timer) {
+						socket.emit('beamer-showtimer:' + data.beamerid, { timerid : timerid, timer : timer });
+					});
 				});
 			});
 		});
@@ -32,6 +42,15 @@ exports.listen = function (redis, app) {
 			socketDb.subscribe('timer-add');
 			socketDb.subscribe('timer-change');
 			socketDb.subscribe('timer-delete');
+
+			db.smembers('timers', function (err, timerids) {
+				timerids.forEach(function(timerid, n) {
+					backend.timers.get(timerid, function (timer) {
+						socketDb.subscribe('timer-change:' + timerid);
+						socket.emit('timer-add', {timerid: timerid, timer: timer});
+					});
+				});
+			});
 		});
 
 		socket.on('registeragenda', function (data) {

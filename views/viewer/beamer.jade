@@ -3,8 +3,9 @@ extends layout
 block content
 	div#waiting Bitte warten…
 
-	h1#title= ''
-	div#content= ''
+	h1#title
+	div#content
+	div#timers
 
 	script(type='text/javascript')
 		var currentSlideID = null;
@@ -21,6 +22,42 @@ block content
 			} else {
 				$('#content').text("");
 			}	
+		}
+
+	script(type='text/javascript')
+		var timerCurrent = {};
+		var timerTimeout = {};
+
+		function updateTimerData(timerid, timer) {
+			timerCurrent[timerid] = timer.current;
+
+			if (timerid in timerTimeout) {
+				window.clearInterval(timerTimeout[timerid]);
+				delete timerTimeout[timerid];
+			}
+			if (timer.running == "true") {
+				timerTimeout[timerid] = window.setInterval(function () {
+					timerCurrent[timerid] -= 0.5;
+					if (timerCurrent[timerid] < 0) {
+						timerCurrent[timerid] = 0;
+					}
+					$("#timers #timer-" + timerid).text(formatTime(timerCurrent[timerid]));
+				}, 500);
+			}
+			$("#timers #timer-" + timerid).css("background-color", timer.color);
+			$("#timers #timer-" + timerid).text(formatTime(timerCurrent[timerid]));
+		}
+
+		function formatTime(time) {
+			var seconds = Math.floor(time % 60);
+			var minutes = Math.floor(time / 60);
+			if (seconds < 10) {
+				seconds = "0" + seconds;
+			}
+			if (minutes < 10) {
+				minutes = "0" + minutes;
+			}
+			return minutes + ":" + seconds;
 		}
 
 	script(type='text/javascript')
@@ -43,5 +80,25 @@ block content
 		});
 
 		socket.on('beamer-flash:#{beamerid}', function (data) {
-			alert(data.flash.text);
+			
+		});
+
+		socket.on('beamer-showtimer:#{beamerid}', function (data) {
+			socket.on('timer-change:' + data.timerid, function (timerData) {
+				updateTimerData(data.timerid, timerData.timer);
+			});
+			if ($("#timers #timer-" + data.timerid).length < 1) {
+				var timer = $("<div>").attr("id", "timer-" + data.timerid);
+				timer.addClass("timer");
+
+				// Insert hidden to allow effects
+				timer.hide();
+				$("#timers").append(timer);
+			}
+			updateTimerData(data.timerid, data.timer);
+			$("#timers #timer-" + data.timerid).show();
+		});
+
+		socket.on('beamer-hidetimer:#{beamerid}', function (data) {
+			$("#timers #timer-" + data.timerid).hide();
 		});
