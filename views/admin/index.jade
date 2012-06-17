@@ -12,14 +12,23 @@ html
 				div.container
 					a.brand Versammlungsleiter
 					ul.nav
-						li.agenda.active
+						li.beamers
+							a#nav-beamers(href="#beamers") Beamereinstellungen
+						li.agenda
 							a#nav-agenda(href="#agenda") Tagesordnung
 						li.timers
 							a#nav-timers(href="#timers") Timer
 					div.pull-right.nav
+						a#identify-beamers.btn.btn-info Identifizieren
 						a#new-flash.btn.btn-danger.btn Info
 
 		script(type="text/javascript")
+			$("#nav-beamers").click(function() {
+				$(".navbar .nav li").removeClass("active");
+				$(".navbar .nav .beamers").addClass("active");
+				$("body>.container").hide();
+				$("body>#beamers").show();
+			});
 			$("#nav-agenda").click(function() {
 				$(".navbar .nav li").removeClass("active");
 				$(".navbar .nav .agenda").addClass("active");
@@ -51,6 +60,9 @@ html
 			div.modal-footer
 				button.btn.btn-primary#save-flash Anzeigen
 				button.btn(data-dismiss="modal") Abbrechen
+
+		div#beamers.container
+			| Test
 
 		div#agenda.container
 			div#slideoptions.btn-group
@@ -116,6 +128,14 @@ html
 
 			$("#new-timer").click(function () {
 				showTimerOptions(null, {});
+			});
+
+			$("#identify-beamers").click(function () {
+				$.ajax({
+					type: 'POST',
+					url: '/beamer-identify',
+					data: { timeout: 10 }
+				});
 			});
 
 			$("#new-flash").click(function () {

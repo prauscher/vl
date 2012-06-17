@@ -29,3 +29,8 @@ exports.hidetimer = function (req, res) {
 		});
 	});
 }
+
+exports.identify = function (req, res) {
+	db.publish('beamer-identify', JSON.stringify({ timeout : req.body.timeout }));
+	res.send(200);
+}

@@ -17,6 +17,7 @@ exports.listen = function (redis, app) {
 		});
 
 		socket.on('registerbeamer', function (data) {
+			socketDb.subscribe('beamer-identify');
 			socketDb.subscribe('beamer-change:' + data.beamerid);
 			socketDb.subscribe('beamer-flash:' + data.beamerid);
 			socketDb.subscribe('beamer-showtimer:' + data.beamerid);

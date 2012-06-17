@@ -3,6 +3,7 @@ extends layout
 block content
 	div#waiting Bitte warten…
 
+	div#identify ..
 	div#flashs
 	div#timers
 	h1#title
@@ -10,6 +11,7 @@ block content
 
 	script(type='text/javascript')
 		var currentSlideID = null;
+		$("#identify").hide();
 
 		function setBeamerContent(slideid, slide) {
 			currentSlideID = slideid;
@@ -66,7 +68,13 @@ block content
 		socket.on('connect', function () {
 			$('#waiting').hide();
 			socket.emit('registerbeamer', {beamerid: '#{beamerid}'});
-			socket.emit('registertimers', {});
+		});
+
+		socket.on('beamer-identify', function (data) {
+			$("#identify").show();
+			window.setTimeout(function () {
+				$("#identify").hide();
+			}, data.timeout * 1000);
 		});
 
 		socket.on('beamer-change:#{beamerid}', function (data) {
@@ -78,6 +86,7 @@ block content
 				setBeamerContent(data.slideid, changeData.slide);
 			});
 			setBeamerContent(data.beamer.currentslideid, data.currentslide);
+			$("#identify").css("background-color", data.beamer.color);
 		});
 
 		socket.on('beamer-flash:#{beamerid}', function (data) {

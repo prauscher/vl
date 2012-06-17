@@ -9,6 +9,8 @@ var routes = require('./routes'),
 
 app.get('/', routes.admin.index);
 
+app.post('/beamer-identify', routes.admin.beamer.identify);
+
 app.post('/agenda/:slideid/delete', routes.admin.agenda.delete);
 app.put('/agenda/:slideid/save', routes.admin.agenda.save);
 
