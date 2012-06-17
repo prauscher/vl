@@ -53,11 +53,10 @@ socket.prototype.registerSlide = function (slideid, updateCallback) {
 	this.socketIo.on('slide-change:' + slideid, function (data) {
 		updateCallback(slideid, data.slide);
 	});
-	this.socketIo.emit('registerslide', { slideid : slideid });
 }
 
 socket.prototype.unregisterSlide = function (slideid) {
-	this.socketIo.emit('unregisterslide', { slideid : slideid });
+	this.socketIo.removeAllListeners('slide-change:' + slideid);
 }
 
 socket.prototype.registerTimers = function (callbacks) {
@@ -74,9 +73,8 @@ socket.prototype.registerTimer = function (timerid, callbacks) {
 	this.socketIo.on('timer-change:' + timerid, function (updateData) {
 		callbacks.update(timerid, updateData.timer);
 	});
-	socket.socketIo.emit('registertimer', { timerid : timerid });
 }
 
 socket.prototype.unregisterTimer = function (timerid) {
-	socket.socketIo.emit('unregistertimer', { timerid : timerid });
+	this.socketIo.removeAllListeners('timer-change:' + timerid);
 }
