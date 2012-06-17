@@ -43,7 +43,8 @@ exports.getAll = function(callback) {
 exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {
-			db.publish('slide-add', JSON.stringify({ slideid : slideid, slide : slide }));
+			io.sockets.emit('slide-add', { slideid : slideid, slide : slide });
+			//db.publish('slide-add', JSON.stringify({ slideid : slideid, slide : slide }));
 			db.zadd('slides:' + slide.parentid + ":children", slidecount + 1, slideid, function (err) {});
 
 			if (callbackSuccess) {

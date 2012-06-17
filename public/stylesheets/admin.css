@@ -3,7 +3,7 @@
 .select-beamer.active
 	{opacity:1;}
 
-.isdone.icon-ok-circle
+.isundone.icon-ok-circle
 	{opacity:0.5;}
 
 #timers .color
