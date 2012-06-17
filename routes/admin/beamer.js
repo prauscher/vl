@@ -31,6 +31,7 @@ exports.hidetimer = function (req, res) {
 }
 
 exports.identify = function (req, res) {
-	db.publish('beamer-identify', JSON.stringify({ timeout : req.body.timeout }));
-	res.send(200);
+	backend.beamer.identify(req.body.timeout, function () {
+		res.send(200);
+	});
 }

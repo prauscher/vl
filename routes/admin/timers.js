@@ -19,7 +19,6 @@ exports.delete = function (req, res) {
 }
 
 exports.start = function (req, res) {
-	console.log("start");
 	update(req.body.timer);
 
 	req.body.timer.running = "true";
@@ -29,7 +28,6 @@ exports.start = function (req, res) {
 }
 
 exports.pause = function (req, res) {
-	console.log("pause");
 	update(req.body.timer);
 	
 	req.body.timer.running = "false";
@@ -39,7 +37,6 @@ exports.pause = function (req, res) {
 }
 
 exports.stop = function (req, res) {
-	console.log("stop");
 	update(req.body.timer);
 	
 	req.body.timer.running = "false";
@@ -49,11 +46,10 @@ exports.stop = function (req, res) {
 	});
 }
 
-// Set started-value to current Date
+// Set started-value to current Date, eventually setting value
 function update(timer) {
 	var now = new Date();
 	if (timer.running == "true") {
-		console.log("debug");
 		timer.startedValue = Math.max(0, timer.startedValue - (now.getTime() - new Date(timer.started).getTime()) / 1000);
 	}
 	timer.started = now;

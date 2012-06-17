@@ -75,3 +75,10 @@ exports.hidetimer = function(beamerid, timerid, timer, callbackSuccess) {
 		}
 	});
 }
+
+exports.identify = function(timeout, callbackSuccess) {
+	db.publish('beamer-identify', JSON.stringify({ timeout : timeout }));
+	if (callbackSuccess) {
+		callbackSuccess();
+	}
+}
