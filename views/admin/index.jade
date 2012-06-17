@@ -6,6 +6,7 @@ html
 		link(rel='stylesheet',href='/bootstrap/css/bootstrap-responsive.min.css')
 		link(rel='stylesheet',href='/stylesheets/admin.css')
 		script(src='/socket.io/socket.io.js')
+		script(src='/javascript/timerClient.js')
 		script(src='/javascript/apiClient/beamer.js')
 		script(src='/javascript/apiClient/agenda.js')
 		script(src='/javascript/apiClient/timers.js')
@@ -186,30 +187,34 @@ html
 						$("#agenda #slide-" + slideid).remove();
 					}
 				});
-				socket.registerTimers({
-					init : function (timerid, timer) {
-						if ($("#timer-" + timerid).length < 1) {
-							timers[timerid] = timer;
-
-							var selectBeamer = $("<td>");
-							for (var beamerid in beamers) {
-								selectBeamer.append(generateSelectBeamerTimerButton(beamerid, timerid));
-							}
-
-							var item = $("<tr>").attr("id", "timer-" + timerid);
-							item.append($("<td>").append($("<img>").addClass('color')));
-							item.append($("<td>").addClass("title"));
-							item.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")));
-							item.append(selectBeamer);
-							item.append($("<td>")
-								.append($("<i>").addClass("start").addClass("icon-play"))
-								.append($("<i>").addClass("pause").addClass("icon-pause"))
-								.append($("<i>").addClass("stop").addClass("icon-stop")));
-
-							$("#timers #timers").append(item);
-						}				
-					},
+				var timerClient = new TimerClient({
 					update : updateTimerData,
-					delete : function (timerid, timer) {}
+					countdown : function (timerid, currentValue) {
+						$("#timers #timer-" + timerid + " .current").text(Math.floor(currentValue));
+					}
 				});
+				timerClient.init = function (timerid, timer) {
+					if ($("#timer-" + timerid).length < 1) {
+						timers[timerid] = timer;
+
+						var selectBeamer = $("<td>");
+						for (var beamerid in beamers) {
+							selectBeamer.append(generateSelectBeamerTimerButton(beamerid, timerid));
+						}
+
+						var item = $("<tr>").attr("id", "timer-" + timerid);
+						item.append($("<td>").append($("<img>").addClass('color')));
+						item.append($("<td>").addClass("title"));
+						item.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")));
+						item.append(selectBeamer);
+						item.append($("<td>")
+							.append($("<i>").addClass("start").addClass("icon-play"))
+							.append($("<i>").addClass("pause").addClass("icon-pause"))
+							.append($("<i>").addClass("stop").addClass("icon-stop")));
+
+						$("#timers #timers").append(item);
+					}				
+				};
+				timerClient.delete = function (timerid, timer) {};
+				socket.registerTimers(timerClient);
 			});

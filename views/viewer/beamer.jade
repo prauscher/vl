@@ -2,6 +2,7 @@ extends layout
 
 append scripts
 	script(src='/javascript/apiClient/socket.js')
+	script(src='/javascript/timerClient.js')
 
 block content
 	div#waiting Bitte warten…
@@ -14,9 +15,6 @@ block content
 
 	script(type='text/javascript')
 		var currentSlideID = null;
-		var timerCurrent = {};
-		var timerTimeout = {};
-		var timerLastRun = {};
 
 		$("#identify").hide();
 
@@ -32,29 +30,6 @@ block content
 			} else {
 				$('#content').text("");
 			}	
-		}
-
-		function updateTimerData(timerid, timer) {
-			timerCurrent[timerid] = timer.current;
-			timerLastRun[timerid] = new Date();
-
-			if (timerid in timerTimeout) {
-				window.clearInterval(timerTimeout[timerid]);
-				delete timerTimeout[timerid];
-			}
-			if (timer.running == "true") {
-				timerTimeout[timerid] = window.setInterval(function () {
-					var now = new Date();
-					timerCurrent[timerid] -= (now.getTime() - timerLastRun[timerid].getTime()) / 1000;
-					if (timerCurrent[timerid] < 0) {
-						timerCurrent[timerid] = 0;
-					}
-					timerLastRun[timerid] = now;
-					$("#timers #timer-" + timerid).text(formatTime(timerCurrent[timerid]));
-				}, 500);
-			}
-			$("#timers #timer-" + timerid).css("background-color", timer.color);
-			$("#timers #timer-" + timerid).text(formatTime(timerCurrent[timerid]));
 		}
 
 		function formatTime(time) {
@@ -105,7 +80,15 @@ block content
 					flashContainer.show();					
 				},
 				showTimer : function (beamerid, timerid, timer) {
-					socket.registerTimer(timerid, updateTimerData);
+					var timerClient = new TimerClient({
+						update : function (timerid, timer) {
+							$("#timers #timer-" + timerid).css("background-color", timer.color);
+						},
+						countdown : function (timerid, currentValue) {
+							$("#timers #timer-" + timerid).text(formatTime(currentValue));
+						}
+					});
+					socket.registerTimer(timerid, timerClient);
 					if ($("#timers #timer-" + timerid).length < 1) {
 						var timerContainer = $("<div>").attr("id", "timer-" + timerid);
 						timerContainer.addClass("timer");
@@ -114,7 +97,7 @@ block content
 						timerContainer.hide();
 						$("#timers").append(timerContainer);
 					}
-					updateTimerData(timerid, timer);
+					timerClient.update(timerid, timer);
 					$("#timers #timer-" + timerid).show();
 				},
 				hideTimer : function (beamerid, timerid, timer) {

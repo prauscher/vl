@@ -1,4 +1,5 @@
-function socket() {}
+function socket() {
+}
 
 socket.prototype.connect = function (connectCallback) {
 	this.socketIo = io.connect();
@@ -62,16 +63,16 @@ socket.prototype.unregisterSlide = function (slideid) {
 socket.prototype.registerTimers = function (callbacks) {
 	var self = this;
 	this.socketIo.on('timer-add', function (data) {
-		self.registerTimer(data.timerid, callbacks.update);
+		self.registerTimer(data.timerid, callbacks);
 		callbacks.init(data.timerid, data.timer);
 		callbacks.update(data.timerid, data.timer);
 	});
 	this.socketIo.emit('registertimers', {});
 }
 
-socket.prototype.registerTimer = function (timerid, updateCallback) {
+socket.prototype.registerTimer = function (timerid, callbacks) {
 	this.socketIo.on('timer-change:' + timerid, function (updateData) {
-		updateCallback(timerid, updateData.timer);
+		callbacks.update(timerid, updateData.timer);
 	});
 	socket.socketIo.emit('registertimer', { timerid : timerid });
 }

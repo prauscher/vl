@@ -31,25 +31,6 @@ function showTimerOptions(timerid, timer) {
 }
 
 function updateTimerData(timerid, timer) {
-	timerCurrent[timerid] = timer.current;
-	timerLastRun[timerid] = new Date();
-
-	if (timerid in timerTimeout) {
-		window.clearInterval(timerTimeout[timerid]);
-		delete timerTimeout[timerid];
-	}
-	if (timer.running == "true") {
-		timerTimeout[timerid] = window.setInterval(function () {
-			var now = new Date();
-			timerCurrent[timerid] -= (now.getTime() - timerLastRun[timerid].getTime()) / 1000;
-			if (timerCurrent[timerid] < 0) {
-				timerCurrent[timerid] = 0;
-			}
-			timerLastRun[timerid] = now;
-			$("#timers #timer-" + timerid + " .current").text(Math.floor(timerCurrent[timerid]));
-		}, 500);
-	}
-
 	$("#timers #timer-" + timerid + " .color").css('background-color', timer.color);
 	$("#timers #timer-" + timerid + " .title").text(timer.title);
 	$("#timers #timer-" + timerid + " .current").text(Math.floor(timer.current));
