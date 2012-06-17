@@ -28,3 +28,15 @@ TimerClient.prototype.update = function (timerid, timer) {
 	this.callbacks.update(timerid, timer);
 	this.callbacks.countdown(timerid, this.timerCurrent[timerid]);
 }
+
+TimerClient.prototype.formatTime = function (time) {
+	var seconds = Math.floor(time % 60);
+	var minutes = Math.floor(time / 60);
+	if (seconds < 10) {
+		seconds = "0" + seconds;
+	}
+	if (minutes < 10) {
+		minutes = "0" + minutes;
+	}
+	return minutes + ":" + seconds;
+}

@@ -3,6 +3,7 @@ extends layout
 append scripts
 	script(src='/javascript/apiClient/socket.js')
 	script(src='/javascript/timerClient.js')
+	script(src='/javascript/viewer/beamer.js')
 
 block content
 	div#waiting Bitte warten…
@@ -18,91 +19,16 @@ block content
 
 		$("#identify").hide();
 
-		function setBeamerContent(slideid, slide) {
-			currentSlideID = slideid;
-			$('#title').text(slide.title);
-			if (slide.type == 'text') {
-				$('#content').text(slide.text);
-			} else if (slide.type == 'html') {
-				$('#content').html(slide.html);
-			} else if (slide.type == 'agenda') {
-				$('#content').text("OHAI!");
-			} else {
-				$('#content').text("");
-			}	
-		}
-
-		function formatTime(time) {
-			var seconds = Math.floor(time % 60);
-			var minutes = Math.floor(time / 60);
-			if (seconds < 10) {
-				seconds = "0" + seconds;
-			}
-			if (minutes < 10) {
-				minutes = "0" + minutes;
-			}
-			return minutes + ":" + seconds;
-		}
-
 	script(type='text/javascript')
 		var socket = new socket();
 		socket.connect(function () {
 			$('#waiting').hide();
+
 			socket.registerIdentifyBeamer(function (timeout) {
 				$("#identify").show();
 				window.setTimeout(function () {
 					$("#identify").hide();
 				}, timeout * 1000);
 			});
-			socket.registerBeamer('#{beamerid}', {
-				update : function (beamerid, beamer, currentslide) {
-					if (currentSlideID != null) {
-						socket.unregisterSlide(currentSlideID);
-					}
-					socket.registerSlide(beamer.currentslideid, setBeamerContent);
-					setBeamerContent(beamer.currentslideid, currentslide);
-
-					$("#identify").css("background-color", beamer.color).text(beamerid);
-				},
-				flash : function (beamerid, flash) {
-					var flashContainer = $("<div>");
-					flashContainer.addClass("flash-" + flash.type);
-					flashContainer.text(flash.text);
-
-					window.setTimeout(function () {
-						flashContainer.hide();
-					}, data.flash.timeout * 1000);
-
-					// Insert hidden to allow effects
-					flashContainer.hide();
-					$("#flashs").append(flashContainer);
-
-					flashContainer.show();					
-				},
-				showTimer : function (beamerid, timerid, timer) {
-					var timerClient = new TimerClient({
-						update : function (timerid, timer) {
-							$("#timers #timer-" + timerid).css("background-color", timer.color);
-						},
-						countdown : function (timerid, currentValue) {
-							$("#timers #timer-" + timerid).text(formatTime(currentValue));
-						}
-					});
-					socket.registerTimer(timerid, timerClient);
-					if ($("#timers #timer-" + timerid).length < 1) {
-						var timerContainer = $("<div>").attr("id", "timer-" + timerid);
-						timerContainer.addClass("timer");
-
-						// Insert hidden to allow effects
-						timerContainer.hide();
-						$("#timers").append(timerContainer);
-					}
-					timerClient.update(timerid, timer);
-					$("#timers #timer-" + timerid).show();
-				},
-				hideTimer : function (beamerid, timerid, timer) {
-					socket.unregisterTimer(timerid);
-					$("#timers #timer-" + timerid).hide();
-				}
-			});
+			socket.registerBeamer('#{beamerid}', beamerClient);
 		});
