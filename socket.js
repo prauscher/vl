@@ -41,7 +41,6 @@ exports.listen = function (redis, app) {
 
 		socket.on('registertimers', function (data) {
 			socketDb.subscribe('timer-add');
-			socketDb.subscribe('timer-change');
 			socketDb.subscribe('timer-delete');
 
 			db.smembers('timers', function (err, timerids) {
@@ -96,6 +95,14 @@ exports.listen = function (redis, app) {
 
 		socket.on('slide-close', function(data) {
 			socketDb.unsubscribe('slide-change:' + data.slideid);
+		});
+
+		socket.on('timer-open', function (data) {
+			socketDb.subscribe('timer-change:' + data.timerid);
+		});
+
+		socket.on('timer-close', function (data) {
+			socketDb.unsubscribe('timer-change:' + data.timerid);
 		});
 	});
 	return io;

@@ -300,6 +300,7 @@ html
 
 			function updateTimerData(timerid, timer) {
 				timerCurrent[timerid] = timer.current;
+				timerLastRun[timerid] = new Date();
 
 				if (timerid in timerTimeout) {
 					window.clearInterval(timerTimeout[timerid]);
@@ -307,10 +308,12 @@ html
 				}
 				if (timer.running == "true") {
 					timerTimeout[timerid] = window.setInterval(function () {
-						timerCurrent[timerid] -= 0.5;
+						var now = new Date();
+						timerCurrent[timerid] -= (now.getTime() - timerLastRun[timerid].getTime()) / 1000;
 						if (timerCurrent[timerid] < 0) {
 							timerCurrent[timerid] = 0;
 						}
+						timerLastRun[timerid] = now;
 						$("#timers #timer-" + timerid + " .current").text(Math.floor(timerCurrent[timerid]));
 					}, 500);
 				}
@@ -400,6 +403,7 @@ html
 			var timers = {};
 			var timerCurrent = {};
 			var timerTimeout = {};
+			var timerLastRun = {};
 
 			var socket = io.connect();
 			socket.on('connect', function() {

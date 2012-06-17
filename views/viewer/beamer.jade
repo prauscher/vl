@@ -30,9 +30,11 @@ block content
 	script(type='text/javascript')
 		var timerCurrent = {};
 		var timerTimeout = {};
+		var timerLastRun = {};
 
 		function updateTimerData(timerid, timer) {
 			timerCurrent[timerid] = timer.current;
+			timerLastRun[timerid] = new Date();
 
 			if (timerid in timerTimeout) {
 				window.clearInterval(timerTimeout[timerid]);
@@ -40,10 +42,12 @@ block content
 			}
 			if (timer.running == "true") {
 				timerTimeout[timerid] = window.setInterval(function () {
-					timerCurrent[timerid] -= 0.5;
+					var now = new Date();
+					timerCurrent[timerid] -= (now.getTime() - timerLastRun[timerid].getTime()) / 1000;
 					if (timerCurrent[timerid] < 0) {
 						timerCurrent[timerid] = 0;
 					}
+					timerLastRun[timerid] = now;
 					$("#timers #timer-" + timerid).text(formatTime(timerCurrent[timerid]));
 				}, 500);
 			}
@@ -81,12 +85,12 @@ block content
 			if (currentSlideID != null) {
 				socket.emit('slide-close', { slideid : currentSlideID });
 			}
-			socket.emit('slide-open', { slideid : data.beamer.currentslideid });
 			socket.on('slide-change:' + data.slideid, function(changeData) {
 				setBeamerContent(data.slideid, changeData.slide);
 			});
+			socket.emit('slide-open', { slideid : data.beamer.currentslideid });
 			setBeamerContent(data.beamer.currentslideid, data.currentslide);
-			$("#identify").css("background-color", data.beamer.color);
+			$("#identify").css("background-color", data.beamer.color).text("#{beamerid}");
 		});
 
 		socket.on('beamer-flash:#{beamerid}', function (data) {
@@ -109,6 +113,7 @@ block content
 			socket.on('timer-change:' + data.timerid, function (timerData) {
 				updateTimerData(data.timerid, timerData.timer);
 			});
+			socket.emit('timer-open', { timerid : data.timerid });
 			if ($("#timers #timer-" + data.timerid).length < 1) {
 				var timer = $("<div>").attr("id", "timer-" + data.timerid);
 				timer.addClass("timer");
@@ -122,5 +127,6 @@ block content
 		});
 
 		socket.on('beamer-hidetimer:#{beamerid}', function (data) {
+			socket.emit('timer-close', { timerid : data.timerid });
 			$("#timers #timer-" + data.timerid).hide();
 		});
