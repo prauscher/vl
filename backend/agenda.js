@@ -44,7 +44,6 @@ exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {
 			io.sockets.emit('slide-add', { slideid : slideid, slide : slide });
-			//db.publish('slide-add', JSON.stringify({ slideid : slideid, slide : slide }));
 			db.zadd('slides:' + slide.parentid + ":children", slidecount + 1, slideid, function (err) {});
 
 			if (callbackSuccess) {
@@ -56,7 +55,7 @@ exports.add = function(slideid, slide, callbackSuccess) {
 
 exports.save = function(slideid, slide, callbackSuccess) {
 	db.hmset('slides:' + slideid, slide, function (err) {
-		db.publish('slide-change:' + slideid, JSON.stringify({ slide : slide }));
+		io.sockets.emit('slide-change:' + slideid, { slide : slide });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -68,7 +67,7 @@ exports.delete = function(slideid, callbackSuccess) {
 	db.hget('slides:' + slideid, 'parentid', function (err, parentid) {
 		db.del('slides:' + slideid, function (err) {});
 		db.zrem('slides:' + parentid + ':children', slideid, function (err) {});
-		db.publish('slide-delete', JSON.stringify({ slideid : slideid }));
+		io.sockets.emit('slide-delete', { slideid : slideid });
 
 		if (callbackSuccess) {
 			callbackSuccess();

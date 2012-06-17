@@ -23,7 +23,7 @@ exports.getAll = function(callback) {
 exports.add = function(timerid, timer, callbackSuccess) {
 	exports.save(timerid, timer, function() {
 		db.sadd('timers', timerid);
-		db.publish('timer-add', JSON.stringify({ timerid : timerid, timer : sanitizeTimer(timer) }));
+		io.sockets.emit('timer-add', { timerid : timerid, timer : sanitizeTimer(timer) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -33,7 +33,7 @@ exports.add = function(timerid, timer, callbackSuccess) {
 
 exports.save = function(timerid, timer, callbackSuccess) {
 	db.hmset('timers:' + timerid, timer, function (err) {
-		db.publish('timer-change:' + timerid, JSON.stringify({ timer : sanitizeTimer(timer) }));
+		io.sockets.emit('timer-change:' + timerid, { timer : sanitizeTimer(timer) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
