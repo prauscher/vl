@@ -16,6 +16,10 @@ exports.listen = function (redis, app) {
 			socket.emit(channel, JSON.parse(message));
 		});
 
+		socket.on('registeridentifybeamer', function (data) {
+			socketDb.subscribe('beamer-identify');
+		});
+
 		socket.on('registerbeamers', function (data) {
 			socketDb.subscribe('beamer-add');
 			socketDb.subscribe('beamer-delete');
@@ -26,7 +30,6 @@ exports.listen = function (redis, app) {
 		});
 
 		socket.on('registerbeamer', function (data) {
-			socketDb.subscribe('beamer-identify');
 			socketDb.subscribe('beamer-change:' + data.beamerid);
 			socketDb.subscribe('beamer-flash:' + data.beamerid);
 			socketDb.subscribe('beamer-showtimer:' + data.beamerid);
@@ -49,7 +52,6 @@ exports.listen = function (redis, app) {
 			socketDb.subscribe('timer-delete');
 
 			backend.timers.getAll(function (timerid, timer) {
-				socketDb.subscribe('timer-change:' + timerid);
 				socket.emit('timer-add', {timerid: timerid, timer: timer});
 			});
 		});
@@ -66,24 +68,23 @@ exports.listen = function (redis, app) {
 
 			// Send _ALL_ the slides for initialization
 			backend.agenda.getAll(function (slideid, slide) {
-				socketDb.subscribe('slide-change:' + slideid);
 				socket.emit('slide-add', {slideid: slideid, slide: slide});
 			});
 		});
 
-		socket.on('slide-open', function(data) {
+		socket.on('registerslide', function(data) {
 			socketDb.subscribe('slide-change:' + data.slideid);
 		});
 
-		socket.on('slide-close', function(data) {
+		socket.on('unregisterslide', function(data) {
 			socketDb.unsubscribe('slide-change:' + data.slideid);
 		});
 
-		socket.on('timer-open', function (data) {
+		socket.on('registertimer', function (data) {
 			socketDb.subscribe('timer-change:' + data.timerid);
 		});
 
-		socket.on('timer-close', function (data) {
+		socket.on('unregistertimer', function (data) {
 			socketDb.unsubscribe('timer-change:' + data.timerid);
 		});
 	});

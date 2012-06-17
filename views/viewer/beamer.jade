@@ -1,5 +1,8 @@
 extends layout
 
+append scripts
+	script(src='/javascript/apiClient/socket.js')
+
 block content
 	div#waiting Bitte warten…
 
@@ -11,6 +14,10 @@ block content
 
 	script(type='text/javascript')
 		var currentSlideID = null;
+		var timerCurrent = {};
+		var timerTimeout = {};
+		var timerLastRun = {};
+
 		$("#identify").hide();
 
 		function setBeamerContent(slideid, slide) {
@@ -26,11 +33,6 @@ block content
 				$('#content').text("");
 			}	
 		}
-
-	script(type='text/javascript')
-		var timerCurrent = {};
-		var timerTimeout = {};
-		var timerLastRun = {};
 
 		function updateTimerData(timerid, timer) {
 			timerCurrent[timerid] = timer.current;
@@ -68,65 +70,56 @@ block content
 		}
 
 	script(type='text/javascript')
-		var socket = io.connect();
-		socket.on('connect', function () {
+		var socket = new socket();
+		socket.connect(function () {
 			$('#waiting').hide();
-			socket.emit('registerbeamer', {beamerid: '#{beamerid}'});
-		});
-
-		socket.on('beamer-identify', function (data) {
-			$("#identify").show();
-			window.setTimeout(function () {
-				$("#identify").hide();
-			}, data.timeout * 1000);
-		});
-
-		socket.on('beamer-change:#{beamerid}', function (data) {
-			if (currentSlideID != null) {
-				socket.emit('slide-close', { slideid : currentSlideID });
-			}
-			socket.on('slide-change:' + data.slideid, function(changeData) {
-				setBeamerContent(data.slideid, changeData.slide);
+			socket.registerIdentifyBeamer(function (timeout) {
+				$("#identify").show();
+				window.setTimeout(function () {
+					$("#identify").hide();
+				}, timeout * 1000);
 			});
-			socket.emit('slide-open', { slideid : data.beamer.currentslideid });
-			setBeamerContent(data.beamer.currentslideid, data.currentslide);
-			$("#identify").css("background-color", data.beamer.color).text("#{beamerid}");
-		});
+			socket.registerBeamer('#{beamerid}', {
+				update : function (beamerid, beamer, currentslide) {
+					if (currentSlideID != null) {
+						socket.unregisterSlide(currentSlideID);
+					}
+					socket.registerSlide(beamer.currentslideid, setBeamerContent);
+					setBeamerContent(beamer.currentslideid, currentslide);
 
-		socket.on('beamer-flash:#{beamerid}', function (data) {
-			var flashContainer = $("<div>");
-			flashContainer.addClass("flash-" + data.flash.type);
-			flashContainer.text(data.flash.text);
+					$("#identify").css("background-color", beamer.color).text(beamerid);
+				},
+				flash : function (beamerid, flash) {
+					var flashContainer = $("<div>");
+					flashContainer.addClass("flash-" + flash.type);
+					flashContainer.text(flash.text);
 
-			window.setTimeout(function () {
-				flashContainer.hide();
-			}, data.flash.timeout * 1000);
+					window.setTimeout(function () {
+						flashContainer.hide();
+					}, data.flash.timeout * 1000);
 
-			// Insert hidden to allow effects
-			flashContainer.hide();
-			$("#flashs").append(flashContainer);
+					// Insert hidden to allow effects
+					flashContainer.hide();
+					$("#flashs").append(flashContainer);
 
-			flashContainer.show();
-		});
+					flashContainer.show();					
+				},
+				showTimer : function (beamerid, timerid, timer) {
+					socket.registerTimer(timerid, updateTimerData);
+					if ($("#timers #timer-" + timerid).length < 1) {
+						var timerContainer = $("<div>").attr("id", "timer-" + timerid);
+						timerContainer.addClass("timer");
 
-		socket.on('beamer-showtimer:#{beamerid}', function (data) {
-			socket.on('timer-change:' + data.timerid, function (timerData) {
-				updateTimerData(data.timerid, timerData.timer);
+						// Insert hidden to allow effects
+						timerContainer.hide();
+						$("#timers").append(timerContainer);
+					}
+					updateTimerData(timerid, timer);
+					$("#timers #timer-" + timerid).show();
+				},
+				hideTimer : function (beamerid, timerid, timer) {
+					socket.unregisterTimer(timerid);
+					$("#timers #timer-" + timerid).hide();
+				}
 			});
-			socket.emit('timer-open', { timerid : data.timerid });
-			if ($("#timers #timer-" + data.timerid).length < 1) {
-				var timer = $("<div>").attr("id", "timer-" + data.timerid);
-				timer.addClass("timer");
-
-				// Insert hidden to allow effects
-				timer.hide();
-				$("#timers").append(timer);
-			}
-			updateTimerData(data.timerid, data.timer);
-			$("#timers #timer-" + data.timerid).show();
-		});
-
-		socket.on('beamer-hidetimer:#{beamerid}', function (data) {
-			socket.emit('timer-close', { timerid : data.timerid });
-			$("#timers #timer-" + data.timerid).hide();
 		});

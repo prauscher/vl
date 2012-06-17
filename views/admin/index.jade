@@ -6,6 +6,15 @@ html
 		link(rel='stylesheet',href='/bootstrap/css/bootstrap-responsive.min.css')
 		link(rel='stylesheet',href='/stylesheets/admin.css')
 		script(src='/socket.io/socket.io.js')
+		script(src='/javascript/apiClient/beamer.js')
+		script(src='/javascript/apiClient/agenda.js')
+		script(src='/javascript/apiClient/timers.js')
+		script(src='/javascript/apiClient/socket.js')
+		script(src='/javascript/admin/navigation.js')
+		script(src='/javascript/admin/beamer.js')
+		script(src='/javascript/admin/beamer-flash.js')
+		script(src='/javascript/admin/agenda.js')
+		script(src='/javascript/admin/timers.js')
 	body(style="padding-top:90px;")
 		div.navbar.navbar-fixed-top
 			div.navbar-inner
@@ -20,26 +29,6 @@ html
 							a#nav-timers(href="#timers") Timer
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-beamers.pull-right.btn.btn-info Identifizieren
-
-		script(type="text/javascript")
-			$("#nav-beamers").click(function() {
-				$(".navbar .nav li").removeClass("active");
-				$(".navbar .nav .beamers").addClass("active");
-				$("body>.container").hide();
-				$("body>#beamers").show();
-			});
-			$("#nav-agenda").click(function() {
-				$(".navbar .nav li").removeClass("active");
-				$(".navbar .nav .agenda").addClass("active");
-				$("body>.container").hide();
-				$("body>#agenda").show();
-			});
-			$("#nav-timers").click(function() {
-				$(".navbar .nav li").removeClass("active");
-				$(".navbar .nav .timers").addClass("active");
-				$("body>.container").hide();
-				$("body>#timers").show();
-			});
 
 		div#flash-options.modal
 			div.modal-header
@@ -116,294 +105,7 @@ html
 					button.btn.btn-danger#delete-timer Löschen
 
 		script(type="text/javascript")
-			$(".navbar .nav li").removeClass("active");
-			$("body>.container").hide();
-			if (location.hash == "#timers") {
-				$(".navbar .nav .timers").addClass("active");
-				$("body>#timers").show();
-			} else if (location.hash == "#beamers") {
-				$(".navbar .nav .beamers").addClass("active");
-				$("body>#beamers").show();
-			} else {
-				$(".navbar .nav .agenda").addClass("active");
-				$("body>#agenda").show();
-			}
-
 			$(".modal").hide();
-
-			$("#new-slide").click(function () {
-				showSlideOptions(null, {});
-			});
-
-			$("#new-timer").click(function () {
-				showTimerOptions(null, {});
-			});
-
-			$("#identify-beamers").click(function () {
-				$.ajax({
-					type: 'POST',
-					url: '/beamer-identify',
-					data: { timeout: 10 }
-				});
-			});
-
-			$("#new-flash").click(function () {
-				$("#flash-options #select-beamers").empty();
-				for (var beamerid in beamers) {
-					var beamerSelect = $("<img>").addClass("select-beamer").addClass("select-beamer-" + beamerid).addClass("active").css("background-color", beamers[beamerid].color);
-					beamerSelect.click(function () {
-						$(this).toggleClass("active", ! $(this).hasClass("active"));
-					});
-					$("#flash-options #select-beamers").append(beamerSelect);
-				}
-
-				$("#flash-options #text").val("");
-				$("#flash-options #type option").removeAttr("selected");
-				$("#flash-options #timeout").val("30");
-
-				$("#flash-options #save-flash").unbind("click");
-				$("#flash-options #save-flash").click(function () {
-					var flash = { text : $("#flash-options #text").val(), type : $("#flash-options #type option:selected").val(), timeout : $("#flash-options #timeout").val() };
-					for (var beamerid in beamers) {
-						if ($("#flash-options #select-beamers .select-beamer-" + beamerid).hasClass("active")) {
-							$.ajax({
-								type: 'POST',
-								url: '/beamer/' + beamerid + '/flash',
-								data: { flash: flash },
-								success: function() {
-									$("#flash-options").modal('hide');
-								}
-							});
-						}
-					}
-				});
-
-				$("#flash-options").modal();
-			});
-
-			/** Slides **/
-
-			function showSlideOptions(slideid, slide) {
-				if (slideid == null) {
-					slideid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
-					slide.hidden = true;
-					slide.isdone = false;
-					$("#agenda #options #delete-slide").hide();
-				} else {
-					$("#agenda #options #delete-slide").show();
-				}
-
-				$("#agenda #options input#title").val(slide.title);
-
-				$("#agenda #options #save-slide").unbind("click");
-				$("#agenda #options #save-slide").click(function() {
-					slide.title = $("#agenda #options #title").val();
-					saveSlide(slideid, slide, function() {
-						$("#agenda #options").modal('hide')
-					});
-				});
-				$("#agenda #options #delete-slide").unbind("click");
-				$("#agenda #options #delete-slide").click(function() {
-					deleteSlide(slideid, function () {
-						$("#agenda #options").modal('hide');
-					});
-				});
-
-				$("#agenda #options").modal();
-			}
-			
-			function saveSlide(slideid, slide, callbackSuccess) {
-				$.ajax({
-					type: 'PUT',
-					url: '/agenda/' + slideid + '/save',
-					data: { slide : slide },
-					success: callbackSuccess
-				});
-			}
-
-			function deleteSlide(slideid, callbackSuccess) {
-				$.ajax({
-					type: 'POST',
-					url: '/agenda/' + slideid + '/delete',
-					success: callbackSuccess
-				});
-			}
-
-			function updateSlideData(slideid, slide) {
-				$("#agenda #slide-" + slideid + " .title").text(slide.title);
-
-				$("#agenda #slide-" + slideid + " .isundone").unbind("click").toggle(slide.isdone != "true").click(function () {
-					slide.isdone = true;
-					saveSlide(slideid, slide);
-				});
-				$("#agenda #slide-" + slideid + " .isdone").unbind("click").toggle(slide.isdone == "true").click(function () {
-					slide.isdone = false;
-					saveSlide(slideid, slide);
-				});
-
-				$("#agenda #slide-" + slideid + " .isvisible").unbind("click").toggle(slide.hidden != "true").click(function () {
-					slide.hidden = true;
-					saveSlide(slideid, slide);
-				});
-				$("#agenda #slide-" + slideid + " .ishidden").unbind("click").toggle(slide.hidden == "true").click(function () {
-					slide.hidden = false;
-					saveSlide(slideid, slide);
-				});
-
-				$("#agenda #slide-" + slideid + " .title").unbind("click");
-				$("#agenda #slide-" + slideid + " .title").click(function() {
-					showSlideOptions(slideid, slide);
-				});
-			}
-
-			/** Timers **/
-
-			function showTimerOptions(timerid, timer) {
-				if (timerid == null) {
-					timerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
-					timer.running = false;
-					$("#timers #timer-options #delete-timer").hide();
-				} else {
-					$("#timers #timer-options #delete-timer").show();
-				}
-
-				$("#timers #timer-options #title").val(timer.title);
-				$("#timers #timer-options #color").val(timer.color);
-				$("#timers #timer-options #value").val(timer.value);
-
-				$("#timers #timer-options #save-timer").unbind("click");
-				$("#timers #timer-options #save-timer").click(function () {
-					timer.title = $("#timers #timer-options #title").val();
-					timer.color = $("#timers #timer-options #color").val();
-					timer.value = $("#timers #timer-options #value").val();
-					saveTimer(timerid, timer, function () {
-						$("#timers #timer-options").modal('hide');
-					});
-				});
-				$("#timers #timer-options #delete-timer").unbind("click");
-				$("#timers #timer-options #delete-timer").click(function () {
-					deleteTimer(timerid, function () {
-						$("#timers #timer-options").modal('hide');
-					});
-				});
-
-				$("#timers #timer-options").modal();
-			}
-
-			function saveTimer(timerid, timer, callbackSuccess) {
-				$.ajax({
-					type: 'PUT',
-					url: '/timers/' + timerid + '/save',
-					data: { timer : timer },
-					success: callbackSuccess
-				});
-			}
-
-			function deleteTimer(timerid, callbackSuccess) {
-				$.ajax({
-					type: 'POST',
-					url: '/timers/' + timerid + '/delete',
-					success: callbackSuccess
-				});
-			}
-
-			function updateTimerData(timerid, timer) {
-				timerCurrent[timerid] = timer.current;
-				timerLastRun[timerid] = new Date();
-
-				if (timerid in timerTimeout) {
-					window.clearInterval(timerTimeout[timerid]);
-					delete timerTimeout[timerid];
-				}
-				if (timer.running == "true") {
-					timerTimeout[timerid] = window.setInterval(function () {
-						var now = new Date();
-						timerCurrent[timerid] -= (now.getTime() - timerLastRun[timerid].getTime()) / 1000;
-						if (timerCurrent[timerid] < 0) {
-							timerCurrent[timerid] = 0;
-						}
-						timerLastRun[timerid] = now;
-						$("#timers #timer-" + timerid + " .current").text(Math.floor(timerCurrent[timerid]));
-					}, 500);
-				}
-
-				$("#timers #timer-" + timerid + " .color").css('background-color', timer.color);
-				$("#timers #timer-" + timerid + " .title").text(timer.title);
-				$("#timers #timer-" + timerid + " .current").text(Math.floor(timer.current));
-				$("#timers #timer-" + timerid + " .value").text(timer.value);
-
-				$("#timers #timer-" + timerid + " .start").toggle(timer.running != 'true').unbind("click").click(function () {
-					$.ajax({
-						type: 'POST',
-						url: '/timers/' + timerid + '/start',
-						data: { timer : timer }
-					});
-				});
-				$("#timers #timer-" + timerid + " .pause").toggle(timer.running == 'true').unbind("click").click(function () {
-					$.ajax({
-						type: 'POST',
-						url: '/timers/' + timerid + '/pause',
-						data: { timer : timer }
-					});
-				});
-				$("#timers #timer-" + timerid + " .stop").unbind("click").click(function () {
-					$.ajax({
-						type: 'POST',
-						url: '/timers/' + timerid + '/stop',
-						data: { timer : timer }
-					});
-				});
-
-				$("#timers #timer-" + timerid + " .title").unbind("click").click(function () {
-					showTimerOptions(timerid, timer);
-				});
-			}
-
-			/** Beamer **/
-
-			function updateBeamerData(beamerid, beamer) {
-				$(".select-beamer-" + beamerid).css("background-color", beamer.color);
-				$("#agenda .select-beamer-" + beamerid).removeClass("active");
-				$("#agenda #slide-" + beamer.currentslideid + " .select-beamer-" + beamerid).addClass("active");
-			}
-
-			function saveBeamer(beamerid, beamer, callbackSuccess) {
-				$.ajax({
-					type: 'PUT',
-					url: '/beamer/' + beamerid + "/save",
-					data: { beamer : beamer },
-					success: callbackSuccess
-				});
-			}
-
-			function generateSelectBeamerButton(beamerid, callbackClick) {
-				return $("<img>").addClass("select-beamer").addClass("select-beamer-" + beamerid).css("background-color", beamers[beamerid].color).attr("title","Beamer: " + beamerid).click(callbackClick);
-			}
-
-			function generateSelectBeamerSlideButton(beamerid, slideid) {
-				return generateSelectBeamerButton(beamerid, function () {
-					beamers[beamerid].currentslideid = slideid;
-					saveBeamer(beamerid, beamers[beamerid]);
-				});
-			}
-
-			function generateSelectBeamerTimerButton(beamerid, timerid) {
-				return generateSelectBeamerButton(beamerid, function () {
-					if ($(this).hasClass("active")) {
-						$.ajax({
-							type: 'POST',
-							url: '/beamer/' + beamerid + '/hidetimer',
-							data: { timerid: timerid }
-						});
-					} else {
-						$.ajax({
-							type: 'POST',
-							url: '/beamer/' + beamerid + '/showtimer',
-							data: { timerid: timerid }
-						});
-					}
-				});
-			}
 
 		script(type="text/javascript")
 			var beamers = {};
@@ -414,109 +116,100 @@ html
 			var timerTimeout = {};
 			var timerLastRun = {};
 
-			var socket = io.connect();
-			socket.on('connect', function() {
-				socket.emit('registerbeamers', {});
-				socket.emit('registeragenda', {});
-				socket.emit('registertimers', {});
-			});
+			var socket = new socket();
+			socket.connect(function () {
+				socket.registerBeamers({
+					init : function (beamerid, beamer) {
+						if (! beamers[beamerid]) {
+							beamers[beamerid] = beamer;
 
-			socket.on('beamer-add', function (data) {
-				socket.on('beamer-change:' + data.beamerid, function (changeData) {
-					updateBeamerData(data.beamerid, changeData.beamer);
-				});
-				socket.on('beamer-showtimer:' + data.beamerid, function (timerData) {
-					$("#timers #timer-" + timerData.timerid + " .select-beamer-" + data.beamerid).addClass("active");
-				});
-				socket.on('beamer-hidetimer:' + data.beamerid, function (timerData) {
-					$("#timers #timer-" + timerData.timerid + " .select-beamer-" + data.beamerid).removeClass("active");
-				});
-				socket.emit('registerbeamer', { beamerid : data.beamerid });
-				if (! beamers[data.beamerid]) {
-					beamers[data.beamerid] = data.beamer;
-
-					for (var slideid in slides) {
-						$("#agenda #slide-" + slideid + " .select-beamers").append(generateSelectBeamerSlideButton(data.beamerid, slideid));
-					}
-					for (var timerid in timers) {
-						$("#timers #timer-" + timerid + " .select-beamers").append(generateSelectBeamerTimerButton(data.beamerid, timerid));
-					}
-				}
-				updateBeamerData(data.beamerid, data.beamer);
-			});
-
-			socket.on('slide-add', function (data) {
-				socket.on('slide-change:' + data.slideid, function (changeData) {
-					updateSlideData(data.slideid, changeData.slide);
-				});
-				if ($("#slide-" + data.slideid).length < 1) {
-					slides[data.slideid] = data.slide;
-
-					var insertPosition;
-					var indent = "";
-					if (data.slide.parentid) {
-						indent = $("#agenda #slide-" + data.slide.parentid + " .indent").html() + "&nbsp;&nbsp;";
-						if (slideLatestChild[data.slide.parentid]) {
-							insertPosition = $("#agenda #slide-" + slideLatestChild[data.slide.parentid]);
-						} else {
-							insertPosition = $("#agenda #slide-" + data.slide.parentid);
+							for (var slideid in slides) {
+								$("#agenda #slide-" + slideid + " .select-beamers").append(generateSelectBeamerSlideButton(beamerid, slideid));
+							}
+							for (var timerid in timers) {
+								$("#timers #timer-" + timerid + " .select-beamers").append(generateSelectBeamerTimerButton(beamerid, timerid));
+							}
 						}
-						slideLatestChild[data.slide.parentid] = data.slideid;
-					} else {
-						indent = "";
-						insertPosition = $("#slides tr");
+					},
+					update : updateBeamerData,
+					flash : function (beamerid, flash) {},
+					showTimer : function (beamerid, timerid, timer) {
+						$("#timers #timer-" + timerid + " .select-beamer-" + beamerid).addClass("active");
+					},
+					hideTimer : function (beamerid, timerid, timer) {
+						$("#timers #timer-" + timerid + " .select-beamer-" + beamerid).removeClass("active");
 					}
-					var item = $("<tr>").attr("id", "slide-" + data.slideid);
-					var selectMarker = $("<td>");
-					selectMarker.append($("<span>").addClass("indent").html(indent));
-					selectMarker.append($("<i>").addClass('icon-move'));
-					var selectBeamers = $("<td>").addClass("select-beamers");
-					for (var beamerid in beamers) {
-						selectBeamers.append(generateSelectBeamerSlideButton(beamerid, data.slideid));
-					}
-					var options = $("<td>");
-					options.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"));
-					options.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"));
-					options.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"));
-					options.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"));
-
-					item.append(selectMarker);
-					item.append($("<td>").addClass("title"));
-					item.append(selectBeamers);
-					item.append(options);
-
-					insertPosition.after(item);
-				}
-				updateSlideData(data.slideid, data.slide);
-			});
-
-			socket.on('slide-delete', function(data) {
-				$("#agenda #slide-" + data.slideid).remove();
-			});
-
-			socket.on('timer-add', function(data) {
-				socket.on('timer-change:' + data.timerid, function (changeData) {
-					updateTimerData(data.timerid, changeData.timer);
 				});
-				if ($("#timer-" + data.timerid).length < 1) {
-					timers[data.timerid] = data.timer;
+				socket.registerAgenda({
+					init : function (slideid, slide) {
+						if ($("#slide-" + slideid).length < 1) {
+							slides[slideid] = slide;
 
-					var selectBeamer = $("<td>");
-					for (var beamerid in beamers) {
-						selectBeamer.append(generateSelectBeamerTimerButton(beamerid, data.timerid));
+							var insertPosition;
+							var indent = "";
+							if (slide.parentid) {
+								indent = $("#agenda #slide-" + slide.parentid + " .indent").html() + "&nbsp;&nbsp;";
+								if (slideLatestChild[slide.parentid]) {
+									insertPosition = $("#agenda #slide-" + slideLatestChild[slide.parentid]);
+								} else {
+									insertPosition = $("#agenda #slide-" + slide.parentid);
+								}
+								slideLatestChild[slide.parentid] = slideid;
+							} else {
+								indent = "";
+								insertPosition = $("#slides tr");
+							}
+							var item = $("<tr>").attr("id", "slide-" + slideid);
+							var selectMarker = $("<td>");
+							selectMarker.append($("<span>").addClass("indent").html(indent));
+							selectMarker.append($("<i>").addClass('icon-move'));
+							var selectBeamers = $("<td>").addClass("select-beamers");
+							for (var beamerid in beamers) {
+								selectBeamers.append(generateSelectBeamerSlideButton(beamerid, slideid));
+							}
+							var options = $("<td>");
+							options.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"));
+							options.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"));
+							options.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"));
+							options.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"));
+
+							item.append(selectMarker);
+							item.append($("<td>").addClass("title"));
+							item.append(selectBeamers);
+							item.append(options);
+
+							insertPosition.after(item);
+						}
+					},
+					update : updateSlideData,
+					delete : function (slideid, slide) {
+						$("#agenda #slide-" + slideid).remove();
 					}
+				});
+				socket.registerTimers({
+					init : function (timerid, timer) {
+						if ($("#timer-" + timerid).length < 1) {
+							timers[timerid] = timer;
 
-					var item = $("<tr>").attr("id", "timer-" + data.timerid);
-					item.append($("<td>").append($("<img>").addClass('color')));
-					item.append($("<td>").addClass("title"));
-					item.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")));
-					item.append(selectBeamer);
-					item.append($("<td>")
-						.append($("<i>").addClass("start").addClass("icon-play"))
-						.append($("<i>").addClass("pause").addClass("icon-pause"))
-						.append($("<i>").addClass("stop").addClass("icon-stop")));
+							var selectBeamer = $("<td>");
+							for (var beamerid in beamers) {
+								selectBeamer.append(generateSelectBeamerTimerButton(beamerid, timerid));
+							}
 
-					$("#timers #timers").append(item);
-				}				
-				updateTimerData(data.timerid, data.timer);
+							var item = $("<tr>").attr("id", "timer-" + timerid);
+							item.append($("<td>").append($("<img>").addClass('color')));
+							item.append($("<td>").addClass("title"));
+							item.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")));
+							item.append(selectBeamer);
+							item.append($("<td>")
+								.append($("<i>").addClass("start").addClass("icon-play"))
+								.append($("<i>").addClass("pause").addClass("icon-pause"))
+								.append($("<i>").addClass("stop").addClass("icon-stop")));
+
+							$("#timers #timers").append(item);
+						}				
+					},
+					update : updateTimerData,
+					delete : function (timerid, timer) {}
+				});
 			});
