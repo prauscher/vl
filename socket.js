@@ -16,6 +16,15 @@ exports.listen = function (redis, app) {
 			socket.emit(channel, JSON.parse(message));
 		});
 
+		socket.on('registerbeamers', function (data) {
+			socketDb.subscribe('beamer-add');
+			socketDb.subscribe('beamer-delete');
+
+			backend.beamer.getAll(function (beamerid, beamer) {
+				socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
+			});
+		});
+
 		socket.on('registerbeamer', function (data) {
 			socketDb.subscribe('beamer-identify');
 			socketDb.subscribe('beamer-change:' + data.beamerid);
@@ -24,18 +33,14 @@ exports.listen = function (redis, app) {
 			socketDb.subscribe('beamer-hidetimer:' + data.beamerid);
 
 			// Initialize Beamerstate
-			db.hgetall('beamer:' + data.beamerid, function (err, beamer) {
-				db.hgetall('slides:' + beamer.currentslideid, function (err, currentslide) {
+			backend.beamer.get(data.beamerid, function (beamer) {
+				backend.agenda.get(beamer.currentslideid, function (currentslide) {
 					socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
 				});
 			});
 
-			db.smembers('beamer:' + data.beamerid + ':timers', function(err, timerids) {
-				timerids.forEach(function (timerid, n) {
-					backend.timers.get(timerid, function (timer) {
-						socket.emit('beamer-showtimer:' + data.beamerid, { timerid : timerid, timer : timer });
-					});
-				});
+			backend.beamer.getTimers(data.beamerid, function (timerid, timer) {
+				socket.emit('beamer-showtimer:' + data.beamerid, { timerid : timerid, timer : timer });
 			});
 		});
 
@@ -43,13 +48,9 @@ exports.listen = function (redis, app) {
 			socketDb.subscribe('timer-add');
 			socketDb.subscribe('timer-delete');
 
-			db.smembers('timers', function (err, timerids) {
-				timerids.forEach(function(timerid, n) {
-					backend.timers.get(timerid, function (timer) {
-						socketDb.subscribe('timer-change:' + timerid);
-						socket.emit('timer-add', {timerid: timerid, timer: timer});
-					});
-				});
+			backend.timers.getAll(function (timerid, timer) {
+				socketDb.subscribe('timer-change:' + timerid);
+				socket.emit('timer-add', {timerid: timerid, timer: timer});
 			});
 		});
 
@@ -59,33 +60,14 @@ exports.listen = function (redis, app) {
 			socketDb.subscribe('slide-move');
 
 			// Inform about our beamerviews
-			db.smembers('beamer', function (err, beamerids) {
-				beamerids.forEach(function(beamerid, n) {
-					db.hgetall('beamer:' + beamerid, function (err, beamer) {
-						socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
-					});
-				});
+			backend.beamer.getAll(function (beamerid, beamer) {
+				socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
 			});
 
-			// Send _ALL_ the slides for initialization (recursive)
-			function sendSlide(slideid) {
-				db.hgetall('slides:' + slideid, function (err, slide) {
-					if (slide != null) {
-						socketDb.subscribe('slide-change:' + slideid);
-						socket.emit('slide-add', {slideid: slideid, slide: slide});
-						sendSubSlides(slideid);
-					}
-				});
-			}
-			function sendSubSlides(slideid) {
-				db.zrange('slides:' + slideid + ":children", 0, -1, function (err, slideids) {
-					slideids.forEach(function(slideid, n) {
-						sendSlide(slideid);
-					});
-				});
-			}
-			db.get('rootslideid', function (err, rootslideid) {
-				sendSlide(rootslideid);
+			// Send _ALL_ the slides for initialization
+			backend.agenda.getAll(function (slideid, slide) {
+				socketDb.subscribe('slide-change:' + slideid);
+				socket.emit('slide-add', {slideid: slideid, slide: slide});
 			});
 		});
 

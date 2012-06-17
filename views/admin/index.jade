@@ -18,9 +18,8 @@ html
 							a#nav-agenda(href="#agenda") Tagesordnung
 						li.timers
 							a#nav-timers(href="#timers") Timer
-					div.pull-right.nav
-						a#identify-beamers.btn.btn-info Identifizieren
-						a#new-flash.btn.btn-danger.btn Info
+					a#new-flash.pull-right.btn.btn-danger.btn Info
+					a#identify-beamers.pull-right.btn.btn-info Identifizieren
 
 		script(type="text/javascript")
 			$("#nav-beamers").click(function() {
@@ -62,7 +61,14 @@ html
 				button.btn(data-dismiss="modal") Abbrechen
 
 		div#beamers.container
-			| Test
+			div#beameroptions.btn-group
+				button#new-beamer.btn.btn-success Neu
+
+			table#beamers.table-striped.table-bordered.table-condensed
+				tr
+					th
+					th Beamer
+					th Optionen
 
 		div#agenda.container
 			div#slideoptions.btn-group
@@ -115,6 +121,9 @@ html
 			if (location.hash == "#timers") {
 				$(".navbar .nav .timers").addClass("active");
 				$("body>#timers").show();
+			} else if (location.hash == "#beamers") {
+				$(".navbar .nav .beamers").addClass("active");
+				$("body>#beamers").show();
 			} else {
 				$(".navbar .nav .agenda").addClass("active");
 				$("body>#agenda").show();
@@ -407,6 +416,7 @@ html
 
 			var socket = io.connect();
 			socket.on('connect', function() {
+				socket.emit('registerbeamers', {});
 				socket.emit('registeragenda', {});
 				socket.emit('registertimers', {});
 			});

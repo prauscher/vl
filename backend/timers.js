@@ -4,6 +4,16 @@ exports.get = function(timerid, callback) {
 	});
 }
 
+exports.getAll = function(callback) {
+	db.smembers('timers', function (err, timerids) {
+		timerids.forEach(function (timerid, n) {
+			exports.get(timerid, function (timer) {
+				callback(timerid, timer);
+			});
+		});
+	});
+}
+
 exports.add = function(timerid, timer, callbackSuccess) {
 	exports.save(timerid, timer, function() {
 		db.sadd('timers', timerid);

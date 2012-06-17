@@ -1,3 +1,29 @@
+exports.get = function(beamerid, callbackSuccess) {
+	db.hgetall('beamer:' + beamerid, function(err, beamer) {
+		callbackSuccess(beamer);
+	});
+}
+
+exports.getAll = function(callback) {
+	db.smembers('beamer', function(err, beamerids) {
+		beamerids.forEach(function (beamerid, n) {
+			exports.get(beamerid, function (beamer) {
+				callback(beamerid, beamer);
+			});
+		});
+	});
+}
+
+exports.getTimers = function(beamerid, callback) {
+	db.smembers('beamer:' + beamerid + ':timers', function (err, timerids) {
+		timerids.forEach(function (timerid, n) {
+			backend.timers.get(timerid, function (timer) {
+				callback(timerid, timer);
+			});
+		});
+	});
+}
+
 exports.add = function(beamerid, beamer, callbackSuccess) {
 	exports.save(beamerid, beamer, function () {
 		db.sadd('beamer', beamerid);

@@ -1,3 +1,25 @@
+exports.get = function(slideid, callback) {
+	db.hgetall('slides:' + slideid, function (err, slide) {
+		callback(slide);
+	});
+}
+
+exports.getAll = function(callback) {
+	function handleSlide(slideid) {
+		exports.get(slideid, function (slide) {
+			callback(slideid, slide);
+			db.zrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
+				subslideids.forEach(function (subslideid) {
+					handleSlide(subslideid);
+				});
+			});
+		});
+	}
+	db.get('rootslideid', function (err, rootslideid) {
+		handleSlide(rootslideid);
+	});
+}
+
 exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {

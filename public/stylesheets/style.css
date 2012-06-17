@@ -1,18 +1,13 @@
-@media only screen and (max-device-width: 640px) {
-   button {
-      padding: .5em;
-   }
-}
-
 html {
-   background: lightgray;
+	background: lightgray;
+	font-size:2em;
 }
 
 body {
-   margin: 25px;
-   padding: 25px;
-   border-radius: 15px;
-   background: white;
+	margin: 25px;
+	padding: 25px;
+	border-radius: 15px;
+	background: white;
 }
 
 th { padding: 5px; border: 1px solid silver }
@@ -21,15 +16,15 @@ th {
    text-align: left
 }
 
-.id-col {
-   text-align: right;
-   color: darkgray;
-   font-family: Monospace;
-}
+.flash-danger
+	{background-color:#f2dede; color:#b94a48;}
+.flash-information
+	{background-color:#d9edf7; color:#3a87ad;}
+.flash-success
+	{background-color:#dff0d8; color:#468847;}
 
-#short-id {
-   float: right;
-   font: 150% monospace;
-   font-weight: bold;
-   color: teal
-}
+#identify
+	{position: fixed; bottom:0px; right:0px; width:50%; height:30%; opacity:0.7;}
+
+#flashs
+	{position: fixed; top:0px; left:0px; width:100%;}
