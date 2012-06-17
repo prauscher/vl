@@ -3,9 +3,10 @@ extends layout
 block content
 	div#waiting Bitte warten…
 
+	div#flashs
+	div#timers
 	h1#title
 	div#content
-	div#timers
 
 	script(type='text/javascript')
 		var currentSlideID = null;
@@ -80,7 +81,19 @@ block content
 		});
 
 		socket.on('beamer-flash:#{beamerid}', function (data) {
-			
+			var flashContainer = $("<div>");
+			flashContainer.addClass("flash-" + data.flash.type);
+			flashContainer.text(data.flash.text);
+
+			window.setTimeout(function () {
+				flashContainer.hide();
+			}, data.flash.timeout * 1000);
+
+			// Insert hidden to allow effects
+			flashContainer.hide();
+			$("#flashs").append(flashContainer);
+
+			flashContainer.show();
 		});
 
 		socket.on('beamer-showtimer:#{beamerid}', function (data) {
