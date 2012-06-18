@@ -69,7 +69,7 @@ $(function () {
 		$.ajax({
 			type: 'POST',
 			url: '/beamer-identify',
-			data: { timeout: 10 }
+			data: { timeout: 5 }
 		});
 	});
 });
