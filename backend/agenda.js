@@ -65,12 +65,14 @@ exports.save = function(slideid, slide, callbackSuccess) {
 
 exports.delete = function(slideid, callbackSuccess) {
 	db.hget('slides:' + slideid, 'parentid', function (err, parentid) {
-		db.del('slides:' + slideid, function (err) {});
-		db.zrem('slides:' + parentid + ':children', slideid, function (err) {});
-		io.sockets.emit('slide-delete', { slideid : slideid });
+		db.zrem('slides:' + parentid + ':children', slideid, function (err) {
+			db.del('slides:' + slideid, function (err) {
+				io.sockets.emit('slide-delete:' + slideid, {});
 
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
+				if (callbackSuccess) {
+					callbackSuccess();
+				}
+			});
+		});
 	});
 }

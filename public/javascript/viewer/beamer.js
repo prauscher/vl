@@ -48,6 +48,10 @@ beamerClient.showTimer = function (beamerid, timerid, timer) {
 			$("#timers #timer-" + timerid).text(timerClient.formatTime(currentValue));
 		}
 	});
+	timerClient.delete = function (timerid) {
+		$("#timers #timer-" + timerid).remove();
+	}
+
 	socket.registerTimer(timerid, timerClient);
 	if ($("#timers #timer-" + timerid).length < 1) {
 		var timerContainer = $("<div>").attr("id", "timer-" + timerid);

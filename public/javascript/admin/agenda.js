@@ -97,7 +97,7 @@ agendaClient.update = function (slideid, slide) {
 	});
 }
 
-agendaClient.delete = function (slideid, slide) {
+agendaClient.delete = function (slideid) {
 	$("#agenda #slide-" + slideid).remove();
 }
 

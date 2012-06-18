@@ -2,6 +2,7 @@ function showTimerOptions(timerid, timer) {
 	if (timerid == null) {
 		timerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
 		timer.running = false;
+		timer.startValue = 0;
 		$("#timers #timer-options #delete-timer").hide();
 	} else {
 		$("#timers #timer-options #delete-timer").show();
