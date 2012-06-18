@@ -12,7 +12,11 @@ exports.exists = function(beamerid, callback) {
 
 exports.get = function(beamerid, callbackSuccess) {
 	db.hgetall('beamer:' + beamerid, function(err, beamer) {
-		callbackSuccess(beamer);
+		if (beamer) {
+			callbackSuccess(beamer);
+		} else {
+			console.log("Unknown Beamer " + beamerid);
+		}
 	});
 }
 
