@@ -20,6 +20,9 @@ socket.prototype.registerBeamers = function (callbacks) {
 		callbacks.init(data.beamerid, data.beamer);
 		callbacks.update(data.beamerid, data.beamer);
 	});
+	this.socketIo.on('beamer-delete', function (data) {
+		callbacks.delete(data.beamerid);
+	});
 	this.socketIo.emit('registerbeamers', {});
 }
 
@@ -46,6 +49,9 @@ socket.prototype.registerAgenda = function (callbacks) {
 		callbacks.init(data.slideid, data.slide);
 		callbacks.update(data.slideid, data.slide);
 	});
+	this.socketIo.on('slide-delete', function (data) {
+		callbacks.delete(data.slideid);
+	});
 	this.socketIo.emit('registeragenda', {});
 }
 
@@ -65,6 +71,9 @@ socket.prototype.registerTimers = function (callbacks) {
 		self.registerTimer(data.timerid, callbacks);
 		callbacks.init(data.timerid, data.timer);
 		callbacks.update(data.timerid, data.timer);
+	});
+	this.socketIo.on('timer-delete', function (data) {
+		callbacks.delete(data.timerid);
 	});
 	this.socketIo.emit('registertimers', {});
 }

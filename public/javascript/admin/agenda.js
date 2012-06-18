@@ -28,6 +28,7 @@ function showSlideOptions(slideid, slide) {
 }
 
 var agendaClient = {};
+
 agendaClient.init = function (slideid, slide) {
 	if ($("#slide-" + slideid).length < 1) {
 		slides[slideid] = slide;
@@ -68,6 +69,7 @@ agendaClient.init = function (slideid, slide) {
 		insertPosition.after(item);
 	}
 }
+
 agendaClient.update = function (slideid, slide) {
 	$("#agenda #slide-" + slideid + " .title").text(slide.title);
 
@@ -94,6 +96,7 @@ agendaClient.update = function (slideid, slide) {
 		showSlideOptions(slideid, slide);
 	});
 }
+
 agendaClient.delete = function (slideid, slide) {
 	$("#agenda #slide-" + slideid).remove();
 }

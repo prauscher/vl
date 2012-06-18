@@ -67,6 +67,7 @@ var timerClient = new TimerClient({
 		$("#timers #timer-" + timerid + " .current").text(timerClient.formatTime(currentValue));
 	}
 });
+
 timerClient.init = function (timerid, timer) {
 	if ($("#timer-" + timerid).length < 1) {
 		timers[timerid] = timer;
@@ -88,8 +89,11 @@ timerClient.init = function (timerid, timer) {
 
 		$("#timers #timers").append(item);
 	}				
-};
-timerClient.delete = function (timerid, timer) {};
+}
+
+timerClient.delete = function (timerid) {
+	$("#timer-" + timerid).remove();
+}
 
 $(function () {
 	$("#new-timer").click(function () {

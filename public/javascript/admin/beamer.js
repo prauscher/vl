@@ -30,6 +30,11 @@ beamerClient.update = function(beamerid, beamer) {
 	$("#agenda #slide-" + beamer.currentslideid + " .select-beamer-" + beamerid).addClass("active");
 }
 
+beamerClient.delete = function(beamerid) {
+	$(".select-beamer-" + beamerid).remove();
+	$("#beamer #beamer-" + beamerid).remove();
+}
+
 beamerClient.generateSelectBeamerButton = function(beamerid, callbackClick) {
 	return $("<img>").addClass("select-beamer").addClass("select-beamer-" + beamerid).css("background-color", beamers[beamerid].color).attr("title","Beamer: " + beamerid).click(callbackClick);
 }
