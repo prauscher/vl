@@ -56,24 +56,22 @@ $(function () {
 	});
 
 	apiClient.on("initTimer", function (timerid, timer) {
-		if ($("#timer-" + timerid).length < 1) {
-			var selectBeamer = $("<td>");
-			apiClient.eachBeamer(function (beamerid, beamer) {
-				generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
-					selectBeamer.append(selectBeamerButton);
-				});
+		var selectBeamer = $("<td>").addClass("select-beamers");
+		apiClient.eachBeamer(function (beamerid, beamer) {
+			generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
+				selectBeamer.append(selectBeamerButton);
 			});
+		});
 
-			$("#timers #timers").append($("<tr>").attr("id", "timer-" + timerid)
-				.append($("<td>").append($("<img>").addClass('color')))
-				.append($("<td>").addClass("title"))
-				.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
-				.append(selectBeamer)
-				.append($("<td>")
-					.append($("<i>").addClass("start").addClass("icon-play"))
-					.append($("<i>").addClass("pause").addClass("icon-pause"))
-					.append($("<i>").addClass("stop").addClass("icon-stop")) ) );
-		}				
+		$("#timers #timers").append($("<tr>").attr("id", "timer-" + timerid)
+			.append($("<td>").append($("<img>").addClass('color')))
+			.append($("<td>").addClass("title"))
+			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
+			.append(selectBeamer)
+			.append($("<td>")
+				.append($("<i>").addClass("start").addClass("icon-play"))
+				.append($("<i>").addClass("pause").addClass("icon-pause"))
+				.append($("<i>").addClass("stop").addClass("icon-stop")) ) );
 	});
 
 	apiClient.on("deleteTimer", function (timerid) {

@@ -89,9 +89,9 @@ html
 				form.form-horizontal.modal-body
 					input(type="text")#title
 				div.modal-footer
-					button.btn.btn-primary#save-slide Speichern
+					button.btn.btn-danger.pull-left#delete-slide Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-danger#delete-slide Löschen
+					button.btn.btn-primary#save-slide Speichern
 
 		div#timers.container
 			div#timeroptions.btn-group
@@ -113,9 +113,9 @@ html
 					input(type="text")#color.span2
 					input(type="text")#value.span1
 				div.modal-footer
-					button.btn.btn-primary#save-timer Speichern
+					button.btn.btn-danger.pull-left#delete-timer Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-danger#delete-timer Löschen
+					button.btn.btn-primary#save-timer Speichern
 
 		script(type="text/javascript")
 			$(".modal").hide();

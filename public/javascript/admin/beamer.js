@@ -53,17 +53,9 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 	generateSelectBeamerButton(beamerid, {
 		click : function () {
 			if ($(this).hasClass("active")) {
-				$.ajax({
-					type: 'POST',
-					url: '/beamer/' + beamerid + '/hidetimer',
-					data: { timerid: timerid }
-				});
+				apiClient.hideTimerBeamer(beamerid, timerid);
 			} else {
-				$.ajax({
-					type: 'POST',
-					url: '/beamer/' + beamerid + '/showtimer',
-					data: { timerid: timerid }
-				});
+				apiClient.showTimerBeamer(beamerid, timerid);
 			}
 		},
 		create : callback

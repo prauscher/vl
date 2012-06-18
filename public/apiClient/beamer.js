@@ -20,10 +20,12 @@ APIClient.prototype.registerIdentifyBeamer = function () {
 APIClient.prototype.registerBeamers = function () {
 	var self = this;
 	this.socketIo.on('beamer-add', function (data) {
-		self.beamers[data.beamerid] = data.beamer;
+		if (! self.beamers[data.beamerid]) {
+			self.beamers[data.beamerid] = data.beamer;
 
-		self.registerBeamer(data.beamerid);
-		self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
+			self.registerBeamer(data.beamerid);
+			self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
+		}
 		self.callCallback("updateBeamer", [ data.beamerid, data.beamer, data.currentslide ] );
 	});
 	this.socketIo.emit('registerbeamers', {});
@@ -73,6 +75,24 @@ APIClient.prototype.flashBeamer = function (beamerid, flash, callbackSuccess) {
 		type: 'POST',
 		url: '/beamer/' + beamerid + '/flash',
 		data: { flash: flash },
+		success: callbackSuccess
+	});
+}
+
+APIClient.prototype.showTimerBeamer = function (beamerid, timerid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/beamer/' + beamerid + '/showtimer',
+		data: { timerid: timerid },
+		success: callbackSuccess
+	});
+}
+
+APIClient.prototype.hideTimerBeamer = function (beamerid, timerid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/beamer/' + beamerid + '/hidetimer',
+		data: { timerid: timerid },
 		success: callbackSuccess
 	});
 }

@@ -28,40 +28,38 @@ function showSlideOptions(slideid, slide) {
 
 $(function () {
 	apiClient.on("initSlide", function (slideid, slide) {
-		if ($("#slide-" + slideid).length < 1) {
-			var insertPosition;
-			var indent = "";
-			if (slide.parentid) {
-				indent = $("#agenda #slide-" + slide.parentid + " .indent").html() + "&nbsp;&nbsp;";
-				if (slideLatestChild[slide.parentid]) {
-					insertPosition = $("#agenda #slide-" + slideLatestChild[slide.parentid]);
-				} else {
-					insertPosition = $("#agenda #slide-" + slide.parentid);
-				}
-				slideLatestChild[slide.parentid] = slideid;
+		var insertPosition;
+		var indent = "";
+		if (slide.parentid) {
+			indent = $("#agenda #slide-" + slide.parentid + " .indent").html() + "&nbsp;&nbsp;";
+			if (slideLatestChild[slide.parentid]) {
+				insertPosition = $("#agenda #slide-" + slideLatestChild[slide.parentid]);
 			} else {
-				indent = "";
-				insertPosition = $("#slides tr");
+				insertPosition = $("#agenda #slide-" + slide.parentid);
 			}
-			var selectBeamers = $("<td>").addClass("select-beamers");
-			apiClient.eachBeamer(function (beamerid, beamer) {
-				generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
-					selectBeamers.append(selectBeamerButton);
-				});
-			});
-
-			insertPosition.after($("<tr>").attr("id", "slide-" + slideid)
-				.append($("<td>")
-					.append($("<span>").addClass("indent").html(indent))
-					.append($("<i>").addClass('icon-move')) )
-				.append($("<td>").addClass("title"))
-				.append(selectBeamers)
-				.append($("<td>")
-					.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"))
-					.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"))
-					.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
-					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt")) ) );
+			slideLatestChild[slide.parentid] = slideid;
+		} else {
+			indent = "";
+			insertPosition = $("#slides tr");
 		}
+		var selectBeamers = $("<td>").addClass("select-beamers");
+		apiClient.eachBeamer(function (beamerid, beamer) {
+			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
+				selectBeamers.append(selectBeamerButton);
+			});
+		});
+
+		insertPosition.after($("<tr>").attr("id", "slide-" + slideid)
+			.append($("<td>")
+				.append($("<span>").addClass("indent").html(indent))
+				.append($("<i>").addClass('icon-move')) )
+			.append($("<td>").addClass("title"))
+			.append(selectBeamers)
+			.append($("<td>")
+				.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"))
+				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"))
+				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
+				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt")) ) );
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {

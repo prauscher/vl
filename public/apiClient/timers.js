@@ -13,10 +13,12 @@ APIClient.prototype.eachTimer = function (callback) {
 APIClient.prototype.registerTimers = function () {
 	var self = this;
 	this.socketIo.on('timer-add', function (data) {
-		self.timers[data.timerid] = data.timer;
+		if (! self.timers[data.timerid]) {
+			self.timers[data.timerid] = data.timer;
 
-		self.registerTimer(data.timerid);
-		self.callCallback("initTimer", [ data.timerid, data.timer ]);
+			self.registerTimer(data.timerid);
+			self.callCallback("initTimer", [ data.timerid, data.timer ]);
+		}
 		self.callCallback("updateTimer", [ data.timerid, data.timer ]);
 	});
 	this.socketIo.emit('registertimers', {});

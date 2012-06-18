@@ -13,10 +13,12 @@ APIClient.prototype.getSlide = function (slideid, callback) {
 APIClient.prototype.registerAgenda = function () {
 	var self = this;
 	this.socketIo.on('slide-add', function (data) {
-		self.slides[data.slideid] = data.slide;
+		if (! self.slides[data.slideid]) {
+			self.slides[data.slideid] = data.slide;
 
-		self.registerSlide(data.slideid);
-		self.callCallback("initSlide", [ data.slideid, data.slide ] );
+			self.registerSlide(data.slideid);
+			self.callCallback("initSlide", [ data.slideid, data.slide ] );
+		}
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
 	});
 	this.socketIo.emit('registeragenda', {});
