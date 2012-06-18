@@ -45,7 +45,7 @@ exports.delete = function(timerid, callbackSuccess) {
 	db.srem('timers', timerid, function (err) {
 		db.del('timers:' + timerid, function (err) {
 			backend.beamer.getAll(function (beamerid, beamer) {
-				db.sismember('beamer:' + beamerid + ':timers', timerid, function (ismember) {
+				db.sismember('beamer:' + beamerid + ':timers', timerid, function (err, ismember) {
 					if (ismember) {
 						db.srem('beamer:' + beamerid + ':timers', timerid);
 					}
