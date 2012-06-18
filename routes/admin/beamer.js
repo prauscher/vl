@@ -1,12 +1,22 @@
 exports.save = function(req, res) {
 	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {
-			backend.beamer.add(req.params.beamerid, req.body.beamer);
+			backend.beamer.add(req.params.beamerid, req.body.beamer, function () {
+				res.send(200);
+			});
 		} else {
-			backend.beamer.save(req.params.beamerid, req.body.beamer);
+			backend.beamer.save(req.params.beamerid, req.body.beamer, function () {
+				res.send(200);
+			});
 		}
 	});
 };
+
+exports.delete = function(req, res) {
+	backend.beamer.delete(req.params.beamerid, function (err) {
+		res.send(200);
+	});
+}
 
 exports.flash = function (req, res) {
 	backend.beamer.flash(req.params.beamerid, req.body.flash, function () {

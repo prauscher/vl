@@ -29,7 +29,11 @@ $(function () {
 		apiClient.registerSlide(beamer.currentslideid);
 		setBeamerContent(beamer.currentslideid, currentslide);
 
-		$("#identify").css("background-color", beamer.color).text(beamerid);
+		$("#identify").css("background-color", beamer.color).text(beamer.title);
+	});
+
+	apiClient.on("deleteBeamer", function (beamerid) {
+		alert("SRSLY");
 	});
 
 	apiClient.on("flashBeamer", function (beamerid, flash) {

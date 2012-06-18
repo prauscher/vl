@@ -11,10 +11,11 @@ app.get('/', routes.admin.index);
 
 app.post('/beamer-identify', routes.admin.beamer.identify);
 
-app.post('/agenda/:slideid/delete', routes.admin.agenda.delete);
 app.put('/agenda/:slideid/save', routes.admin.agenda.save);
+app.post('/agenda/:slideid/delete', routes.admin.agenda.delete);
 
 app.put('/beamer/:beamerid/save', routes.admin.beamer.save);
+app.post('/beamer/:beamerid/delete', routes.admin.beamer.delete);
 app.post('/beamer/:beamerid/showtimer', routes.admin.beamer.showtimer);
 app.post('/beamer/:beamerid/hidetimer', routes.admin.beamer.hidetimer);
 app.post('/beamer/:beamerid/flash', routes.admin.beamer.flash);

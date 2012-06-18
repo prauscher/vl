@@ -60,6 +60,18 @@ html
 					th Beamer
 					th Optionen
 
+			div#beamer-options.modal
+				div.modal-header
+					button.close(data-dismiss="modal") ×
+					h3 Beamer bearbeiten
+				form.form-horizontal.modal-body
+					input(type="text")#title
+					input(type="text")#color
+				div.modal-footer
+					button.btn.btn-danger.pull-left#delete-beamer Löschen
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-primary#save-beamer Speichern
+
 		div#agenda.container
 			div#slideoptions.btn-group
 				button#new-slide.btn.btn-success Neu

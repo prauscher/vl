@@ -60,6 +60,14 @@ APIClient.prototype.saveBeamer = function(beamerid, beamer, callbackSuccess) {
 	});
 }
 
+APIClient.prototype.deleteBeamer = function (beamerid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/beamer/' + beamerid + '/delete',
+		success: callbackSuccess
+	});
+}
+
 APIClient.prototype.flashBeamer = function (beamerid, flash, callbackSuccess) {
 	$.ajax({
 		type: 'POST',

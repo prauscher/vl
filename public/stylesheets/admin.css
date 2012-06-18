@@ -6,5 +6,5 @@
 .isundone.icon-ok-circle
 	{opacity:0.5;}
 
-#timers .color
+#timers .color, #beamers .color
 	{width:16px; height:16px;}
