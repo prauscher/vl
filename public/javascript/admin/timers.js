@@ -12,8 +12,7 @@ function showTimerOptions(timerid, timer) {
 	$("#timers #timer-options #color").val(timer.color);
 	$("#timers #timer-options #value").val(timer.value);
 
-	$("#timers #timer-options #save-timer").unbind("click");
-	$("#timers #timer-options #save-timer").click(function () {
+	$("#timers #timer-options #save-timer").unbind("click").click(function () {
 		timer.title = $("#timers #timer-options #title").val();
 		timer.color = $("#timers #timer-options #color").val();
 		timer.value = $("#timers #timer-options #value").val();
@@ -21,8 +20,7 @@ function showTimerOptions(timerid, timer) {
 			$("#timers #timer-options").modal('hide');
 		});
 	});
-	$("#timers #timer-options #delete-timer").unbind("click");
-	$("#timers #timer-options #delete-timer").click(function () {
+	$("#timers #timer-options #delete-timer").unbind("click").click(function () {
 		deleteTimer(timerid, function () {
 			$("#timers #timer-options").modal('hide');
 		});

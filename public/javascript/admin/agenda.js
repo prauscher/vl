@@ -10,15 +10,13 @@ function showSlideOptions(slideid, slide) {
 
 	$("#agenda #options input#title").val(slide.title);
 
-	$("#agenda #options #save-slide").unbind("click");
-	$("#agenda #options #save-slide").click(function() {
+	$("#agenda #options #save-slide").unbind("click").click(function() {
 		slide.title = $("#agenda #options #title").val();
 		saveSlide(slideid, slide, function() {
 			$("#agenda #options").modal('hide')
 		});
 	});
-	$("#agenda #options #delete-slide").unbind("click");
-	$("#agenda #options #delete-slide").click(function() {
+	$("#agenda #options #delete-slide").unbind("click").click(function() {
 		deleteSlide(slideid, function () {
 			$("#agenda #options").modal('hide');
 		});
@@ -47,24 +45,22 @@ agendaClient.init = function (slideid, slide) {
 			indent = "";
 			insertPosition = $("#slides tr");
 		}
-		var item = $("<tr>").attr("id", "slide-" + slideid);
-		var selectMarker = $("<td>");
-		selectMarker.append($("<span>").addClass("indent").html(indent));
-		selectMarker.append($("<i>").addClass('icon-move'));
 		var selectBeamers = $("<td>").addClass("select-beamers");
 		for (var beamerid in beamers) {
 			selectBeamers.append(beamerClient.generateSelectBeamerSlideButton(beamerid, slideid));
 		}
-		var options = $("<td>");
-		options.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"));
-		options.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"));
-		options.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"));
-		options.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"));
 
-		item.append(selectMarker);
-		item.append($("<td>").addClass("title"));
-		item.append(selectBeamers);
-		item.append(options);
+		var item = $("<tr>").attr("id", "slide-" + slideid)
+			.append($("<td>")
+				.append($("<span>").addClass("indent").html(indent))
+				.append($("<i>").addClass('icon-move')) )
+			.append($("<td>").addClass("title"))
+			.append(selectBeamers)
+			.append($("<td>")
+				.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"))
+				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"))
+				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
+				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt")) );
 
 		insertPosition.after(item);
 	}
@@ -91,8 +87,7 @@ agendaClient.update = function (slideid, slide) {
 		saveSlide(slideid, slide);
 	});
 
-	$("#agenda #slide-" + slideid + " .title").unbind("click");
-	$("#agenda #slide-" + slideid + " .title").click(function() {
+	$("#agenda #slide-" + slideid + " .title").unbind("click").click(function() {
 		showSlideOptions(slideid, slide);
 	});
 }

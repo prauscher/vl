@@ -36,7 +36,12 @@ beamerClient.delete = function(beamerid) {
 }
 
 beamerClient.generateSelectBeamerButton = function(beamerid, callbackClick) {
-	return $("<img>").addClass("select-beamer").addClass("select-beamer-" + beamerid).css("background-color", beamers[beamerid].color).attr("title","Beamer: " + beamerid).click(callbackClick);
+	return $("<img>")
+		.addClass("select-beamer")
+		.addClass("select-beamer-" + beamerid)
+		.css("background-color", beamers[beamerid].color)
+		.attr("title","Beamer: " + beamerid)
+		.click(callbackClick);
 }
 
 beamerClient.generateSelectBeamerSlideButton = function(beamerid, slideid) {

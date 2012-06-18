@@ -24,13 +24,13 @@ beamerClient.update = function (beamerid, beamer, currentslide) {
 }
 
 beamerClient.flash = function (beamerid, flash) {
-	var flashContainer = $("<div>");
-	flashContainer.addClass("flash-" + flash.type);
-	flashContainer.text(flash.text);
+	var flashContainer = $("<div>")
+		.addClass("flash-" + flash.type)
+		.text(flash.text);
 
 	window.setTimeout(function () {
 		flashContainer.hide();
-	}, data.flash.timeout * 1000);
+	}, flash.timeout * 1000);
 
 	// Insert hidden to allow effects
 	flashContainer.hide();
