@@ -1,16 +1,16 @@
 $(function () {
 	$("#new-flash").click(function () {
 		$("#flash-options #select-beamers").empty();
-		for (var beamerid in beamers) {
-			$("#flash-options #select-beamers").append($("<img>")
-				.addClass("select-beamer")
-				.addClass("select-beamer-" + beamerid)
-				.addClass("active")
-				.css("background-color", beamers[beamerid].color)
-				.click(function () {
+		apiClient.eachBeamer(function (beamerid, beamer) {
+			generateSelectBeamerButton(beamerid, {
+				create : function (selectBeamerButton) {
+					$("#flash-options #select-beamers").append(selectBeamerButton.addClass("active"));
+				},
+				click : function () {
 					$(this).toggleClass("active", ! $(this).hasClass("active"));
-				}) );
-		}
+				}
+			});
+		});
 
 		$("#flash-options #text").val("");
 		$("#flash-options #type option").removeAttr("selected");
@@ -18,18 +18,13 @@ $(function () {
 
 		$("#flash-options #save-flash").unbind("click").click(function () {
 			var flash = { text : $("#flash-options #text").val(), type : $("#flash-options #type option:selected").val(), timeout : $("#flash-options #timeout").val() };
-			for (var beamerid in beamers) {
+			apiClient.eachBeamer(function (beamerid, beamer) {
 				if ($("#flash-options #select-beamers .select-beamer-" + beamerid).hasClass("active")) {
-					$.ajax({
-						type: 'POST',
-						url: '/beamer/' + beamerid + '/flash',
-						data: { flash: flash },
-						success: function() {
-							$("#flash-options").modal('hide');
-						}
+					apiClient.flashBeamer(beamerid, flash, function () {
+						$("#flash-options").modal('hide');
 					});
 				}
-			}
+			});
 		});
 
 		$("#flash-options").modal();

@@ -1,71 +1,81 @@
-var beamerClient = {};
-
-beamerClient.update = function (beamerid, beamer, currentslide) {
-	if (currentSlideID != null) {
-		socket.unregisterSlide(currentSlideID);
-	}
-	var setBeamerContent = function (slideid, slide) {
-		currentSlideID = slideid;
-		$('#title').text(slide.title);
-		if (slide.type == 'text') {
-			$('#content').text(slide.text);
-		} else if (slide.type == 'html') {
-			$('#content').html(slide.html);
-		} else if (slide.type == 'agenda') {
-			$('#content').text("OHAI!");
-		} else {
-			$('#content').text("");
-		}	
-	};
-	socket.registerSlide(beamer.currentslideid, setBeamerContent);
-	setBeamerContent(beamer.currentslideid, currentslide);
-
-	$("#identify").css("background-color", beamer.color).text(beamerid);
+var setBeamerContent = function (slideid, slide) {
+	currentSlideID = slideid;
+	$('#title').text(slide.title);
+	if (slide.type == 'text') {
+		$('#content').text(slide.text);
+	} else if (slide.type == 'html') {
+		$('#content').html(slide.html);
+	} else if (slide.type == 'agenda') {
+		$('#content').text("OHAI!");
+	} else {
+		$('#content').text("");
+	}	
 }
 
-beamerClient.flash = function (beamerid, flash) {
-	var flashContainer = $("<div>")
-		.addClass("flash-" + flash.type)
-		.text(flash.text);
+$(function () {
+	apiClient.on("updateSlide", setBeamerContent);
 
-	window.setTimeout(function () {
-		flashContainer.hide();
-	}, flash.timeout * 1000);
-
-	// Insert hidden to allow effects
-	flashContainer.hide();
-	$("#flashs").append(flashContainer);
-
-	flashContainer.show();					
-}
-
-beamerClient.showTimer = function (beamerid, timerid, timer) {
-	var timerClient = new TimerClient({
-		update : function (timerid, timer) {
-			$("#timers #timer-" + timerid).css("background-color", timer.color);
-		},
-		countdown : function (timerid, currentValue) {
-			$("#timers #timer-" + timerid).text(timerClient.formatTime(currentValue));
-		}
+	apiClient.on("identifyBeamer", function (timeout) {
+		$("#identify").show();
+		window.setTimeout(function () {
+			$("#identify").hide();
+		}, timeout * 1000);
 	});
-	timerClient.delete = function (timerid) {
-		$("#timers #timer-" + timerid).remove();
-	}
 
-	socket.registerTimer(timerid, timerClient);
-	if ($("#timers #timer-" + timerid).length < 1) {
-		var timerContainer = $("<div>").attr("id", "timer-" + timerid);
-		timerContainer.addClass("timer");
+	apiClient.on("updateBeamer", function (beamerid, beamer, currentslide) {
+		if (currentSlideID != null) {
+			apiClient.unregisterSlide(currentSlideID);
+		}
+		apiClient.registerSlide(beamer.currentslideid);
+		setBeamerContent(beamer.currentslideid, currentslide);
+
+		$("#identify").css("background-color", beamer.color).text(beamerid);
+	});
+
+	apiClient.on("flashBeamer", function (beamerid, flash) {
+		var flashContainer = $("<div>")
+			.addClass("flash-" + flash.type)
+			.text(flash.text);
+
+		window.setTimeout(function () {
+			flashContainer.hide();
+		}, flash.timeout * 1000);
 
 		// Insert hidden to allow effects
-		timerContainer.hide();
-		$("#timers").append(timerContainer);
-	}
-	timerClient.update(timerid, timer);
-	$("#timers #timer-" + timerid).show();
-}
+		flashContainer.hide();
+		$("#flashs").append(flashContainer);
 
-beamerClient.hideTimer = function (beamerid, timerid, timer) {
-	socket.unregisterTimer(timerid);
-	$("#timers #timer-" + timerid).hide();
-}
+		flashContainer.show();					
+	});
+
+	apiClient.on("updateTimer", function (timerid, timer) {
+		$("#timers #timer-" + timerid).css("background-color", timer.color);
+	});
+
+	apiClient.on("countdownTimer", function (timerid, currentValue) {
+		$("#timers #timer-" + timerid).text(formatTime(currentValue));
+	});
+
+	apiClient.on("deleteTimer", function(timerid) {
+		$("#timers #timer-" + timerid).remove();
+	});
+
+	apiClient.on("showTimerBeamer", function (beamerid, timerid, timer) {
+		this.registerTimer(timerid);
+		if ($("#timers #timer-" + timerid).length < 1) {
+			var timerContainer = $("<div>").attr("id", "timer-" + timerid);
+			timerContainer.addClass("timer");
+
+			// Insert hidden to allow effects
+			timerContainer.hide();
+			$("#timers").append(timerContainer);
+		}
+		this.callCallback("updateTimer", [ timerid, timer ] );
+		$("#timers #timer-" + timerid).show();
+	});
+
+	apiClient.on("hideTimerBeamer", function (beamerid, timerid, timer) {
+		this.unregisterTimer(timerid);
+		$("#timers #timer-" + timerid).hide();
+	});
+});

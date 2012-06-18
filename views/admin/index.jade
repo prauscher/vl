@@ -7,10 +7,10 @@ html
 		link(rel='stylesheet',href='/stylesheets/admin.css')
 		script(src='/socket.io/socket.io.js')
 		script(src='/javascript/timerClient.js')
-		script(src='/javascript/apiClient/beamer.js')
-		script(src='/javascript/apiClient/agenda.js')
-		script(src='/javascript/apiClient/timers.js')
-		script(src='/javascript/apiClient/socket.js')
+		script(src='/apiClient/index.js')
+		script(src='/apiClient/beamer.js')
+		script(src='/apiClient/agenda.js')
+		script(src='/apiClient/timers.js')
 		script(src='/javascript/admin/navigation.js')
 		script(src='/javascript/admin/beamer.js')
 		script(src='/javascript/admin/beamer-flash.js')
@@ -109,17 +109,10 @@ html
 			$(".modal").hide();
 
 		script(type="text/javascript")
-			var beamers = {};
-			var slides = {};
-			var slideLatestChild = {};
-			var timers = {};
-			var timerCurrent = {};
-			var timerTimeout = {};
-			var timerLastRun = {};
-
-			var socket = new socket();
-			socket.connect(function () {
-				socket.registerBeamers(beamerClient);
-				socket.registerAgenda(agendaClient);
-				socket.registerTimers(timerClient);
+			var apiClient = new APIClient();
+			apiClient.connect(function () {
+				this.registerBeamers();
+				this.registerAgenda();
+				this.registerTimers();
 			});
+			TimerClient(apiClient);

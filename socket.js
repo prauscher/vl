@@ -10,9 +10,6 @@ exports.listen = function (app) {
 	io.sockets.on('connection', function(socket) {
 		console.log('NEW CONNECTION!!!');
 
-		socket.on('registeridentifybeamer', function (data) {
-		});
-
 		socket.on('registerbeamers', function (data) {
 			backend.beamer.getAll(function (beamerid, beamer) {
 				socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
