@@ -5,14 +5,35 @@ function showSlideOptions(slideid, slide) {
 		slideid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
 		slide.hidden = true;
 		slide.isdone = false;
+		slide.type = "agenda";
 		$("#agenda #options #delete-slide").hide();
 	} else {
 		$("#agenda #options #delete-slide").show();
 	}
 
 	$("#agenda #options input#title").val(slide.title);
+
+	$("#agenda #options #slidecontent .nav>li").removeClass("active");
+	$("#agenda #options #slidecontent .tab-content").removeClass("active");
+	$("#agenda #options #slidecontent .nav>li.slidecontent-" + slide.type).addClass("active");
+	$("#agenda #options #slidecontent .tab-content #slidecontent-" + slide.type).addClass("active");
+
+	var types = ["agenda", "text", "html"];
+	for (var type in types) {
+		$("#agenda #options .slidecontent-" + types[type]).on("show", function () {
+			slide.type = types[type];
+		});
+	}
+
+	$("#agenda #options #slidecontent-text-text").val(slide.text);
+	$("#agenda #options #slidecontent-html-html").text(slide.html);
+
 	$("#agenda #options #save-slide").unbind("click").click(function() {
-		slide.title = $("#agenda #options #title").val();
+		slide.title = $("#agenda #options input#title").val();
+
+		slide.text = $("#agenda #options #slidecontent-text-text").val();
+		slide.html = $("#agenda #options #slidecontent-html-html").val();
+
 		apiClient.saveSlide(slideid, slide, function() {
 			$("#agenda #options").modal('hide')
 		});

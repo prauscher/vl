@@ -87,8 +87,23 @@ html
 				div.modal-header
 					button.close(data-dismiss="modal") ×
 					h3 Tagesordnungspunkt bearbeiten
-				form.form-horizontal.modal-body
+				div.modal-body
 					input(type="text")#title
+					div#slidecontent
+						ul.nav.nav-tabs
+							li.slidecontent-agenda
+								a(data-toggle="tab",href="#slidecontent-agenda") Agenda
+							li.slidecontent-text
+								a(data-toggle="tab",href="#slidecontent-text") Test
+							li.slidecontent-html
+								a(data-toggle="tab",href="#slidecontent-html") HTML
+						div.tab-content
+							div.tab-pane#slidecontent-agenda
+								| Nothing to show here
+							div.tab-pane#slidecontent-text
+								textarea#slidecontent-text-text
+							div.tab-pane#slidecontent-html
+								textarea#slidecontent-html-html
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-slide Löschen
 					button.btn(data-dismiss="modal") Schließen
