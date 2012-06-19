@@ -78,7 +78,8 @@ $(function () {
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
 			.append($("<td>").append($("<img>").addClass("color")))
 			.append($("<td>").addClass("title"))
-			.append($("<td>")));
+			.append($("<td>")
+				.append($("<a>").attr("href","/beamer/" + beamerid).append($("<i>").addClass("icon-play-circle"))) ) );
 	});
 
 	apiClient.on("showTimerBeamer", function (beamerid, timerid, timer) {
