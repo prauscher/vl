@@ -7,9 +7,9 @@ var routes = require('./routes'),
 
 // Routes
 
-app.get('/', routes.viewer.index);
-app.get('/beamer', routes.viewer.beamer_default);
-app.get('/beamer/:beamerid', routes.viewer.beamer);
+app.get('/', function (req, res) {
+	res.render('clientOverview');
+});
 
 app.listen(3000, function(){
 	console.log("Express server listening on http://localhost:%d/ in mode %s", app.address().port, app.settings.env);

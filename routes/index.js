@@ -1,2 +1,3 @@
-exports.viewer = require('./viewer');
-exports.admin = require('./admin');
+exports.beamer = require('./beamer.js');
+exports.agenda = require('./agenda.js');
+exports.timers = require('./timers.js');

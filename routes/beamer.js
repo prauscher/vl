@@ -1,3 +1,13 @@
+exports.showBeamer = function(req,res) {
+	res.render('showBeamer', { beamerid : req.params.beamerid });
+}
+
+exports.showDefaultBeamer = function(req,res) {
+	backend.beamer.getDefaultBeamerID(function (beamerid) {
+		res.render('showBeamer', { beamerid : beamerid });
+	});
+}
+
 exports.save = function(req, res) {
 	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {
@@ -24,7 +34,7 @@ exports.flash = function (req, res) {
 	});
 };
 
-exports.showtimer = function (req, res) {
+exports.showTimer = function (req, res) {
 	backend.timers.get(req.body.timerid, function (timer) {
 		backend.beamer.showtimer(req.params.beamerid, req.body.timerid, timer, function() {
 			res.send(200);
@@ -32,7 +42,7 @@ exports.showtimer = function (req, res) {
 	});
 }
 
-exports.hidetimer = function (req, res) {
+exports.hideTimer = function (req, res) {
 	backend.timers.get(req.body.timerid, function (timer) {
 		backend.beamer.hidetimer(req.params.beamerid, req.body.timerid, timer, function() {
 			res.send(200);

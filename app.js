@@ -5,6 +5,7 @@
 var express = require('express'),
     backend = require('./backend');
     socket = require('./socket.js');
+    routes = require('./routes');
 
 var app = module.exports = express.createServer();
 
@@ -30,3 +31,9 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 });
+
+// Routes
+
+app.get('/beamer', routes.beamer.showDefaultBeamer);
+app.get('/beamer/:beamerid', routes.beamer.showBeamer);
+
