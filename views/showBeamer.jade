@@ -12,7 +12,7 @@ html
 		script(src='/javascript/viewer/beamer.js')
 
 	body
-		div#waiting Bitte warten…
+		div#waiting
 
 		div#identify ..
 		div#flashs
@@ -31,5 +31,7 @@ html
 				this.registerIdentifyBeamer();
 				this.registerBeamer('#{beamerid}');
 			});
-			apiClient.on('beamerInit')
+			apiClient.on('updateBeamer', function (beamerid, beamer) {
+				$("#waiting").fadeOut(300);
+			});
 			TimerClient(apiClient);
