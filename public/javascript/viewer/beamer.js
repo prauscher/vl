@@ -15,6 +15,8 @@ var setBeamerContent = function (slideid, slide) {
 $(function () {
 	apiClient.on("updateSlide", setBeamerContent);
 
+	apiClient.on("deleteSlide", function (slideid) {});
+
 	apiClient.on("identifyBeamer", function (timeout) {
 		$("#identify").show();
 		window.setTimeout(function () {

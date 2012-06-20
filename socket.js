@@ -46,6 +46,12 @@ exports.listen = function (app) {
 				socket.emit('slide-add', {slideid: slideid, slide: slide});
 			});
 		});
+
+		socket.on('registerslide', function (data) {
+			backend.agenda.get(data.slideid, function (slide) {
+				socket.emit('slide-change:' + data.slideid, { slide: slide });
+			});
+		});
 	});
 	return io;
 }

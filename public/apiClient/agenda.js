@@ -36,6 +36,7 @@ APIClient.prototype.registerSlide = function (slideid) {
 
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
+	this.socketIo.emit('registerslide', { slideid: slideid });
 }
 
 APIClient.prototype.unregisterSlide = function (slideid) {

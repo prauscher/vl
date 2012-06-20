@@ -1,3 +1,7 @@
+exports.showSlide = function (req, res) {
+	res.render('showBeamer', { slideid : req.params.slideid });
+}
+
 exports.save = function (req, res) {
 	var slide = req.body.slide;
 

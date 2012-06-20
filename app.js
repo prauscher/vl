@@ -37,3 +37,4 @@ app.configure('production', function(){
 app.get('/beamer', routes.beamer.showDefaultBeamer);
 app.get('/beamer/:beamerid', routes.beamer.showBeamer);
 
+app.get('/slides/:slideid', routes.agenda.showSlide);
