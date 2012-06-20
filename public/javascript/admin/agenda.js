@@ -13,20 +13,13 @@ function showSlideOptions(slideid, slide) {
 
 	$("#agenda #options input#title").val(slide.title);
 
-	$("#agenda #options #slidecontent .nav>li").removeClass("active");
-	$("#agenda #options #slidecontent .tab-content").removeClass("active");
-	$("#agenda #options #slidecontent .nav>li.slidecontent-" + slide.type).addClass("active");
-	$("#agenda #options #slidecontent .tab-content #slidecontent-" + slide.type).addClass("active");
-
-	var types = ["agenda", "text", "html"];
-	for (var type in types) {
-		$("#agenda #options .slidecontent-" + types[type]).on("show", function () {
-			slide.type = types[type];
-		});
-	}
+	$("#agenda #options #slidecontent .nav .slidecontent-" + slide.type).tab('show');
+	$("#agenda #options #slidecontent .nav a").unbind("show").on("show", function (e) {
+		slide.type = e.target.className.split("-").pop();
+	});
 
 	$("#agenda #options #slidecontent-text-text").val(slide.text);
-	$("#agenda #options #slidecontent-html-html").text(slide.html);
+	$("#agenda #options #slidecontent-html-html").val(slide.html);
 
 	$("#agenda #options #save-slide").unbind("click").click(function() {
 		slide.title = $("#agenda #options input#title").val();
