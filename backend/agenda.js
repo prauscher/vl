@@ -24,19 +24,27 @@ exports.get = function(slideid, callback) {
 	});
 }
 
-exports.getAll = function(callback) {
-	function handleSlide(slideid) {
-		exports.get(slideid, function (slide) {
-			callback(slideid, slide);
-			db.zrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
-				subslideids.forEach(function (subslideid) {
-					handleSlide(subslideid);
-				});
+exports.eachChildren = function(slideid, callback) {
+	db.zrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
+		subslideids.forEach(function (subslideid) {
+			exports.get(subslideid, function (subslide) {
+				callback(subslideid, subslide);
 			});
+		});
+	});
+}
+
+exports.getAll = function(callback) {
+	function handleSlide(slideid, slide) {
+		callback(slideid, slide);
+		exports.eachChildren(slideid, function (subslideid, subslide) {
+			handleSlide(subslideid, subslide);
 		});
 	}
 	db.get('rootslideid', function (err, rootslideid) {
-		handleSlide(rootslideid);
+		exports.get(rootslideid, function (rootslide) {
+			handleSlide(rootslideid, rootslide);
+		});
 	});
 }
 
