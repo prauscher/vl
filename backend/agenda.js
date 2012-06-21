@@ -12,6 +12,14 @@ exports.setRootSlideID = function (rootslideid, callbackSuccess) {
 	});
 }
 
+exports.getRootSlide = function (callback) {
+	exports.getRootSlideID(function (rootslideid) {
+		exports.get(rootslideid, function (rootslide) {
+			callback(rootslideid, rootslide);
+		});
+	});
+}
+
 exports.exists = function (slideid, callback) {
 	db.exists('slides:' + slideid, function (err, exists) {
 		callback(exists);
@@ -30,20 +38,6 @@ exports.eachChildren = function(slideid, callback) {
 			exports.get(subslideid, function (subslide) {
 				callback(subslideid, subslide);
 			});
-		});
-	});
-}
-
-exports.getAll = function(callback) {
-	function handleSlide(slideid, slide) {
-		callback(slideid, slide);
-		exports.eachChildren(slideid, function (subslideid, subslide) {
-			handleSlide(subslideid, subslide);
-		});
-	}
-	db.get('rootslideid', function (err, rootslideid) {
-		exports.get(rootslideid, function (rootslide) {
-			handleSlide(rootslideid, rootslide);
 		});
 	});
 }

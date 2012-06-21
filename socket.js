@@ -36,15 +36,20 @@ exports.listen = function (app) {
 		});
 
 		socket.on('registeragenda', function (data) {
-			// Send _ALL_ the slides for initialization
-			backend.agenda.getAll(function (slideid, slide) {
-				socket.emit('slide-add', {slideid: slideid, slide: slide});
+			// Send rootslide. client may ask for children
+			backend.agenda.getRootSlide(function (rootslideid, rootslide) {
+				socket.emit('slide-add', {slideid: rootslideid, slide: rootslide});
 			});
 		});
 
 		socket.on('registerslide', function (data) {
 			backend.agenda.get(data.slideid, function (slide) {
 				socket.emit('slide-change:' + data.slideid, { slide: slide });
+			});
+			
+			// Send children
+			backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
+				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, slide: subslide});
 			});
 		});
 	});

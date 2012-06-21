@@ -26,6 +26,14 @@ APIClient.prototype.registerAgenda = function () {
 
 APIClient.prototype.registerSlide = function (slideid) {
 	var self = this;
+	this.socketIo.on('slide-add:' + slideid, function (data) {
+		if (! self.slides[data.slideid]) {
+			self.slides[data.slideid] = data.slide;
+
+			self.callCallback("initSlide", [ data.slideid, data.slide ] );
+		}
+		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
+	});
 	this.socketIo.on('slide-change:' + slideid, function (data) {
 		self.slides[slideid] = data.slide;
 

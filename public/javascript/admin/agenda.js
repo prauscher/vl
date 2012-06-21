@@ -48,7 +48,6 @@ $(function () {
 		update: function(ev, ui) {
 			// callback here
 			if (! ui.item.parent().hasClass("slide-children")) {
-				alert("test");
 				// Something went wrong. mostly, the user has moved to root layer
 				return false;
 			} else {
