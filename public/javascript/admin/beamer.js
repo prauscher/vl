@@ -1,6 +1,8 @@
 function showBeamerOptions(beamerid, beamer) {
 	if (beamerid == null) {
 		beamerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
+		beamer.scroll = 0;
+		beamer.zoom = 1;
 		$("#beamers #beamer-options #delete-beamer").hide();
 	} else {
 		$("#beamers #beamer-options #delete-beamer").show();
@@ -79,6 +81,11 @@ $(function () {
 			.append($("<td>").append($("<img>").addClass("color")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>")
+				.append($("<i>").addClass("icon-repeat").addClass("reset"))
+				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in"))
+				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out"))
+				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up"))
+				.append($("<i>").addClass("icon-chevron-down").addClass("scroll-down"))
 				.append($("<a>").attr("href","/beamer/" + beamerid).append($("<i>").addClass("icon-play-circle"))) ) );
 	});
 
@@ -94,6 +101,32 @@ $(function () {
 		$("#beamers #beamer-" + beamerid + " .color").css("background-color", beamer.color);
 		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).unbind("click").click(function () {
 			showBeamerOptions(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .reset").unbind("click").click(function () {
+			beamer.zoom = 1;
+			beamer.scroll = 0;
+			apiClient.saveBeamer(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .zoom-in").unbind("click").click(function () {
+			beamer.zoom *= 1.1;
+			apiClient.saveBeamer(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .zoom-out").unbind("click").click(function () {
+			beamer.zoom /= 1.1;
+			apiClient.saveBeamer(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .scroll-up").unbind("click").click(function () {
+			beamer.scroll -= 20;
+			apiClient.saveBeamer(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .scroll-down").unbind("click").click(function () {
+			beamer.scroll += 20;
+			apiClient.saveBeamer(beamerid, beamer);
 		});
 
 		$(".select-beamer-" + beamerid).css("background-color", beamer.color);
