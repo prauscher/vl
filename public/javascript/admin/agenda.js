@@ -72,6 +72,9 @@ $(function () {
 		var selectBeamers = $("<span>").addClass("select-beamers");
 		apiClient.eachBeamer(function (beamerid, beamer) {
 			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
+				if (beamer.currentslideid == slideid) {
+					selectBeamerButton.addClass("active");
+				}
 				selectBeamers.append(selectBeamerButton);
 			});
 		});
