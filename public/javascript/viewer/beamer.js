@@ -1,4 +1,4 @@
-var setBeamerContent = function (slideid, slide) {
+function setBeamerContent (slideid, slide) {
 	currentSlideID = slideid;
 	$('#title').text(slide.title);
 	if (slide.type == 'text') {
@@ -10,6 +10,13 @@ var setBeamerContent = function (slideid, slide) {
 	} else {
 		$('#content').text("");
 	}	
+}
+
+function setViewerData(scroll, zoom) {
+	$("#content").animate({
+		fontSize: zoom + "em",
+		marginTop: scroll + "em"
+	}, 500);
 }
 
 $(function () {
@@ -30,6 +37,7 @@ $(function () {
 		}
 		apiClient.registerSlide(beamer.currentslideid);
 		setBeamerContent(beamer.currentslideid, currentslide);
+		setViewerData(beamer.scroll, beamer.zoom);
 
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
 	});

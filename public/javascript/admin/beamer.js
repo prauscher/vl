@@ -109,12 +109,12 @@ $(function () {
 		});
 
 		$("#beamers #beamer-" + beamerid + " .scroll-up").unbind("click").click(function () {
-			beamer.scroll -= 20;
+			beamer.scroll--;
 			apiClient.saveBeamer(beamerid, beamer);
 		});
 
 		$("#beamers #beamer-" + beamerid + " .scroll-down").unbind("click").click(function () {
-			beamer.scroll += 20;
+			beamer.scroll++;
 			apiClient.saveBeamer(beamerid, beamer);
 		});
 
