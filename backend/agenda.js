@@ -52,7 +52,7 @@ exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {
 			io.sockets.emit('slide-add', { slideid : slideid, slide : slide });
-			db.zadd('slides:' + slide.parentid + ":children", slidecount + 1, slideid, function (err) {});
+			db.zadd('slides:' + slide.parentid + ":children", slidecount, slideid, function (err) {});
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -68,6 +68,40 @@ exports.save = function(slideid, slide, callbackSuccess) {
 		if (callbackSuccess) {
 			callbackSuccess();
 		}
+	});
+}
+
+exports.move = function(slideid, parentid, position, callbackSuccess) {
+	exports.get(slideid, function (slide) {
+		db.zrank('slides:' + slide.parentid + ':children', slideid, function (err, slideindex) {
+			db.zrange('slides:' + slide.parentid + ':children', slideindex, -1, function (err, childids) {
+				if (childids) {
+					childids.forEach(function (childid) {
+						// Not decrement when childid == slideid, as slideid will get removed parallel
+						if (childid != slideid) {
+							db.zincrby('slides:' + slide.parentid + ':children', -1, childid);
+						}
+					});
+				}
+			});
+			db.zrem('slides:' + slide.parentid + ':children', slideid, function (err) {
+				slide.parentid = parentid;
+				exports.save(slideid, slide, function () {
+					db.zrangebyscore('slides:' + parentid + ':children', position, '+inf', function (err, childids) {
+						if (childids) {
+							childids.forEach(function (childid) {
+								db.zincrby('slides:' + parentid + ':children', 1, childid);
+							});
+						}
+					});
+					db.zadd('slides:' + parentid + ':children', position, slideid, function () {
+						if (callbackSuccess) {
+							callbackSuccess();
+						}
+					});
+				});
+			});
+		});
 	});
 }
 

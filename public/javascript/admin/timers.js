@@ -78,6 +78,14 @@ $(function () {
 		$("#timer-" + timerid).remove();
 	});
 
+	apiClient.on("initBeamer", function (beamerid, beamer) {
+		apiClient.eachTimer(function (timerid, timer) {
+			generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
+				$("#timers #timer-" + timerid + " .select-beamers").append(selectBeamerButton);
+			});
+		});
+	});
+
 	$("#new-timer").click(function () {
 		showTimerOptions(null, {});
 	});

@@ -15,6 +15,7 @@ app.post('/beamer-identify', routes.beamer.identify);
 
 app.put('/agenda/:slideid/save', routes.agenda.save);
 app.post('/agenda/:slideid/delete', routes.agenda.delete);
+app.post('/agenda/:slideid/move', routes.agenda.move);
 
 app.put('/beamer/:beamerid/save', routes.beamer.save);
 app.post('/beamer/:beamerid/delete', routes.beamer.delete);

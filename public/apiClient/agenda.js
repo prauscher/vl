@@ -52,6 +52,15 @@ APIClient.prototype.saveSlide = function(slideid, slide, callbackSuccess) {
 	});
 }
 
+APIClient.prototype.moveSlide = function (slideid, parentid, position, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/agenda/' + slideid + '/move',
+		data: { parentid: parentid, position: position },
+		success: callbackSuccess
+	});
+}
+
 APIClient.prototype.deleteSlide = function(slideid, callbackSuccess) {
 	$.ajax({
 		type: 'POST',

@@ -66,17 +66,6 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 
 $(function () {
 	apiClient.on("initBeamer", function (beamerid, beamer) {
-		apiClient.eachSlide(function (slideid, slide) {
-			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
-				$("#agenda #slide-" + slideid + " .select-beamers").append(selectBeamerButton);
-				});
-		});
-		apiClient.eachTimer(function (timerid, timer) {
-			generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
-				$("#timers #timer-" + timerid + " .select-beamers").append(selectBeamerButton);
-			});
-		});
-
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
 			.append($("<td>").append($("<img>").addClass("color")))
 			.append($("<td>").addClass("title"))
@@ -130,9 +119,6 @@ $(function () {
 		});
 
 		$(".select-beamer-" + beamerid).css("background-color", beamer.color);
-
-		$("#agenda .select-beamer-" + beamerid).removeClass("active");
-		$("#agenda #slide-" + beamer.currentslideid + " .select-beamer-" + beamerid).addClass("active");
 	});
 
 	apiClient.on("deleteBeamer", function(beamerid) {

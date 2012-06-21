@@ -36,11 +36,6 @@ exports.listen = function (app) {
 		});
 
 		socket.on('registeragenda', function (data) {
-			// Inform about our beamerviews
-			backend.beamer.getAll(function (beamerid, beamer) {
-				socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
-			});
-
 			// Send _ALL_ the slides for initialization
 			backend.agenda.getAll(function (slideid, slide) {
 				socket.emit('slide-add', {slideid: slideid, slide: slide});

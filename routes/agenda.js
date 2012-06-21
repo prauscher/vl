@@ -28,6 +28,12 @@ exports.save = function (req, res) {
 	});
 }
 
+exports.move = function (req, res) {
+	backend.agenda.move(req.params.slideid, req.body.parentid, req.body.position, function () {
+		res.send(200);
+	});
+}
+
 exports.delete = function (req, res) {
 	backend.agenda.delete(req.params.slideid, function () {
 		res.send(200);
