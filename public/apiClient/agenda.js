@@ -50,7 +50,8 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
-	this.socketIo.emit('registerslide', { slideid: slideid });
+
+	this.socketIo.emit('registerslide', { slideid: slideid, sendChildren: (typeof maxdepth == 'undefined' || maxdepth > 0) });
 }
 
 APIClient.prototype.unregisterSlide = function (slideid) {

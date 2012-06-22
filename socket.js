@@ -47,11 +47,13 @@ exports.listen = function (app) {
 				socket.emit('slide-change:' + data.slideid, { slide: slide });
 			});
 			
-			// Send children
-			var position = 0;
-			backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
-				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position++});
-			});
+			if (data.sendChildren) {
+				// Send children
+				var position = 0;
+				backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
+					socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position++});
+				});
+			}
 		});
 	});
 	return io;
