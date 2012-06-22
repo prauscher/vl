@@ -1,4 +1,5 @@
 APIClient.prototype.slides = {};
+APIClient.prototype.slideChildren = {};
 
 APIClient.prototype.eachSlide = function (callback) {
 	for (var slideid in this.slides) {
@@ -23,8 +24,10 @@ APIClient.prototype.registerAgenda = function () {
 
 APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	var self = this;
+	self.slideChildren[slideid] = [];
 	this.socketIo.on('slide-add:' + slideid, function (data) {
 		self.slides[data.slideid] = null;
+		self.slideChildren[slideid].push(data.slideid);
 
 		if (typeof maxdepth == 'undefined') {
 			self.registerSlide(data.slideid);
@@ -40,10 +43,10 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	});
 	this.socketIo.on('slide-delete:' + slideid, function (data) {
 		delete self.slides[slideid];
+		var parentid = self.slides[slideid].parentid;
+		self.slideChildren[parentid].slice(self.slideChildren[parentid].indexOf(slideid), 1);
 
-		self.socketIo.removeAllListeners('slide-add:' + slideid);
-		self.socketIo.removeAllListeners('slide-change:' + slideid);
-		self.socketIo.removeAllListeners('slide-delete:' + slideid);
+		self.unregisterSlide(slideid);
 
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
@@ -54,6 +57,10 @@ APIClient.prototype.unregisterSlide = function (slideid) {
 	this.socketIo.removeAllListeners('slide-add:' + slideid);
 	this.socketIo.removeAllListeners('slide-change:' + slideid);
 	this.socketIo.removeAllListeners('slide-delete:' + slideid);
+
+	for (var i in this.slideChildren[slideid]) {
+		this.unregisterSlide(this.slideChildren[slideid][i]);
+	}
 }
 
 APIClient.prototype.saveSlide = function(slideid, slide, callbackSuccess) {
