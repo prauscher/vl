@@ -177,7 +177,9 @@ $(function () {
 			apiClient.saveBeamer(beamerid, beamer);
 		});
 
-		$(".select-beamer-" + beamerid).css("background-color", beamer.color);
+		$(".select-beamer-" + beamerid)
+			.css("background-color", beamer.color)
+			.title("Beamer: " + beamer.title);
 	});
 
 	apiClient.on("deleteBeamer", function(beamerid) {
