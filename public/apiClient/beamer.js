@@ -21,12 +21,10 @@ APIClient.prototype.registerIdentifyBeamer = function () {
 APIClient.prototype.registerBeamers = function () {
 	var self = this;
 	this.socketIo.on('beamer-add', function (data) {
-		if (! self.beamers[data.beamerid]) {
-			self.beamers[data.beamerid] = data.beamer;
+		self.beamers[data.beamerid] = data.beamer;
 
-			self.registerBeamer(data.beamerid);
-			self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
-		}
+		self.registerBeamer(data.beamerid);
+		self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
 		self.callCallback("updateBeamer", [ data.beamerid, data.beamer, data.currentslide ] );
 	});
 	this.socketIo.emit('registerbeamers', {});

@@ -13,12 +13,10 @@ APIClient.prototype.getSlide = function (slideid, callback) {
 APIClient.prototype.registerAgenda = function () {
 	var self = this;
 	this.socketIo.on('slide-add', function (data) {
-		if (! self.slides[data.slideid]) {
-			self.slides[data.slideid] = data.slide;
+		self.slides[data.slideid] = data.slide;
 
-			self.registerSlide(data.slideid);
-			self.callCallback("initSlide", [ data.slideid, data.slide ] );
-		}
+		self.registerSlide(data.slideid);
+		self.callCallback("initSlide", [ data.slideid, data.slide ] );
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
 	});
 	this.socketIo.emit('registeragenda', {});
@@ -27,16 +25,14 @@ APIClient.prototype.registerAgenda = function () {
 APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	var self = this;
 	this.socketIo.on('slide-add:' + slideid, function (data) {
-		if (! self.slides[data.slideid]) {
-			self.slides[data.slideid] = data.slide;
+		self.slides[data.slideid] = data.slide;
 
-			if (typeof maxdepth == 'undefined') {
-				self.registerSlide(data.slideid);
-			} else if (maxdepth > 0) {
-				self.registerSlide(data.slideid, maxdepth - 1);
-			}
-			self.callCallback("initSlide", [ data.slideid, data.slide, data.position ] );
+		if (typeof maxdepth == 'undefined') {
+			self.registerSlide(data.slideid);
+		} else if (maxdepth > 0) {
+			self.registerSlide(data.slideid, maxdepth - 1);
 		}
+		self.callCallback("initSlide", [ data.slideid, data.slide, data.position ] );
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
 	});
 	this.socketIo.on('slide-change:' + slideid, function (data) {

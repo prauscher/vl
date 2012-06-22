@@ -1,5 +1,6 @@
 function APIClient() {
 	this.callbacks = {};
+	this.firstConnect = true;
 }
 
 APIClient.prototype.connect = function (callback) {
@@ -7,7 +8,10 @@ APIClient.prototype.connect = function (callback) {
 
 	this.socketIo = io.connect();
 	this.socketIo.on('connect', function () {
-		callback.apply(self, []);
+		if (self.firstConnect) {
+			self.firstConnect = false;
+			callback.apply(self, []);
+		}
 	});
 }
 
