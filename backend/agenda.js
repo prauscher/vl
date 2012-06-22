@@ -42,7 +42,7 @@ exports.eachChildren = function(slideid, callback) {
 	});
 }
 
-exports.add = function(slideid, slide, callbackSuccess) {
+function appendSlide(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {
 			db.zadd('slides:' + slide.parentid + ":children", slidecount, slideid, function (err) {});
@@ -53,6 +53,21 @@ exports.add = function(slideid, slide, callbackSuccess) {
 			}
 		});
 	});
+}
+
+exports.add = function(slideid, slide, callbackSuccess) {
+	if (! slide.parentid) {
+		exports.getRootSlide(function (rootslideid, rootslide) {
+			if (rootslide == null) {
+				exports.setRootSlideID(slideid);
+			} else {
+				slide.parentid = rootslideid;
+				appendSlide(slideid, slide, callbackSuccess);
+			}
+		});
+	} else {
+		appendSlide(slideid, slide, callbackSuccess);
+	}
 }
 
 exports.save = function(slideid, slide, callbackSuccess) {
