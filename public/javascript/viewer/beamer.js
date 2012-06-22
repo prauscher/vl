@@ -23,8 +23,8 @@ function setViewerData(scroll, zoom) {
 }
 
 $(function () {
-	apiClient.on("initSlide", function (slideid, slide, position) {
-		if (slide.parentid == currentSlideID) {
+	apiClient.on("initSlide", function (slideid, parentid, position) {
+		if (parentid == currentSlideID) {
 			var item = $("<li>").attr("id", "agenda-" + slideid);
 			if (position == 0) {
 				$("#content .content-agenda").prepend(item);

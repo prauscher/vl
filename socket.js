@@ -37,8 +37,8 @@ exports.listen = function (app) {
 
 		socket.on('registeragenda', function (data) {
 			// Send rootslide. client may ask for children
-			backend.agenda.getRootSlide(function (rootslideid, rootslide) {
-				socket.emit('slide-add', {slideid: rootslideid, slide: rootslide});
+			backend.agenda.getRootSlideID(function (rootslideid) {
+				socket.emit('slide-add', {slideid: rootslideid});
 			});
 		});
 
@@ -50,7 +50,7 @@ exports.listen = function (app) {
 			// Send children
 			var position = 0;
 			backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
-				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, slide: subslide, position: position++});
+				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position++});
 			});
 		});
 	});

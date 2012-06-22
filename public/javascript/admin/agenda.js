@@ -60,7 +60,7 @@ $(function () {
 		}
 	});
 
-	apiClient.on("initSlide", function (slideid, slide, position) {
+	apiClient.on("initSlide", function (slideid, parentid, position) {
 		var selectBeamers = $("<span>").addClass("select-beamers");
 		apiClient.eachBeamer(function (beamerid, beamer) {
 			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
@@ -85,11 +85,11 @@ $(function () {
 					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) ))
 			.append($('<ol>').addClass("slide-children") );
 
-		if (slide.parentid) {
+		if (parentid != null) {
 			if (position == 0) {
-				$('#slide-' + slide.parentid + ' > ol').prepend(item);
+				$('#slide-' + parentid + ' > ol').prepend(item);
 			} else {
-				$('#slide-' + slide.parentid + ' > ol > li:eq(' + (position - 1) + ')').after(item);
+				$('#slide-' + parentid + ' > ol > li:eq(' + (position - 1) + ')').after(item);
 			}
 		} else {
 			$("ol#slides").append(item);
