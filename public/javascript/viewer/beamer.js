@@ -59,7 +59,7 @@ $(function () {
 		}
 		currentSlideID = beamer.currentslideid;
 		$('#content .content-agenda').empty();
-		apiClient.registerSlide(currentSlideID);
+		apiClient.registerSlide(currentSlideID, 0);
 
 		setBeamerContent(currentSlideID, currentslide);
 		setViewerData(beamer.scroll, beamer.zoom);

@@ -24,13 +24,17 @@ APIClient.prototype.registerAgenda = function () {
 	this.socketIo.emit('registeragenda', {});
 }
 
-APIClient.prototype.registerSlide = function (slideid) {
+APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	var self = this;
 	this.socketIo.on('slide-add:' + slideid, function (data) {
 		if (! self.slides[data.slideid]) {
 			self.slides[data.slideid] = data.slide;
 
-			self.registerSlide(data.slideid);
+			if (typeof maxdepth == 'undefined') {
+				self.registerSlide(data.slideid);
+			} else if (maxdepth > 0) {
+				self.registerSlide(data.slideid, maxdepth - 1);
+			}
 			self.callCallback("initSlide", [ data.slideid, data.slide, data.position ] );
 		}
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
