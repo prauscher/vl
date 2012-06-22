@@ -19,6 +19,9 @@ th {
 #waiting
 	{position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:lightgray; opacity:0.4; background-position:center; background-image:url(/images/waiting.gif); background-repeat:no-repeat;}
 
+.content-agenda .done
+	{color:#777777;}
+
 .flash-danger
 	{background-color:#f2dede; color:#b94a48;}
 .flash-information
