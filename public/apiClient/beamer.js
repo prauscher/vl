@@ -25,7 +25,6 @@ APIClient.prototype.registerBeamers = function () {
 
 		self.registerBeamer(data.beamerid);
 		self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
-		self.callCallback("updateBeamer", [ data.beamerid, data.beamer, data.currentslide ] );
 	});
 	this.socketIo.emit('registerbeamers', {});
 }

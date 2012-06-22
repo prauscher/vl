@@ -60,7 +60,7 @@ $(function () {
 		if (currentSlideID == null || currentSlideID != beamer.currentslideid) {
 			currentSlideID = beamer.currentslideid;
 			$('#content .content-agenda').empty();
-			apiClient.registerSlide(currentSlideID, 0);
+			apiClient.registerSlide(currentSlideID, 1);
 
 			setBeamerContent(currentSlideID, currentslide);
 		}

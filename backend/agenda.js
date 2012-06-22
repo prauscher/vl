@@ -45,8 +45,8 @@ exports.eachChildren = function(slideid, callback) {
 exports.add = function(slideid, slide, callbackSuccess) {
 	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
 		exports.save(slideid, slide, function() {
-			io.sockets.emit('slide-add', { slideid : slideid, slide : slide });
 			db.zadd('slides:' + slide.parentid + ":children", slidecount, slideid, function (err) {});
+			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : slidecount });
 
 			if (callbackSuccess) {
 				callbackSuccess();
