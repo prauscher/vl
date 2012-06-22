@@ -47,6 +47,5 @@ html
 		- else if (typeof slideid != 'undefined')
 			script(type="text/javascript")
 				apiClient.connect(function () {
-					this.registerSlide('#{slideid}');
+					setCurrentSlide('#{slideid}');
 				});
-

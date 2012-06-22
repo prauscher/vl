@@ -22,6 +22,15 @@ function setViewerData(scroll, zoom) {
 	}, 500);
 }
 
+function setCurrentSlide(slideid) {
+	if (currentSlideID != null) {
+		apiClient.unregisterSlide(currentSlideID);
+	}
+	currentSlideID = slideid;
+	$('#content .content-agenda').empty();
+	apiClient.registerSlide(slideid, 1);
+}
+
 $(function () {
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
@@ -54,16 +63,8 @@ $(function () {
 	});
 
 	apiClient.on("updateBeamer", function (beamerid, beamer, currentslide) {
-		if (currentSlideID != null) {
-			apiClient.unregisterSlide(currentSlideID);
-		}
-		if (currentSlideID == null || currentSlideID != beamer.currentslideid) {
-			currentSlideID = beamer.currentslideid;
-			$('#content .content-agenda').empty();
-			apiClient.registerSlide(currentSlideID, 1);
-
-			setBeamerContent(currentSlideID, currentslide);
-		}
+		setCurrentSlide(beamer.currentslideid);
+		setBeamerContent(currentSlideID, currentslide);
 		setViewerData(beamer.scroll, beamer.zoom);
 
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
