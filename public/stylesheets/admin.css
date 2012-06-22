@@ -8,3 +8,22 @@
 
 #timers .color, #beamers .color
 	{width:16px; height:16px;}
+
+ol#slides, #slides ol
+	{list-style:none; margin-left:15px;}
+ol#slides>li>ol>li>.slide>.move
+	{width:55px;}
+ol#slides>li>ol>li>ol>li>.slide>.move
+	{width:40px;}
+ol#slides>li>ol>li>ol>li>ol>li>.slide>.move
+	{width:25px;}
+ol#slides>li>ol>li>ol>li>ol>li>ol>li>.slide>.move
+	{width:10px;}
+ol#slides .slide .move
+	{display:block; float:left; width:70px;}
+ol#slides .slide .title
+	{display:block; float:left; width:200px;}
+ol#slides .slide .select-beamers
+	{display:block; float:left;}
+ol#slides .slide .options
+	{display:block;}

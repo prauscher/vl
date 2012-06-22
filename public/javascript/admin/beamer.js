@@ -101,6 +101,7 @@ $(function () {
 					.addClass("select-beamer")
 					.addClass("active")
 					.addClass("select-beamer-" + beamerid) )
+				.append(" ")
 				.append($("<span>").addClass("title")) ) );
 
 		var handoverBeamer = $("<td>").addClass("handover-beamer");
