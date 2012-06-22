@@ -36,6 +36,7 @@ APIClient.prototype.registerTimer = function (timerid) {
 
 APIClient.prototype.unregisterTimer = function (timerid) {
 	this.socketIo.removeAllListeners('timer-change:' + timerid);
+	this.socketIo.removeAllListeners('timer-delete:' + timerid);
 }
 
 APIClient.prototype.saveTimer = function(timerid, timer, callbackSuccess) {

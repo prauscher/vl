@@ -53,7 +53,9 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 }
 
 APIClient.prototype.unregisterSlide = function (slideid) {
+	this.socketIo.removeAllListeners('slide-add:' + slideid);
 	this.socketIo.removeAllListeners('slide-change:' + slideid);
+	this.socketIo.removeAllListeners('slide-delete:' + slideid);
 }
 
 APIClient.prototype.saveSlide = function(slideid, slide, callbackSuccess) {
