@@ -96,27 +96,27 @@ $(function () {
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
-		$("#agenda #slide-" + slideid + ">.slide .title").text(slide.title);
+		$("#agenda #slide-" + slideid + " > .slide .title").text(slide.title);
 
-		$("#agenda #slide-" + slideid + ">.slide .isundone").unbind("click").toggle(slide.isdone != "true").click(function () {
+		$("#agenda #slide-" + slideid + " > .slide .isundone").unbind("click").toggle(slide.isdone != "true").click(function () {
 			slide.isdone = true;
 			apiClient.saveSlide(slideid, slide);
 		});
-		$("#agenda #slide-" + slideid + ">.slide .isdone").unbind("click").toggle(slide.isdone == "true").click(function () {
+		$("#agenda #slide-" + slideid + " > .slide .isdone").unbind("click").toggle(slide.isdone == "true").click(function () {
 			slide.isdone = false;
 			apiClient.saveSlide(slideid, slide);
 		});
 
-		$("#agenda #slide-" + slideid + ">.slide .isvisible").unbind("click").toggle(slide.hidden != "true").click(function () {
+		$("#agenda #slide-" + slideid + " > .slide .isvisible").unbind("click").toggle(slide.hidden != "true").click(function () {
 			slide.hidden = true;
 			apiClient.saveSlide(slideid, slide);
 		});
-		$("#agenda #slide-" + slideid + ">.slide .ishidden").unbind("click").toggle(slide.hidden == "true").click(function () {
+		$("#agenda #slide-" + slideid + " > .slide .ishidden").unbind("click").toggle(slide.hidden == "true").click(function () {
 			slide.hidden = false;
 			apiClient.saveSlide(slideid, slide);
 		});
 
-		$("#agenda #slide-" + slideid + ">.slide .title").unbind("click").click(function() {
+		$("#agenda #slide-" + slideid + " > .slide .title").unbind("click").click(function() {
 			showSlideOptions(slideid, slide);
 		});
 	});

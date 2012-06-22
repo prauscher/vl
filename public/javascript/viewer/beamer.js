@@ -1,14 +1,17 @@
 function setBeamerContent (slideid, slide) {
-	currentSlideID = slideid;
 	$('#title').text(slide.title);
+
+	$('#content .content-text').hide();
+	$('#content .content-html').hide();
+	$('#content .content-agenda').hide();
 	if (slide.type == 'text') {
-		$('#content').text(slide.text);
+		$('#content .content-text').show();
+		$('#content .content-text').text(slide.text);
 	} else if (slide.type == 'html') {
-		$('#content').html(slide.html);
+		$('#content .content-html').show();
+		$('#content .content-html').html(slide.html);
 	} else if (slide.type == 'agenda') {
-		$('#content').text("OHAI!");
-	} else {
-		$('#content').text("");
+		$('#content .content-agenda').show();
 	}	
 }
 
