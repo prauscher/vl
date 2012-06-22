@@ -1,4 +1,5 @@
 APIClient.prototype.beamers = {};
+APIClient.prototype.beamerTimers = {};
 
 APIClient.prototype.getBeamer = function (beamerid, callback) {
 	callback(this.beamers[beamerid]);
@@ -33,6 +34,7 @@ APIClient.prototype.registerBeamers = function () {
 
 APIClient.prototype.registerBeamer = function (beamerid) {
 	var self = this;
+	self.beamerTimers[beamerid] = [];
 	this.socketIo.on('beamer-change:' + beamerid, function (data) {
 		self.beamers[beamerid] = data.beamer;
 
@@ -43,14 +45,29 @@ APIClient.prototype.registerBeamer = function (beamerid) {
 	});
 	this.socketIo.on('beamer-showtimer:' + beamerid, function (data) {
 		self.callCallback("showTimerBeamer", [ beamerid, data.timerid, data.timer ]);
+		self.beamerTimers[beamerid].push(data.timerid);
 	});
 	this.socketIo.on('beamer-hidetimer:' + beamerid, function (data) {
 		self.callCallback("hideTimerBeamer", [ beamerid, data.timerid, data.timer ]);
+		self.beamerTimers[beamerid].splice(self.beamerTimers[beamerid].indexOf(data.timerid), 1);
 	});
 	this.socketIo.on('beamer-delete:' + beamerid, function (data) {
 		self.callCallback("deleteBeamer", [ beamerid ]);
 	});
 	this.socketIo.emit('registerbeamer', { beamerid : beamerid });
+}
+
+APIClient.prototype.eachBeamerTimer = function(beamerid, callback) {
+	var self = this;
+	this.beamerTimers[beamerid].forEach(function (timerid) {
+		self.getTimer(timerid, function (timer) {
+			callback(timerid, timer);
+		});
+	});
+}
+
+APIClient.prototype.beamerHasTimer = function(beamerid, timerid, callback) {
+	callback(this.beamerTimers[beamerid].indexOf(timerid) != -1);
 }
 
 APIClient.prototype.saveBeamer = function(beamerid, beamer, callbackSuccess) {

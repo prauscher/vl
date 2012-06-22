@@ -39,6 +39,35 @@ function generateSelectBeamerButton(beamerid, callbacks) {
 	});
 }
 
+function generateSelectBeamerHandoverButton(sourceBeamerid, targetBeamerid, callback) {
+	generateSelectBeamerButton(sourceBeamerid, {
+		click : function () {
+			apiClient.getBeamer(sourceBeamerid, function (sourceBeamer) {
+				apiClient.getBeamer(targetBeamerid, function (targetBeamer) {
+					targetBeamer.currentslideid = sourceBeamer.currentslideid;
+					apiClient.saveBeamer(targetBeamerid, targetBeamer);
+
+					apiClient.eachBeamerTimer(targetBeamerid, function (timerid, timer) {
+						apiClient.beamerHasTimer(sourceBeamerid, timerid, function (hasTimer) {
+							if (! hasTimer) {
+								apiClient.hideTimerBeamer(targetBeamerid, timerid);
+							}
+						});
+					});
+					apiClient.eachBeamerTimer(sourceBeamerid, function (timerid, timer) {
+						apiClient.beamerHasTimer(targetBeamerid, timerid, function (hasTimer) {
+							if (! hasTimer) {
+								apiClient.showTimerBeamer(targetBeamerid, timerid);
+							}
+						});
+					});
+				});
+			});
+		},
+		create : callback
+	});
+}
+
 function generateSelectBeamerSlideButton(beamerid, slideid, callback) {
 	generateSelectBeamerButton(beamerid, {
 		click : function () {
@@ -66,9 +95,23 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 
 $(function () {
 	apiClient.on("initBeamer", function (beamerid, beamer) {
+		var handoverBeamer = $("<td>").addClass("select-beamer");
+
+		apiClient.eachBeamer(function (targetBeamerid, targetBeamer) {
+			if (targetBeamerid != beamerid) {
+				generateSelectBeamerHandoverButton(beamerid, targetBeamerid, function(handoverBeamerButton) {
+					$("#beamers #beamer-" + targetBeamerid + " .select-beamer").append(handoverBeamerButton.addClass("active"));
+				});
+				generateSelectBeamerHandoverButton(targetBeamerid, beamerid, function(handoverBeamerButton) {
+					handoverBeamer.append(handoverBeamerButton.addClass("active"));
+				});
+			}
+		});
+
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
 			.append($("<td>").append($("<img>").addClass("color")))
 			.append($("<td>").addClass("title"))
+			.append(handoverBeamer)
 			.append($("<td>")
 				.append($("<i>").addClass("icon-repeat").addClass("reset"))
 				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in"))
