@@ -179,7 +179,7 @@ $(function () {
 
 		$(".select-beamer-" + beamerid)
 			.css("background-color", beamer.color)
-			.title("Beamer: " + beamer.title);
+			.attr("title", "Beamer: " + beamer.title);
 	});
 
 	apiClient.on("deleteBeamer", function(beamerid) {

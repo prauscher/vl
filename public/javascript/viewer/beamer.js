@@ -56,9 +56,9 @@ $(function () {
 	});
 
 	apiClient.on("identifyBeamer", function (timeout) {
-		$("#identify").show();
+		$("#identify").fadeIn(100);
 		window.setTimeout(function () {
-			$("#identify").hide();
+			$("#identify").fadeOut(300);
 		}, timeout * 1000);
 	});
 
@@ -80,14 +80,14 @@ $(function () {
 			.text(flash.text);
 
 		window.setTimeout(function () {
-			flashContainer.hide();
+			flashContainer.slideUp(300);
 		}, flash.timeout * 1000);
 
 		// Insert hidden to allow effects
 		flashContainer.hide();
 		$("#flashs").append(flashContainer);
 
-		flashContainer.show();					
+		flashContainer.show(300);
 	});
 
 	apiClient.on("updateTimer", function (timerid, timer) {
