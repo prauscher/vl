@@ -30,6 +30,7 @@ APIClient.prototype.registerSlide = function (slideid) {
 		if (! self.slides[data.slideid]) {
 			self.slides[data.slideid] = data.slide;
 
+			self.registerSlide(data.slideid);
 			self.callCallback("initSlide", [ data.slideid, data.slide ] );
 		}
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
