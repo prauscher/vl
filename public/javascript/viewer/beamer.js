@@ -37,7 +37,9 @@ $(function () {
 		}
 	});
 
-	apiClient.on("deleteSlide", function (slideid) {});
+	apiClient.on("deleteSlide", function (slideid) {
+		$("#content .content-agenda #agenda-" + slideid).remove();
+	});
 
 	apiClient.on("identifyBeamer", function (timeout) {
 		$("#identify").show();

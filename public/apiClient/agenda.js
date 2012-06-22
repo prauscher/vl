@@ -43,6 +43,10 @@ APIClient.prototype.registerSlide = function (slideid) {
 	this.socketIo.on('slide-delete:' + slideid, function (data) {
 		delete self.slides[slideid];
 
+		self.socketIo.removeAllListeners('slide-add:' + slideid);
+		self.socketIo.removeAllListeners('slide-change:' + slideid);
+		self.socketIo.removeAllListeners('slide-delete:' + slideid);
+
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
 	this.socketIo.emit('registerslide', { slideid: slideid });
