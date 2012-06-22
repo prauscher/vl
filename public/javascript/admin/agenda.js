@@ -60,15 +60,7 @@ $(function () {
 		}
 	});
 
-	apiClient.on("initSlide", function (slideid, slide) {
-		var parentElement;
-
-		if (slide.parentid) {
-			parentElement = $('#slide-' + slide.parentid + ' > ol');
-		} else {
-			parentElement = $("ol#slides");
-		}
-
+	apiClient.on("initSlide", function (slideid, slide, position) {
 		var selectBeamers = $("<span>").addClass("select-beamers");
 		apiClient.eachBeamer(function (beamerid, beamer) {
 			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
@@ -79,7 +71,7 @@ $(function () {
 			});
 		});
 
-		parentElement.append($("<li>").attr("id", "slide-" + slideid)
+		var item = $("<li>").attr("id", "slide-" + slideid)
 			.append($('<div>').addClass("slide")
 				.append($("<span>").addClass("move")
 					.append($("<i>").addClass('icon-move')) )
@@ -91,8 +83,17 @@ $(function () {
 					.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
 					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"))
 					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) ))
-			.append($('<ol>').addClass("slide-children")) );
+			.append($('<ol>').addClass("slide-children") );
 
+		if (slide.parentid) {
+			if (position == 0) {
+				$('#slide-' + slide.parentid + ' > ol').prepend(item);
+			} else {
+				$('#slide-' + slide.parentid + ' > ol > li:eq(' + (position - 1) + ')').after(item);
+			}
+		} else {
+			$("ol#slides").append(item);
+		}
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {

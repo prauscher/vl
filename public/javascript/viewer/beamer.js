@@ -23,9 +23,14 @@ function setViewerData(scroll, zoom) {
 }
 
 $(function () {
-	apiClient.on("initSlide", function (slideid, slide) {
+	apiClient.on("initSlide", function (slideid, slide, position) {
 		if (slide.parentid == currentSlideID) {
-			$("#content .content-agenda").append($("<li>").attr("id", "agenda-" + slideid));
+			var item = $("<li>").attr("id", "agenda-" + slideid);
+			if (position == 0) {
+				$("#content .content-agenda").prepend(item);
+			} else {
+				$("#content .content-agenda>li:eq(" + (position - 1) + ")").after(item);
+			}
 		}
 	});
 

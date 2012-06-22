@@ -31,7 +31,7 @@ APIClient.prototype.registerSlide = function (slideid) {
 			self.slides[data.slideid] = data.slide;
 
 			self.registerSlide(data.slideid);
-			self.callCallback("initSlide", [ data.slideid, data.slide ] );
+			self.callCallback("initSlide", [ data.slideid, data.slide, data.position ] );
 		}
 		self.callCallback("updateSlide", [ data.slideid, data.slide ] );
 	});

@@ -48,8 +48,9 @@ exports.listen = function (app) {
 			});
 			
 			// Send children
+			var position = 0;
 			backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
-				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, slide: subslide});
+				socket.emit('slide-add:' + data.slideid, {slideid: subslideid, slide: subslide, position: position++});
 			});
 		});
 	});

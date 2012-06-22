@@ -89,6 +89,9 @@ exports.move = function(slideid, parentid, position, callbackSuccess) {
 						}
 					});
 					db.zadd('slides:' + parentid + ':children', position, slideid, function () {
+						io.sockets.emit('slide-delete:' + slideid, {});
+						io.sockets.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
+
 						if (callbackSuccess) {
 							callbackSuccess();
 						}
