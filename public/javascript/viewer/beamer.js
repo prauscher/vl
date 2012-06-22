@@ -23,7 +23,19 @@ function setViewerData(scroll, zoom) {
 }
 
 $(function () {
-	apiClient.on("updateSlide", setBeamerContent);
+	apiClient.on("initSlide", function (slideid, slide) {
+		if (slide.parentid == currentSlideID) {
+			$("#content .content-agenda").append($("<li>").attr("id", "agenda-" + slideid));
+		}
+	});
+
+	apiClient.on("updateSlide", function (slideid, slide) {
+		if (slideid == currentSlideID) {
+			setBeamerContent(slideid, slide);
+		} else {
+			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
+		}
+	});
 
 	apiClient.on("deleteSlide", function (slideid) {});
 
@@ -38,8 +50,11 @@ $(function () {
 		if (currentSlideID != null) {
 			apiClient.unregisterSlide(currentSlideID);
 		}
-		apiClient.registerSlide(beamer.currentslideid);
-		setBeamerContent(beamer.currentslideid, currentslide);
+		currentSlideID = beamer.currentslideid;
+		$('#content .content-agenda').empty();
+		apiClient.registerSlide(currentSlideID);
+
+		setBeamerContent(currentSlideID, currentslide);
 		setViewerData(beamer.scroll, beamer.zoom);
 
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
