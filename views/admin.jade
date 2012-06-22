@@ -33,6 +33,15 @@ html
 							a#nav-timers(href="#timers") Timer
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-beamers.pull-right.btn.btn-info Identifizieren
+					div#showbeamer.btn-group.pull-right
+						a.btn.dropdown-toggle(data-toggle="dropdown") Beamer
+							span.caret
+						ul.dropdown-menu
+							li#showbeamers
+								a
+									img.select-beamer
+									| Alle zeigen
+							li.divider
 
 		div#flash-options.modal
 			div.modal-header

@@ -95,12 +95,20 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 
 $(function () {
 	apiClient.on("initBeamer", function (beamerid, beamer) {
-		var handoverBeamer = $("<td>").addClass("select-beamer");
+		$("#showbeamer ul").append($("<li>").attr("id", "showbeamer-" + beamerid)
+			.append($("<a>")
+				.append($("<img>")
+					.addClass("select-beamer")
+					.addClass("active")
+					.addClass("select-beamer-" + beamerid) )
+				.append($("<span>").addClass("title")) ) );
+
+		var handoverBeamer = $("<td>").addClass("handover-beamer");
 
 		apiClient.eachBeamer(function (targetBeamerid, targetBeamer) {
 			if (targetBeamerid != beamerid) {
 				generateSelectBeamerHandoverButton(beamerid, targetBeamerid, function(handoverBeamerButton) {
-					$("#beamers #beamer-" + targetBeamerid + " .select-beamer").append(handoverBeamerButton.addClass("active"));
+					$("#beamers #beamer-" + targetBeamerid + " .handover-beamer").append(handoverBeamerButton.addClass("active"));
 				});
 				generateSelectBeamerHandoverButton(targetBeamerid, beamerid, function(handoverBeamerButton) {
 					handoverBeamer.append(handoverBeamerButton.addClass("active"));
@@ -130,6 +138,13 @@ $(function () {
 	});
 
 	apiClient.on("updateBeamer", function(beamerid, beamer) {
+		$("#showbeamer #showbeamer-" + beamerid).unbind("click").click(function () {
+			$(".select-beamer").hide();
+			$("#showbeamer .select-beamer").show();
+			$(".select-beamer-" + beamerid).show();
+		});
+		$("#showbeamer #showbeamer-" + beamerid + " .title").text(beamer.title);
+
 		$("#beamers #beamer-" + beamerid + " .color").css("background-color", beamer.color);
 		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).unbind("click").click(function () {
 			showBeamerOptions(beamerid, beamer);
@@ -165,6 +180,7 @@ $(function () {
 	});
 
 	apiClient.on("deleteBeamer", function(beamerid) {
+		$("#showbeamer-" + beamerid).remove();
 		$("#beamers #beamer-" + beamerid).remove();
 
 		$(".select-beamer-" + beamerid).remove();
@@ -181,5 +197,9 @@ $(function () {
 			url: '/beamer-identify',
 			data: { timeout: 5 }
 		});
+	});
+
+	$("#showbeamers").click(function () {
+		$(".select-beamer").show();
 	});
 });
