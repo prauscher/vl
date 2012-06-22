@@ -57,11 +57,13 @@ $(function () {
 		if (currentSlideID != null) {
 			apiClient.unregisterSlide(currentSlideID);
 		}
-		currentSlideID = beamer.currentslideid;
-		$('#content .content-agenda').empty();
-		apiClient.registerSlide(currentSlideID, 0);
+		if (currentSlideID == null || currentSlideID != beamer.currentslideid) {
+			currentSlideID = beamer.currentslideid;
+			$('#content .content-agenda').empty();
+			apiClient.registerSlide(currentSlideID, 0);
 
-		setBeamerContent(currentSlideID, currentslide);
+			setBeamerContent(currentSlideID, currentslide);
+		}
 		setViewerData(beamer.scroll, beamer.zoom);
 
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
