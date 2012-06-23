@@ -60,6 +60,13 @@ exports.add = function(slideid, slide, callbackSuccess) {
 		exports.getRootSlide(function (rootslideid, rootslide) {
 			if (rootslide == null) {
 				exports.setRootSlideID(slideid);
+				exports.save(slideid, slide, function() {
+					io.sockets.emit('slide-add', { slideid : slideid });
+
+					if (callbackSuccess) {
+						callbackSuccess();
+					}
+				});
 			} else {
 				slide.parentid = rootslideid;
 				appendSlide(slideid, slide, callbackSuccess);
