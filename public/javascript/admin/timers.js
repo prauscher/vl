@@ -17,6 +17,9 @@ function showTimerOptions(timerid, timer) {
 		timer.title = $("#timers #timer-options #title").val();
 		timer.color = $("#timers #timer-options #color").val();
 		timer.value = $("#timers #timer-options #value").val();
+		if (!timer.startedValue) {
+			timer.startedValue = timer.value;
+		}
 		apiClient.saveTimer(timerid, timer, function () {
 			$("#timers #timer-options").modal('hide');
 		});
