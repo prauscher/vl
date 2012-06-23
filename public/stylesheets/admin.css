@@ -20,7 +20,7 @@ ol#slides>li>ol>li>ol>li>ol>li>.slide>.move
 ol#slides>li>ol>li>ol>li>ol>li>ol>li>.slide>.move
 	{width:10px;}
 ol#slides .slide
-	{display:block; float:left; clear:left;}
+	{display:block;}
 ol#slides .slide .move
 	{display:block; float:left; width:70px;}
 ol#slides .slide .title
