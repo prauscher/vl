@@ -43,12 +43,11 @@ function showSlideOptions(slideid, slide) {
 $(function () {
 	$('ol#slides').nestedSortable({
 		handle: '.icon-move',
-	        items: 'li',
 	        toleranceElement: '> div',
+	        items: 'li',
 		update: function(ev, ui) {
-			// callback here
-			if (! ui.item.parent().hasClass("slide-children")) {
-				// Something went wrong. mostly, the user has moved to root layer
+			if (ui.item.parent().hasClass("ui-sortable")) {
+				// We do not want to put elements to the root layer
 				return false;
 			} else {
 				var slideid = ui.item.attr("id").split('-',2)[1];
@@ -71,6 +70,7 @@ $(function () {
 			});
 		});
 
+		// Note: The <ol> for children will be removed and recreated by jQuery. Do _not_ add classes to them!
 		var item = $("<li>").attr("id", "slide-" + slideid)
 			.append($('<div>').addClass("slide")
 				.append($("<span>").addClass("move")
@@ -84,7 +84,7 @@ $(function () {
 					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"))
 					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) )
 				.append($("<span>").addClass("fixFloat")) )
-			.append($('<ol>').addClass("slide-children") );
+			.append($('<ol>') );
 
 		if (parentid != null) {
 			if (position == 0) {
