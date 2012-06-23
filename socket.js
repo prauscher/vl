@@ -38,7 +38,9 @@ exports.listen = function (app) {
 		socket.on('registeragenda', function (data) {
 			// Send rootslide. client may ask for children
 			backend.agenda.getRootSlideID(function (rootslideid) {
-				socket.emit('slide-add', {slideid: rootslideid});
+				if (rootslideid != null) {
+					socket.emit('slide-add', {slideid: rootslideid});
+				}
 			});
 		});
 
