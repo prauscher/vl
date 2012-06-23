@@ -1,3 +1,5 @@
+var currentlyPickedBeamer = null;
+
 function showBeamerOptions(beamerid, beamer) {
 	if (beamerid == null) {
 		beamerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
@@ -36,6 +38,7 @@ function generateSelectBeamerButton(beamerid, callbacks) {
 			.addClass("select-beamer-" + beamerid)
 			.css("background-color", beamer.color)
 			.attr("title","Beamer: " + beamer.title)
+			.toggle(currentlyPickedBeamer == null || currentlyPickedBeamer == beamerid)
 			.click(callbacks.click) );
 	});
 }
@@ -143,6 +146,7 @@ $(function () {
 
 	apiClient.on("updateBeamer", function(beamerid, beamer) {
 		$("#showbeamer #showbeamer-" + beamerid).unbind("click").click(function () {
+			currentlyPickedBeamer = beamerid;
 			$(".select-beamer").hide();
 			$("#showbeamer .select-beamer").show();
 			$(".select-beamer-" + beamerid).show();
@@ -206,6 +210,7 @@ $(function () {
 	});
 
 	$("#showbeamers").click(function () {
+		currentlyPickedBeamer = null;
 		$(".select-beamer").show();
 	});
 });
