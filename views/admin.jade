@@ -1,12 +1,14 @@
 !!!
 html
 	head
+		link(rel='stylesheet',href='/jquery-miniColors/jquery.miniColors.css')
 		link(rel='stylesheet',href='/bootstrap/css/bootstrap.min.css')
 		link(rel='stylesheet',href='/bootstrap/css/bootstrap-responsive.min.css')
 		link(rel='stylesheet',href='/stylesheets/admin.css')
 		script(src='/javascript/jquery-1.7.2.min.js')
 		script(src='/javascript/jquery-ui-1.8.21.custom.min.js')
 		script(src='/javascript/jquery.mjs.nestedSortable.js')
+		script(src='/jquery-miniColors/jquery.miniColors.min.js')
 		script(src='/bootstrap/js/bootstrap.min.js')
 		script(src='/socket.io/socket.io.js')
 		script(src='/javascript/timerClient.js')
@@ -78,7 +80,7 @@ html
 					h3 Beamer bearbeiten
 				form.form-horizontal.modal-body
 					input(type="text")#title
-					input(type="text")#color
+					input(type="hidden")#color
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-beamer Löschen
 					button.btn(data-dismiss="modal") Schließen
@@ -133,7 +135,7 @@ html
 					h3 Timer anlegen
 				form.form-horizontal.modal-body
 					input(type="text")#title
-					input(type="text")#color.span2
+					input(type="hidden")#color
 					input(type="text")#value.span1
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-timer Löschen

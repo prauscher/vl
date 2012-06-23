@@ -9,7 +9,8 @@ function showBeamerOptions(beamerid, beamer) {
 	}
 
 	$("#beamers #beamer-options #title").val(beamer.title);
-	$("#beamers #beamer-options #color").val(beamer.color);
+	// Call destroy to remove miniColors-objects earlier beamer-options
+	$("#beamers #beamer-options #color").val(beamer.color).miniColors('destroy').miniColors();
 
 	$("#beamers #beamer-options #delete-beamer").unbind("click").click(function () {
 		apiClient.deleteBeamer(beamerid, function () {
