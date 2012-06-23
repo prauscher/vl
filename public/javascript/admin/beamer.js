@@ -44,6 +44,8 @@ function generateSelectBeamerHandoverButton(sourceBeamerid, targetBeamerid, call
 		click : function () {
 			apiClient.getBeamer(sourceBeamerid, function (sourceBeamer) {
 				apiClient.getBeamer(targetBeamerid, function (targetBeamer) {
+					targetBeamer.zoom = sourceBeamer.zoom;
+					targetBeamer.scroll = sourceBeamer.scroll;
 					targetBeamer.currentslideid = sourceBeamer.currentslideid;
 					apiClient.saveBeamer(targetBeamerid, targetBeamer);
 
