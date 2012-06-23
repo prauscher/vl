@@ -29,3 +29,5 @@ ol#slides .slide .select-beamers
 	{display:block; float:left;}
 ol#slides .slide .options
 	{display:block; float:left;}
+ol#slides .slide .fixFloat
+	{display:block; clear:left;}

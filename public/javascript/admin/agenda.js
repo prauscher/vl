@@ -82,7 +82,8 @@ $(function () {
 					.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"))
 					.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
 					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"))
-					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) ))
+					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) )
+				.append($("<span>").addClass("fixFloat")) )
 			.append($('<ol>').addClass("slide-children") );
 
 		if (parentid != null) {
