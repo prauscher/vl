@@ -17,6 +17,12 @@ html
 		div#identify
 
 		div#header
+		div#beamer-controls
+			div#beamer-reset
+			div#beamer-zoom-in
+			div#beamer-zoom-out
+			div#beamer-scroll-up
+			div#beamer-scroll-down
 		div#currentTime
 		div#flashs
 		div#timers
@@ -46,8 +52,10 @@ html
 					this.registerIdentifyBeamer();
 					this.registerBeamer('#{beamerid}');
 				});
+				$("#beamer-controls").hide();
 		- else if (typeof slideid != 'undefined')
 			script(type="text/javascript")
 				apiClient.connect(function () {
 					setCurrentSlide('#{slideid}');
 				});
+				$("#beamer-controls").show();

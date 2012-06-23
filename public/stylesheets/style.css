@@ -7,6 +7,8 @@ body
 	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em;}
 #header
 	{position:fixed; top:0px; left:0px; height:110px; width:100%; background-color:#ee9922; background-image:url(/images/logo.png); background-repeat:no-repeat; background-position:10px 10px; opacity:0.9;}
+#beamer-controls
+	{position:fixed; top:0px; right:20px; height:18px; background-color:#cccccc; border-bottom-left-radius:5px; border-bottom-right-radius:5px; padding:2px; opacity:0.8;}
 #flashs
 	{position:fixed; top:110px; left:0px; width:100%; opacity:0.7;}
 #flashs>div
@@ -27,3 +29,16 @@ body
 	{background-color:#3a87ad;}
 .flash-success
 	{background-color:#468847;}
+
+#beamer-controls>*
+	{width:14px; height:14px; background-image:url(/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
+#beamer-reset
+	{background-position:-216px -24px;}
+#beamer-zoom-in
+	{background-position:-336px 0px;}
+#beamer-zoom-out
+	{background-position:-360px 0px;}
+#beamer-scroll-up
+	{background-position:-288px -120px;}
+#beamer-scroll-down
+	{background-position:-313px -119px;}

@@ -1,3 +1,6 @@
+var beamerScroll = 0;
+var beamerZoom = 1;
+
 function setBeamerContent (slideid, slide) {
 	$('#title').text(slide.title);
 
@@ -16,6 +19,9 @@ function setBeamerContent (slideid, slide) {
 }
 
 function setViewerData(scroll, zoom) {
+	beamerScroll = scroll;
+	beamerZoom = zoom;
+
 	$("#content").animate({
 		fontSize: zoom + "em",
 		marginTop: scroll + "em"
@@ -132,6 +138,22 @@ $(function () {
 	apiClient.on("hideTimerBeamer", function (beamerid, timerid, timer) {
 		this.unregisterTimer(timerid);
 		$("#timers #timer-" + timerid).hide();
+	});
+
+	$("#beamer-reset").click(function() {
+		setViewerData(0, 1);
+	});
+	$("#beamer-zoom-in").click(function () {
+		setViewerData(beamerScroll, beamerZoom * 1.1);
+	});
+	$("#beamer-zoom-out").click(function () {
+		setViewerData(beamerScroll, beamerZoom / 1.1);
+	});
+	$("#beamer-scroll-up").click(function () {
+		setViewerData(beamerScroll - 1, beamerZoom);
+	});
+	$("#beamer-scroll-down").click(function () {
+		setViewerData(beamerScroll + 1, beamerZoom);
 	});
 
 	updateCurrentTime();
