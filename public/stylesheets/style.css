@@ -11,8 +11,10 @@ body
 	{position:fixed; top:110px; left:0px; width:100%; opacity:0.7;}
 #flashs>div
 	{height:40px;}
+#currentTime
+	{position:fixed; top:50px; right:30px; height:40px; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; background-color:#cccccc;}
 #timers
-	{position:fixed; top:50px; right:30px; height:40px;}
+	{position:fixed; top:50px; right:180px; height:40px;}
 #timers>div
 	{float:right; height:100%; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; margin-left:30px;}
 

@@ -31,6 +31,19 @@ function setCurrentSlide(slideid) {
 	apiClient.registerSlide(slideid, 1);
 }
 
+function updateCurrentTime() {
+	var now = new Date();
+	var hours = now.getHours();
+	if (hours < 10) {
+		hours = "0" + hours;
+	}
+	var minutes = now.getMinutes();
+	if (minutes < 10) {
+		minutes = "0" + minutes;
+	}
+	$("#currentTime").text(hours + ":" + minutes);
+}
+
 $(function () {
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
@@ -120,4 +133,7 @@ $(function () {
 		this.unregisterTimer(timerid);
 		$("#timers #timer-" + timerid).hide();
 	});
+
+	updateCurrentTime();
+	window.setInterval(updateCurrentTime ,1000);
 });
