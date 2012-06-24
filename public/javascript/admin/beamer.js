@@ -18,7 +18,7 @@ function pickBeamer(beamerid) {
 
 function showBeamerOptions(beamerid, beamer) {
 	if (beamerid == null) {
-		beamerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
+		beamerid = generateID();
 		beamer.scroll = 0;
 		beamer.zoom = 1;
 		$("#beamers #beamer-options #delete-beamer").hide();
