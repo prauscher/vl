@@ -11,12 +11,18 @@ function showTimerOptions(timerid, timer) {
 	$("#timers #timer-options #title").val(timer.title);
 	// Call destroy to remove earlier timer-option-dialogs
 	$("#timers #timer-options #color").val(timer.color).miniColors("destroy").miniColors();
-	$("#timers #timer-options #value").val(timer.value);
+	$("#timers #timer-options #value").val(formatTime(timer.value));
 
 	$("#timers #timer-options #save-timer").unbind("click").click(function () {
 		timer.title = $("#timers #timer-options #title").val();
 		timer.color = $("#timers #timer-options #color").val();
-		timer.value = $("#timers #timer-options #value").val();
+
+		timer.value = 0;
+		var parts = $("#timers #timer-options #value").val().split(":");
+		for (var i = 0; i < parts.length; i++) {
+			timer.value += parts[i] * Math.pow(60, parts.length - i - 1);
+		}
+
 		if (!timer.startedValue) {
 			timer.startedValue = timer.value;
 		}
