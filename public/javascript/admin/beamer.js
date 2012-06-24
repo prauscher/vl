@@ -1,5 +1,21 @@
 var currentlyPickedBeamer = null;
 
+function pickBeamer(beamerid) {
+	currentlyPickedBeamer = beamerid;
+	$.cookie("currentlyPickedBeamer", beamerid);
+
+	$("#showbeamer li").removeClass("active");
+
+	if (beamerid != null) {
+		$(".select-beamer").hide();
+		$("#showbeamer .select-beamer").show();
+		$(".select-beamer-" + beamerid).show();
+		$("#showbeamer #showbeamer-" + beamerid).addClass("active");
+	} else {
+		$(".select-beamer").show();
+	}
+}
+
 function showBeamerOptions(beamerid, beamer) {
 	if (beamerid == null) {
 		beamerid = Math.random().toString(36).replace(/[^a-zA-Z0-9]/,'').substring(0,7);
@@ -146,12 +162,7 @@ $(function () {
 
 	apiClient.on("updateBeamer", function(beamerid, beamer) {
 		$("#showbeamer #showbeamer-" + beamerid).unbind("click").click(function () {
-			currentlyPickedBeamer = beamerid;
-			$(".select-beamer").hide();
-			$("#showbeamer li").removeClass("active");
-			$("#showbeamer .select-beamer").show();
-			$("#showbeamer #showbeamer-" + beamerid).addClass("active");
-			$(".select-beamer-" + beamerid).show();
+			pickBeamer(beamerid);
 		});
 		$("#showbeamer #showbeamer-" + beamerid + " .title").text(beamer.title);
 
@@ -212,8 +223,10 @@ $(function () {
 	});
 
 	$("#showbeamers").click(function () {
-		currentlyPickedBeamer = null;
-		$(".select-beamer").show();
-		$("#showbeamer li").removeClass("active");
+		pickBeamer(null);
 	});
+
+	if ($.cookie("currentlyPickedBeamer")) {
+		pickBeamer($.cookie("currentlyPickedBeamer"));
+	}
 });
