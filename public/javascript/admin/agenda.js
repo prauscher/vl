@@ -78,11 +78,11 @@ $(function () {
 				.append($("<span>").addClass("title"))
 				.append(selectBeamers)
 				.append($("<span>").addClass("options")
-					.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Erledigt"))
-					.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Erledigt"))
-					.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Versteckt"))
-					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Versteckt"))
-					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle"))) )
+					.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Als nicht erledigt markieren"))
+					.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Als erledigt markieren"))
+					.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In Agendaansicht verstecken"))
+					.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In Agendaansicht anzeigen"))
+					.append($("<a>").attr("href", "/slides/" + slideid).append($("<i>").addClass("icon-play-circle").attr("title", "Folie öffnen") )) )
 				.append($("<span>").addClass("fixFloat")) )
 			.append($('<ol>') );
 

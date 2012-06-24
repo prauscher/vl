@@ -144,12 +144,12 @@ $(function () {
 			.append($("<td>").addClass("title"))
 			.append(handoverBeamer)
 			.append($("<td>")
-				.append($("<i>").addClass("icon-repeat").addClass("reset"))
-				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in"))
-				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out"))
-				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up"))
-				.append($("<i>").addClass("icon-chevron-down").addClass("scroll-down"))
-				.append($("<a>").attr("href","/beamer/" + beamerid).append($("<i>").addClass("icon-play-circle"))) ) );
+				.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
+				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
+				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
+				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
+				.append($("<i>").addClass("icon-chevron-down").addClass("scroll-down").attr("title", "Hinabscrollen"))
+				.append($("<a>").attr("href","/beamer/" + beamerid).append($("<i>").addClass("icon-play-circle").attr("title", "Beamer öffnen"))) ) );
 	});
 
 	apiClient.on("showTimerBeamer", function (beamerid, timerid, timer) {

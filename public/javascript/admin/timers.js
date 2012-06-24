@@ -79,9 +79,9 @@ $(function () {
 			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
 			.append(selectBeamer)
 			.append($("<td>")
-				.append($("<i>").addClass("start").addClass("icon-play"))
-				.append($("<i>").addClass("pause").addClass("icon-pause"))
-				.append($("<i>").addClass("stop").addClass("icon-stop")) ) );
+				.append($("<i>").addClass("start").addClass("icon-play").attr("title", "Starten"))
+				.append($("<i>").addClass("pause").addClass("icon-pause").attr("title", "Pausieren"))
+				.append($("<i>").addClass("stop").addClass("icon-stop").attr("title", "Stoppen")) ) );
 	});
 
 	apiClient.on("deleteTimer", function (timerid) {
