@@ -2,7 +2,8 @@
  * Module dependencies.
  */
 
-var routes = require('./routes'),
+var fs = require('fs'),
+    routes = require('./routes'),
     app = require('./app.js');
 
 // Routes
@@ -29,6 +30,17 @@ app.post('/timers/:timerid/start', routes.timers.start);
 app.post('/timers/:timerid/pause', routes.timers.pause);
 app.post('/timers/:timerid/stop', routes.timers.stop);
 
-app.listen(3001, function(){
+if (process.argv.length < 3) {
+	console.error("Please provide the config file name as a command line parameter!");
+	process.exit(1);
+}
+
+var config = JSON.parse(fs.readFileSync(process.argv[2]));
+
+app.listen(config.port, config.host, function() {
+        if (process.getuid() == 0) {
+		process.setgid(config.setgid);
+		process.setuid(config.setuid);
+	}
 	console.log("Express server listening on http://localhost:%d/ in mode %s", app.address().port, app.settings.env);
 });
