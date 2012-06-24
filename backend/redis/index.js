@@ -1,6 +1,6 @@
 var redis = require('redis'),
     socketio = require('socket.io'),
-    config = require('../config.js');
+    config = require('../../config.js');
 
 global.db = redis.createClient();
 
