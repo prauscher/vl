@@ -148,7 +148,9 @@ $(function () {
 		$("#showbeamer #showbeamer-" + beamerid).unbind("click").click(function () {
 			currentlyPickedBeamer = beamerid;
 			$(".select-beamer").hide();
+			$("#showbeamer li").removeClass("active");
 			$("#showbeamer .select-beamer").show();
+			$("#showbeamer #showbeamer-" + beamerid).addClass("active");
 			$(".select-beamer-" + beamerid).show();
 		});
 		$("#showbeamer #showbeamer-" + beamerid + " .title").text(beamer.title);
@@ -212,5 +214,6 @@ $(function () {
 	$("#showbeamers").click(function () {
 		currentlyPickedBeamer = null;
 		$(".select-beamer").show();
+		$("#showbeamer li").removeClass("active");
 	});
 });
