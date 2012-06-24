@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-var fs = require('fs'),
+var config = require('./config.js'),
     routes = require('./routes'),
     app = require('./app.js');
 
@@ -11,13 +11,6 @@ var fs = require('fs'),
 app.get('/', function (req, res) {
 	res.render('clientOverview');
 });
-
-if (process.argv.length < 3) {
-	console.error("Please provide the config file name as a command line parameter!");
-	process.exit(1);
-}
-
-var config = JSON.parse(fs.readFileSync(process.argv[2]));
 
 app.listen(config.port, config.host, function(){
         if (process.getuid() == 0) {
