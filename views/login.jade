@@ -1,0 +1,32 @@
+!!!
+html
+	head
+		title Versammlungsleiter
+		link(rel='stylesheet',href='/login.css')
+		script(src='/javascript/jquery-1.7.2.min.js')
+		script(src='/javascript/jquery-ui-1.8.21.custom.min.js')
+	body
+		form(action="/login",method="post")
+			input(type="password",name="password")
+
+		script(type="text/javascript")
+			$("input[name=password]").focus();
+			$(document).click(function () {
+				$("input[name=password]").focus();
+			})
+			$("form").submit(function() {
+				$.ajax({
+					type: 'POST',
+					url: '/login',
+					data: { password: $("input[name=password]").val() },
+					dataType: 'JSON',
+					success: function(data) {
+						if (data.success) {
+							window.location = "/admin";
+						} else {
+							$("input[name=password]").val("").effect("highlight", { color: "#ff0000" });
+						}
+					}
+				});
+				return false;
+			});
