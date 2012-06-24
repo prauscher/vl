@@ -117,7 +117,7 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 
 $(function () {
 	apiClient.on("initBeamer", function (beamerid, beamer) {
-		$("#showbeamer ul").append($("<li>").attr("id", "showbeamer-" + beamerid)
+		$("#showbeamer ul").append($("<li>").attr("id", "showbeamer-" + beamerid).toggleClass("active", (currentlyPickedBeamer == beamerid))
 			.append($("<a>")
 				.append($("<img>")
 					.addClass("select-beamer")
