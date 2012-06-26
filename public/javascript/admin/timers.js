@@ -2,6 +2,7 @@ function showTimerOptions(timerid, timer) {
 	if (timerid == null) {
 		timerid = generateID();
 		timer.running = false;
+		timer.value = 0;
 		timer.startValue = 0;
 		$("#timers #timer-options #delete-timer").hide();
 	} else {
