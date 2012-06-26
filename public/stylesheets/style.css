@@ -24,6 +24,8 @@ body
 #timers>div
 	{float:right; height:100%; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; margin-left:30px;}
 
+.content-text
+	{white-space:pre-line;}
 .content-agenda .done
 	{color:#777777;}
 
