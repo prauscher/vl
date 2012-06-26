@@ -4,7 +4,7 @@
 	{position: fixed; left:15%; right:15%; top:35%; bottom:35%; opacity:0.7; border-radius:30px; padding:50px; color:white; font-size:3em; text-align:center;}
 
 body
-	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em;}
+	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em; overflow:hidden;}
 #header
 	{position:fixed; top:0px; left:0px; height:110px; width:100%; background-color:#ee9922; background-image:url(/images/logo.png); background-repeat:no-repeat; background-position:10px 10px; opacity:0.9;}
 #beamer-controls
