@@ -75,7 +75,7 @@ $(function () {
 		});
 
 		$("#timers #timers").append($("<tr>").attr("id", "timer-" + timerid)
-			.append($("<td>").append($("<img>").addClass('color')))
+			.append($("<td>").append($("<img>").addClass('color').attr("src", "/images/empty.gif")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
 			.append(selectBeamer)

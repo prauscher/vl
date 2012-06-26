@@ -1,13 +1,13 @@
+.select-beamer, #timers .color, #beamers .color
+	{border:1px solid #777777; margin:1px; width:13px; height:13px;}
+
 .select-beamer
-	{width:16px; height:16px; opacity:0.5;}
+	{opacity:0.5;}
 .select-beamer.active
 	{opacity:1;}
 
 .isundone.icon-ok-circle
 	{opacity:0.5;}
-
-#timers .color, #beamers .color
-	{width:16px; height:16px;}
 
 ol#slides, #slides ol
 	{list-style:none; margin-left:15px;}

@@ -50,6 +50,7 @@ function showBeamerOptions(beamerid, beamer) {
 function generateSelectBeamerButton(beamerid, callbacks) {
 	apiClient.getBeamer(beamerid, function (beamer) {
 		callbacks.create($("<img>")
+			.attr("src", "/images/empty.gif")
 			.addClass("select-beamer")
 			.addClass("select-beamer-" + beamerid)
 			.css("background-color", beamer.color)
@@ -120,6 +121,7 @@ $(function () {
 		$("#showbeamer ul").append($("<li>").attr("id", "showbeamer-" + beamerid).toggleClass("active", (currentlyPickedBeamer == beamerid))
 			.append($("<a>")
 				.append($("<img>")
+					.attr("src", "/images/empty.gif")
 					.addClass("select-beamer")
 					.addClass("active")
 					.addClass("select-beamer-" + beamerid) )
@@ -140,7 +142,7 @@ $(function () {
 		});
 
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
-			.append($("<td>").append($("<img>").addClass("color")))
+			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
 			.append($("<td>").addClass("title"))
 			.append(handoverBeamer)
 			.append($("<td>")
