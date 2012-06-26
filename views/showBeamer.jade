@@ -13,6 +13,9 @@ html
 		script(src='/javascript/viewer/beamer.js')
 
 	body
+		div#error
+			.message
+			.notes
 		div#waiting
 		div#identify
 
@@ -38,12 +41,6 @@ html
 
 		script(type="text/javascript")
 			var apiClient = new APIClient();
-			apiClient.on('updateSlide', function (slideid, slide) {
-				$("#waiting").fadeOut(300);
-			});
-			apiClient.on('updateBeamer', function (beamerid, beamer) {
-				$("#waiting").fadeOut(300);
-			});
 			TimerClient(apiClient);
 
 		- if (typeof beamerid != 'undefined')

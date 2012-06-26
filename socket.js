@@ -19,9 +19,13 @@ exports.listen = function (app) {
 		socket.on('registerbeamer', function (data) {
 			// Initialize Beamerstate
 			backend.beamer.get(data.beamerid, function (beamer) {
-				backend.agenda.get(beamer.currentslideid, function (currentslide) {
-					socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
-				});
+				if (beamer == null) {
+					socket.emit('err:beamer-not-found:' + data.beamerid, {});
+				} else {
+					backend.agenda.get(beamer.currentslideid, function (currentslide) {
+						socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
+					});
+				}
 			});
 
 			backend.beamer.getTimers(data.beamerid, function (timerid, timer) {
@@ -46,7 +50,11 @@ exports.listen = function (app) {
 
 		socket.on('registerslide', function (data) {
 			backend.agenda.get(data.slideid, function (slide) {
-				socket.emit('slide-change:' + data.slideid, { slide: slide });
+				if (slide == null) {
+					socket.emit('err:slide-not-found:' + data.slideid, {});
+				} else {
+					socket.emit('slide-change:' + data.slideid, { slide: slide });
+				}
 			});
 			
 			if (data.sendChildren) {

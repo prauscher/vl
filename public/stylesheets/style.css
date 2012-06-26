@@ -1,7 +1,11 @@
+#error
+	{position:fixed; top:0px; left:0px; height:100%; width:100%; background:-webkit-gradient(linear, left top, left bottom, from(#999), to(#333)); color:white; display:none; z-index:100;}
+#error .message
+	{text-shadow:#fff 0px 1px 0, #000 0 -1px 0; top:40%; position:absolute;}
 #waiting
 	{position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:lightgray; opacity:0.4; background-position:center; background-image:url(/images/waiting.gif); background-repeat:no-repeat; z-index:90;}
 #identify
-	{position: fixed; left:15%; right:15%; top:35%; bottom:35%; opacity:0.7; border-radius:30px; padding:50px; color:white; font-size:3em; text-align:center;}
+	{position:fixed; left:15%; right:15%; top:35%; bottom:35%; opacity:0.7; border-radius:30px; padding:50px; color:white; font-size:3em; text-align:center;}
 
 body
 	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em; overflow:hidden;}

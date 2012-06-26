@@ -50,7 +50,27 @@ function updateCurrentTime() {
 	$("#currentTime").text(hours + ":" + minutes);
 }
 
+function showError(message, notes) {
+	$("#error .message").text(message);
+	$("#error .notes").text(notes);
+	$("#error").show();
+	$("#waiting").hide();
+}
+
 $(function () {
+	apiClient.on('updateSlide', function (slideid, slide) {
+		$("#waiting").fadeOut(300);
+	});
+	apiClient.on('error:slideNotFound', function (slideid) {
+		showError("Die Folie wurde nicht gefunden");
+	});
+	apiClient.on('updateBeamer', function (beamerid, beamer) {
+		$("#waiting").fadeOut(300);
+	});
+	apiClient.on('error:beamerNotFound', function (beamerid) {
+		showError("Der Beamer wurde nicht gefunden");
+	});
+
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
 			var item = $("<li>").attr("id", "agenda-" + slideid);
@@ -82,15 +102,19 @@ $(function () {
 	});
 
 	apiClient.on("updateBeamer", function (beamerid, beamer, currentslide) {
-		setCurrentSlide(beamer.currentslideid);
-		setBeamerContent(currentSlideID, currentslide);
+		if (currentslide == null) {
+			showError("Der Beamer ist nicht konfiguriert", "Es ist keine Folie für den Beamer konfiguriert");
+		} else {
+			setCurrentSlide(beamer.currentslideid);
+			setBeamerContent(currentSlideID, currentslide);
+		}
 		setViewerData(beamer.scroll, beamer.zoom);
 
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
 	});
 
 	apiClient.on("deleteBeamer", function (beamerid) {
-		alert("SRSLY");
+		showError("Der Beamer wurde gelöscht");
 	});
 
 	apiClient.on("flashBeamer", function (beamerid, flash) {

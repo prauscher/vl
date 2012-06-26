@@ -32,6 +32,10 @@ APIClient.prototype.registerBeamers = function () {
 APIClient.prototype.registerBeamer = function (beamerid) {
 	var self = this;
 	self.beamerTimers[beamerid] = [];
+	this.socketIo.on('err:beamer-not-found:' + beamerid, function (data) {
+		console.debug("[APIClient] Beamer not found: " + beamerid);
+		self.callCallback("error:beamerNotFound", [ beamerid ]);
+	});
 	this.socketIo.on('beamer-change:' + beamerid, function (data) {
 		self.beamers[beamerid] = data.beamer;
 

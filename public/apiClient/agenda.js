@@ -25,6 +25,10 @@ APIClient.prototype.registerAgenda = function () {
 APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	var self = this;
 	self.slideChildren[slideid] = [];
+	this.socketIo.on('err:slide-not-found:' + slideid, function (data) {
+		console.log("[APIClient] Slide not found: " + slideid);
+		self.callCallback("error:slideNotFound", [ slideid ]);
+	});
 	this.socketIo.on('slide-add:' + slideid, function (data) {
 		self.slides[data.slideid] = null;
 		self.slideChildren[slideid].push(data.slideid);
