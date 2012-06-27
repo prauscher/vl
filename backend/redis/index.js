@@ -20,6 +20,17 @@ global.db._ziteratepartial = function(key, startscore, endscore, callback) {
 		}
 	});
 }
+global.db._zmove = function(item, sourceKey, destinationKey, destinationPosition, callback) {
+	db.zscore(sourceKey, item, function (err, sourcePosition) {
+		// Add 1 to sourcePosition to avoid a racecondition beween zincr and zrem on the same id
+		db._zreorder(sourceKey, sourcePosition + 1, "+inf", -1);
+		db.zrem(sourceKey, item, function(err) {
+			db._zreorder(destinationKey, destinationPosition, "+inf", 1, function () {
+				db.zadd(destinationKey, destinationPosition, item, callback);
+			});
+		});
+	});
+}
 
 exports.socketIoStore = new socketio.RedisStore({ redisPub: config.redis, redisSub: config.redis, redisClient: config.redis });
 

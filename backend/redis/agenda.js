@@ -89,23 +89,15 @@ exports.save = function(slideid, slide, callbackSuccess) {
 
 exports.move = function(slideid, parentid, position, callbackSuccess) {
 	exports.get(slideid, function (slide) {
-		db.zscore('slides:' + slide.parentid + ':children', slideid, function (err, oldposition) {
-			// Not decrement slideid, as slideid will get removed parallel
-			db._zreorder('slides:' + slide.parentid + ':children', oldposition + 1, '+inf', -1);
-			db.zrem('slides:' + slide.parentid + ':children', slideid, function (err) {
-				slide.parentid = parentid;
-				exports.save(slideid, slide, function () {
-					db._zreorder('slides:' + parentid + ':children', position, '+inf', 1, function () {
-						db.zadd('slides:' + parentid + ':children', position, slideid, function () {
-							io.sockets.emit('slide-delete:' + slideid, {});
-							io.sockets.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
+		db._zmove(slideid, 'slides:' + slide.parentid + ':children', 'slides:' + parentid + ':children', position, function () {
+			slide.parentid = parentid;
+			exports.save(slideid, slide, function () {
+				io.sockets.emit('slide-delete:' + slideid, {});
+				io.sockets.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
 
-							if (callbackSuccess) {
-								callbackSuccess();
-							}
-						});
-					});
-				});
+				if (callbackSuccess) {
+					callbackSuccess();
+				}
 			});
 		});
 	});
