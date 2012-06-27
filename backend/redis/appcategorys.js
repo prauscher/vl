@@ -94,9 +94,9 @@ exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 }
 
 exports.delete = function(appcategoryid, callbackSuccess) {
-	db.hget('appcategory:' + appcategoryid, 'parentid', function (err, parentid) {
+	db.hget('appcategorys:' + appcategoryid, 'parentid', function (err, parentid) {
 		db.zrem(getAppCategoryKey(parentid), appcategoryid, function (err) {
-			db.del('appcategory:' + appcategoryid, function (err) {
+			db.del('appcategorys:' + appcategoryid, function (err) {
 				db.del('appcategorys:' + appcategoryid + ':children');
 				db.del('appcategorys:' + appcategoryid + ':applications');
 				db.del('appcategorys:' + appcategoryid + ':ballots');
