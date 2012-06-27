@@ -15,11 +15,16 @@ $(function () {
 	$("#nav-timers").click(function() {
 		switchNavigation("timers");
 	});
+	$("#nav-applications").click(function() {
+		switchNavigation("applications");
+	});
 
 	if (location.hash == "#timers") {
 		switchNavigation("timers");
 	} else if (location.hash == "#beamers") {
 		switchNavigation("beamers");
+	} else if (location.hash == "#applications") {
+		switchNavigation("applications");
 	} else {
 		switchNavigation("agenda");
 	}

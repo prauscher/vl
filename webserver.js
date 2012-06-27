@@ -67,12 +67,12 @@ exports.createServer = function (config) {
 		app.post('/timers/:timerid/stop',	generateCallback(routes.timers.stop) );
 
 		app.put('/appcategorys/:appcategoryid/save',	generateCallback(routes.appcategorys.save) );
-		app.put('/appcategorys/:appcategoryid/delete',	generateCallback(routes.appcategorys.delete) );
-		app.put('/appcategorys/:appcategoryid/move',	generateCallback(routes.appcategorys.move) );
+		app.post('/appcategorys/:appcategoryid/delete',	generateCallback(routes.appcategorys.delete) );
+		app.post('/appcategorys/:appcategoryid/move',	generateCallback(routes.appcategorys.move) );
 
 		app.put('/applications/:applicationid/save',	generateCallback(routes.applications.save) );
-		app.put('/applications/:applicationid/delete',	generateCallback(routes.applications.delete) );
-		app.put('/applications/:applicationid/move',	generateCallback(routes.applications.move) );
+		app.post('/applications/:applicationid/delete',	generateCallback(routes.applications.delete) );
+		app.post('/applications/:applicationid/move',	generateCallback(routes.applications.move) );
 	}
 
 	return app;

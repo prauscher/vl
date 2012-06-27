@@ -68,8 +68,9 @@ exports.listen = function (app) {
 
 		socket.on('registerappcategorys', function(data) {
 			// client may ask for children
+			var position = 0;
 			backend.appcategorys.eachChildren(null, function(appcategoryid, appcategory) {
-				socket.emit('appcategory-add', {appcategoryid: appcategoryid});
+				socket.emit('appcategory-add', {appcategoryid: appcategoryid, position: position++});
 			});
 		});
 
@@ -84,14 +85,24 @@ exports.listen = function (app) {
 
 			// Send children
 			var position = 0;
-			backend.appcategorys.eachChildren(function (appcategoryid, appcategory) {
+			backend.appcategorys.eachChildren(data.appcategoryid, function (appcategoryid, appcategory) {
 				socket.emit('appcategory-add:' + data.appcategoryid, { appcategoryid: appcategoryid, position: position++ });
 			});
 
 			// Send applications
-			position = 0;
-			backend.appcategorys.eachApplication(function (applicationid, application) {
-				socket.emit('application-add:' + data.appcategoryid, { applicationid: applicationid, position: position++ });
+			var applicationPosition = 0;
+			backend.appcategorys.eachApplication(data.appcategoryid, function (applicationid, application) {
+				socket.emit('application-add:' + data.appcategoryid, { applicationid: applicationid, position: applicationPosition++ });
+			});
+		});
+
+		socket.on('registerapplication', function (data) {
+			backend.applications.get(data.applicationid, function (application) {
+				if (application == null) {
+					socket.emit('err:application-not-found:' + data.applicationid, {});
+				} else {
+					socket.emit('application-change:' + data.applicationid, { application : application });
+				}
 			});
 		});
 	});

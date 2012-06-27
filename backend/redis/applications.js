@@ -11,9 +11,10 @@ exports.get = function(applicationid, callback) {
 }
 
 exports.add = function(applicationid, application, callbackSuccess) {
-	db.zcard('appcategorys:' + application.categoryid, function(err, applicationcount) {
+	db.zcard('appcategorys:' + application.categoryid + ':applications', function(err, applicationcount) {
 		exports.save(applicationid, application, function () {
-			db.zadd('appcategorys:' + application.categoryid, applicationcount, applicationid);
+			console.log('appcategorys:' + application.categoryid + ':applications' + " / " + applicationcount + " / " + applicationid);
+			db.zadd('appcategorys:' + application.categoryid + ':applications', applicationcount, applicationid);
 			io.sockets.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: applicationcount });
 
 			if (callbackSuccess) {

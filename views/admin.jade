@@ -17,12 +17,15 @@ html
 		script(src='/apiClient/beamer.js')
 		script(src='/apiClient/agenda.js')
 		script(src='/apiClient/timers.js')
+		script(src='/apiClient/appcategorys.js')
+		script(src='/apiClient/applications.js')
 		script(src='/javascript/admin/index.js')
 		script(src='/javascript/admin/navigation.js')
 		script(src='/javascript/admin/beamer.js')
 		script(src='/javascript/admin/beamer-flash.js')
 		script(src='/javascript/admin/agenda.js')
 		script(src='/javascript/admin/timers.js')
+		script(src='/javascript/admin/applications.js')
 	body(style="padding-top:90px;")
 		div.navbar.navbar-fixed-top
 			div.navbar-inner
@@ -35,6 +38,8 @@ html
 							a#nav-agenda(href="#agenda") Tagesordnung
 						li.timers
 							a#nav-timers(href="#timers") Timer
+						li.applications
+							a#nav-applications(href="#applications") Anträge
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-beamers.pull-right.btn.btn-info Identifizieren
 					div#showbeamer.btn-group.pull-right
@@ -144,6 +149,50 @@ html
 					button.btn(data-dismiss="modal") Schließen
 					button.btn.btn-primary#save-timer Speichern
 
+		div#applications.container
+			div#applicationoptions.btn-toolbar
+				div.btn-group
+					a.btn.btn-success.dropdown-toggle(data-toggle="dropdown")
+						Neuer Antrag
+						span.caret
+					ul.dropdown-menu.new-application-categorys
+				div.btn-group
+					button#new-appcategory.btn.btn-success Neue Kategorie
+
+			ol#applications
+
+			div#application-options.modal
+				div.modal-header
+					button.close(data-dismatch="modal") ×
+					h3 Antrag anlegen
+				form.form-horizontal.modal-body
+					input(type="text")#applicationid.span1
+					input(type="text")#title.span3
+					input(type="text")#submitter.span2
+					select#status
+						option(value="open")		Offen
+						option(value="accepted")	Angenommen
+						option(value="rejected")	Abgelehnt
+						option(value="withdrawn")	Zurückgezogen
+						option(value="suspended")	Vertagt
+					textarea#text
+					textarea#argumentation
+				div.modal-footer
+					button.btn.btn-danger.pull-left#delete-application Löschen
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-primary#save-application Speichern
+
+			div#appcategory-options.modal
+				div.modal-header
+					button.close(data-dismatch="modal") ×
+					h3 Antragskategorie anlegen
+				form.form-horizontal.modal-body
+					input(type="text")#title
+				div.modal-footer
+					button.btn.btn-danger.pull-left#delete-appcategory Löschen
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-primary#save-appcategory Speichern
+
 		script(type="text/javascript")
 			$(".modal").hide();
 
@@ -153,5 +202,6 @@ html
 				this.registerBeamers();
 				this.registerAgenda();
 				this.registerTimers();
+				this.registerAppCategorys();
 			});
 			TimerClient(apiClient);

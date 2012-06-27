@@ -18,7 +18,7 @@ APIClient.prototype.registerAppCategorys = function () {
 		self.appCategorys[data.appcategoryid] = null;
 
 		self.registerAppCategory(data.appcategoryid);
-		self.callCallback("initAppCategory", [ data.appCategoryid, null ] );
+		self.callCallback("initAppCategory", [ data.appcategoryid, null, data.position ] );
 	});
 	this.socketIo.emit('registerappcategorys', {});
 }
@@ -43,7 +43,7 @@ APIClient.prototype.registerAppCategory = function (appcategoryid) {
 		self.appCategoryApplications[appcategoryid].push(data.applicationid);
 
 		self.registerApplication(data.applicationid);
-		self.callCallback("initApplication", [ data.application, appcategoryid, data.position ] );
+		self.callCallback("initApplication", [ data.applicationid, appcategoryid, data.position ] );
 	});
 	this.socketIo.on('appcategory-change:' + appcategoryid, function (data) {
 		self.appCategorys[appcategoryid] = data.appcategory;
@@ -52,8 +52,10 @@ APIClient.prototype.registerAppCategory = function (appcategoryid) {
 	});
 	this.socketIo.on('appcategory-delete:' + appcategoryid, function (data) {
 		var parentid = self.appCategorys[appcategoryid].parentid;
-		delete self.appCategorys[parentid];
-		self.appCategoryChildren[parentid].slice(self.appCategoryChildren[parentid].indexOf(appcategoryid), 1);
+		if (parentid) {
+			delete self.appCategorys[parentid];
+			self.appCategoryChildren[parentid].slice(self.appCategoryChildren[parentid].indexOf(appcategoryid), 1);
+		}
 
 		self.unregisterAppCategory(appcategoryid);
 		self.callCallback("deleteAppCategory", [ appcategoryid ] );

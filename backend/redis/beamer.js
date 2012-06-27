@@ -81,7 +81,6 @@ exports.flash = function(beamerid, flash, callbackSuccess) {
 }
 
 exports.showtimer = function(beamerid, timerid, timer, callbackSuccess) {
-	console.log("Show " + timerid + " on " + beamerid);
 	db.sadd('beamer:' + beamerid + ':timers', timerid, function() {
 		io.sockets.emit('beamer-showtimer:' + beamerid, { timerid : timerid, timer : timer });
 
