@@ -3,7 +3,7 @@ function generateID() {
 }
 
 $(function () {
-	$(".modal").on("hide", function() {
+	$(".modal").hide().on("hide", function() {
 		$(this).find(".miniColors").miniColors("destroy");
 	});
 });
