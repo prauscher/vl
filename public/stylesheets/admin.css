@@ -9,44 +9,5 @@
 .isundone.icon-ok-circle
 	{opacity:0.5;}
 
-ol#slides, #slides ol
+ol.ui-sortable, ol.ui-sortable ol
 	{list-style:none; margin-left:15px;}
-ol#slides>li>ol>li>.slide>.move
-	{width:55px;}
-ol#slides>li>ol>li>ol>li>.slide>.move
-	{width:40px;}
-ol#slides>li>ol>li>ol>li>ol>li>.slide>.move
-	{width:25px;}
-ol#slides>li>ol>li>ol>li>ol>li>ol>li>.slide>.move
-	{width:10px;}
-ol#slides .slide
-	{display:block;}
-ol#slides .slide .move
-	{display:block; float:left; width:70px;}
-ol#slides .slide .title
-	{display:block; float:left; width:350px;}
-ol#slides .slide .select-beamers
-	{display:block; float:left;}
-ol#slides .slide .options
-	{display:block; float:left;}
-ol#slides .slide .fixFloat
-	{display:block; clear:left;}
-
-ol#applications, #applications ol
-	{list-style:none; margin-left:15px;}
-ol#applications>li>ol>li>*>.move
-	{width:55px;}
-ol#applications>li>ol>li>ol>li>*>.move
-	{width:40px;}
-ol#applications>li>ol>li>ol>li>ol>li>*>.move
-	{width:25px;}
-ol#applications>li>ol>li>ol>li>ol>li>ol>li>*>.move
-	{width:10px;}
-ol#applications li>div
-	{display:block;}
-ol#applications li>div .move
-	{display:block; float:left; width:70px;}
-ol#applications li>div .title
-	{display:block; float:left; width:350px;}
-ol#applications li>div .fixFloat
-	{display:block; clear:left;}

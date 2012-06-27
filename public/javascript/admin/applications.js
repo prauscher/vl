@@ -67,95 +67,55 @@ function showApplicationOptions(applicationid, application) {
 }
 
 $(function () {
-	$('ol#applications').nestedSortable({
-		handle: '.icon-move',
-	        toleranceElement: '> div',
-	        items: 'li',
-		disableNesting: 'application',
-		update: function(ev, ui) {
-			if (ui.item.hasClass("application")) {
-				if (ui.item.parent().hasClass("ui-sortable")) {
-					// We do not want to put applications to the root layer
-					return false;
-				} else {
-					var applicationid = ui.item.attr("id").split('-',2)[1];
-					var categoryid = ui.item.parent().parent().attr("id").split('-',2)[1];
-					var position = ui.item.index(".application");
-					apiClient.moveApplication(applicationid, categoryid, position);
-				}
+	var applicationsTreeTable = new TreeTable("ol#applications", { disableNesting : "application" });
+	applicationsTreeTable.setStyle("appcategory", "icon", {width: "20px"});
+	applicationsTreeTable.setStyle("application", "icon", {width: "20px"});
+	applicationsTreeTable.setStyle("application", "title", {width: "350px"});
+	applicationsTreeTable.setStyle("application", "title", {width: "350px"});
+	applicationsTreeTable.onMove(function (id, parentid, position, type, parenttype) {
+		if (type == "application") {
+			if (parentid == null || parenttype != "appcategory") {
+				return false;
 			} else {
-				var appcategoryid = ui.item.attr("id").split('-',2)[1];
-				var parentid = ui.item.parent().parent().attr("id").split('-',2)[1];
-				var position = ui.item.index();
-				apiClient.moveAppCategory(appcategoryid, parentid, position);
+				apiClient.moveApplication(id, parentid, position);
 			}
+		} else if (type == "appcategory") {
+			apiClient.moveAppCategory(id, parentid, position);
 		}
 	});
 
-	// Note: The <ol> for children will be removed and recreated by jQuery. Do _not_ add classes to them!
-
 	apiClient.on("initAppCategory", function (appcategoryid, parentid, position) {
-		var item = $("<li>").attr("id", "appcategory-" + appcategoryid)
-			.append($('<div>').addClass("appcategory")
-				.append($("<span>").addClass("move")
-					.append($("<i>").addClass('icon-move')) )
-				.append($("<span>").addClass("title"))
-				.append($("<span>").addClass("fixFloat")) );
-
-		if (parentid != null) {
-			if ($('#appcategory-' + parentid + ' > ol').length < 1) {
-				$('#appcategory-' + parentid).append($("<ol>"));
-			}
-			if (position == 0) {
-				$('#appcategory-' + parentid + ' > ol').prepend(item);
-			} else {
-				$('#appcategory-' + parentid + ' > ol > li:eq(' + (position - 1) + ')').after(item);
-			}
-		} else {
-			if (position == 0) {
-				$('ol#applications').prepend(item);
-			} else {
-				$('ol#applications > li:eq(' + (position - 1) + ')').after(item);
-			}
-		}
+		applicationsTreeTable.add("appcategory", appcategoryid, "appcategory", parentid, position, {
+			icon: $("<i>").addClass("icon").addClass("icon-folder-open"),
+			title: $("<span>")
+		});
 	});
 
 	apiClient.on("initApplication", function (applicationid, categoryid, position) {
-		var item = $("<li>").attr("id", "application-" + applicationid).addClass("application")
-			.append($('<div>').addClass("application")
-				.append($("<span>").addClass("move")
-					.append($("<i>").addClass('icon-move')) )
-				.append($("<span>").addClass("title"))
-				.append($("<span>").addClass("fixFloat")) );
-
-		if ($('#appcategory-' + categoryid + ' > ol').length < 1) {
-			$('#appcategory-' + categoryid).append($("<ol>"));
-		}
-		if (position == 0) {
-			$('#appcategory-' + categoryid + ' > ol').prepend(item);
-		} else {
-			$('#appcategory-' + categoryid + ' > ol > li.application:eq(' + (position - 1) + ')').after(item);
-		}
+		applicationsTreeTable.add("application", applicationid, "appcategory", categoryid, position, {
+			icon: $("<i>").addClass("icon").addClass("icon-file"),
+			title: $("<span>")
+		});
 	});
 
 	apiClient.on("updateAppCategory", function (appcategoryid, appcategory) {
-		$("#applications #appcategory-" + appcategoryid + " > .appcategory .title").text(appcategory.title);
-
-		$("#applications #appcategory-" + appcategoryid + " > .appcategory .title").unbind("click").click(function() {
+		applicationsTreeTable.get("appcategory", appcategoryid, "title").text(appcategory.title).click(function () {
 			showAppCategoryOptions(appcategoryid, appcategory);
 		});
 	});
 
 	apiClient.on("updateApplication", function (applicationid, application) {
-		$("#applications #application-" + applicationid + " > .application .title").text(application.title);
-
-		$("#applications #application-" + applicationid + " > .application .title").unbind("click").click(function() {
+		applicationsTreeTable.get("application", applicationid, "title").text(application.title).unbind("click").click(function() {
 			showApplicationOptions(applicationid, application);
 		});
 	});
 
 	apiClient.on("deleteAppCategory", function (appcategoryid) {
-		$("#applications #appcategory-" + appcategoryid).remove();
+		applicationsTreeTable.remove("appcategory", appcategoryid)
+	});
+
+	apiClient.on("deleteApplication", function (applicationid) {
+		applicationsTreeTable.remove("application", applicationid);
 	});
 
 	apiClient.on("initAppCategory", function (appcategoryid) {
