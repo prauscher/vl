@@ -61,8 +61,8 @@ exports.save = function(beamerid, beamer, callbackSuccess) {
 
 exports.delete = function(beamerid, callbackSuccess) {
 	db.srem('beamer', beamerid, function (err) {
-		db.del('beamer:' + beamerid + ':timers');
 		db.del('beamer:' + beamerid, function(err) {
+			db.del('beamer:' + beamerid + ':timers');
 			io.sockets.emit('beamer-delete:' + beamerid, {});
 
 			if (callbackSuccess) {

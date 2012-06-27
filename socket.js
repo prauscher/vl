@@ -65,6 +65,35 @@ exports.listen = function (app) {
 				});
 			}
 		});
+
+		socket.on('registerappcategorys', function(data) {
+			// client may ask for children
+			backend.appcategorys.eachChildren(null, function(appcategoryid, appcategory) {
+				socket.emit('appcategory-add', {appcategoryid: appcategoryid});
+			});
+		});
+
+		socket.on('registerappcategory', function (data) {
+			backend.appcategorys.get(data.appcategoryid, function (appcategory) {
+				if (appcategory == null) {
+					socket.emit('err:appcategory-not-found:' + data.appcategoryid, {});
+				} else {
+					socket.emit('appcategory-change:' + data.appcategoryid, { appcategory: appcategory });
+				}
+			});
+
+			// Send children
+			var position = 0;
+			backend.appcategorys.eachChildren(function (appcategoryid, appcategory) {
+				socket.emit('appcategory-add:' + data.appcategoryid, { appcategoryid: appcategoryid, position: position++ });
+			});
+
+			// Send applications
+			position = 0;
+			backend.appcategorys.eachApplication(function (applicationid, application) {
+				socket.emit('application-add:' + data.appcategoryid, { applicationid: applicationid, position: position++ });
+			});
+		});
 	});
 	return io;
 }

@@ -107,6 +107,7 @@ exports.delete = function(slideid, callbackSuccess) {
 	db.hget('slides:' + slideid, 'parentid', function (err, parentid) {
 		db.zrem('slides:' + parentid + ':children', slideid, function (err) {
 			db.del('slides:' + slideid, function (err) {
+				db.del('slides:' + slideid + ':children');
 				io.sockets.emit('slide-delete:' + slideid, {});
 
 				if (callbackSuccess) {

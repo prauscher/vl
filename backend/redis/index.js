@@ -37,3 +37,4 @@ exports.socketIoStore = new socketio.RedisStore({ redisPub: config.redis, redisS
 exports.beamer = require('./beamer.js');
 exports.agenda = require('./agenda.js');
 exports.timers = require('./timers.js');
+exports.applications = require('./applications.js');
