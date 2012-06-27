@@ -185,7 +185,8 @@ $(function () {
 		$(".content-application .application-text").text(application.text);
 		$(".content-application .application-argumentation").text(application.argumentation);
 		$(".content-application .application-submitter").text(application.submitter);
-		$(".content-application .application-status").text(application.status);
+		$(".content-application .application-status *").hide();
+		$(".content-application .application-status .status-" + application.status).show();
 	});
 
 	$("#beamer-reset").click(function() {
