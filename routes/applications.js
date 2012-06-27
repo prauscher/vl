@@ -15,7 +15,7 @@ exports.save = function (req, res) {
 }
 
 exports.move = function (req, res) {
-	backend.applications.move(req.params.applicationid, req.body.parentid, req.body.position, function () {
+	backend.applications.move(req.params.applicationid, req.body.categoryid, req.body.position, function () {
 		res.send(200);
 	});
 }
