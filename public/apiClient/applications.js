@@ -49,7 +49,7 @@ APIClient.prototype.moveApplication = function (applicationid, categoryid, posit
 	$.ajax({
 		type: 'POST',
 		url: '/applications/' + applicationid + '/move',
-		data: { categoryid: categorytid, position: position },
+		data: { categoryid: categoryid, position: position },
 		success: callbackSuccess
 	});
 }
