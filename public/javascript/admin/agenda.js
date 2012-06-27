@@ -26,6 +26,7 @@ function showSlideOptions(slideid, slide) {
 
 		slide.text = $("#agenda #options #slidecontent-text-text").val();
 		slide.html = $("#agenda #options #slidecontent-html-html").val();
+		slide.applicationid = $("#agenda #options #slidecontent-application-applicationid option:selected").val();
 
 		apiClient.saveSlide(slideid, slide, function() {
 			$("#agenda #options").modal('hide')
@@ -138,6 +139,15 @@ $(function () {
 	apiClient.on("updateBeamer", function (beamerid, beamer) {
 		$("#agenda .select-beamer-" + beamerid).removeClass("active");
 		$("#agenda #slide-" + beamer.currentslideid + ">div>.select-beamers>.select-beamer-" + beamerid).addClass("active");
+	});
+
+	apiClient.on("initApplication", function (applicationid, categoryid, position) {
+		$("#agenda #options #slidecontent-application-applicationid").append(
+			$("<option>").addClass("application-" + applicationid).attr("value", applicationid) )
+	});
+
+	apiClient.on("updateApplication", function (applicationid, application) {
+		$("#agenda #options #slidecontent-application-applicationid option.application-" + applicationid).text(applicationid + ": " + application.title);
 	});
 
 	$("#new-slide").click(function () {

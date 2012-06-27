@@ -1,12 +1,24 @@
+var currentSlideID = null;
+var currentApplicationID = null;
 var beamerScroll = 0;
 var beamerZoom = 1;
 
 function setBeamerContent (slideid, slide) {
+	if (currentApplicationID != null) {
+		apiClient.unregisterApplication(currentApplicationID);
+		currentApplicationID = null;
+	}
+	if (slide.type == 'application') {
+		currentApplicationID = slide.applicationid;
+		apiClient.registerApplication(currentApplicationID);
+	}
+
 	$('#title').text(slide.title);
 
 	$('#content .content-text').hide();
 	$('#content .content-html').hide();
 	$('#content .content-agenda').hide();
+	$('#content .content-application').hide();
 	if (slide.type == 'text') {
 		$('#content .content-text').show();
 		$('#content .content-text').text(slide.text);
@@ -15,6 +27,8 @@ function setBeamerContent (slideid, slide) {
 		$('#content .content-html').html(slide.html);
 	} else if (slide.type == 'agenda') {
 		$('#content .content-agenda').show();
+	} else if (slide.type == 'application') {
+		$('#content .content-application').show();
 	}	
 }
 
@@ -31,10 +45,12 @@ function setViewerData(scroll, zoom) {
 function setCurrentSlide(slideid) {
 	if (currentSlideID != null) {
 		apiClient.unregisterSlide(currentSlideID);
+		currentSlideID = null;
 	}
 	currentSlideID = slideid;
 	$('#content .content-agenda').empty();
-	apiClient.registerSlide(slideid, 1);
+
+	apiClient.registerSlide(currentSlideID, 1);
 }
 
 function updateCurrentTime() {
@@ -162,6 +178,14 @@ $(function () {
 	apiClient.on("hideTimerBeamer", function (beamerid, timerid, timer) {
 		this.unregisterTimer(timerid);
 		$("#timers #timer-" + timerid).hide();
+	});
+
+	apiClient.on("updateApplication", function (applicationid, application) {
+		$(".content-application .applicationid").text(applicationid);
+		$(".content-application .application-text").text(application.text);
+		$(".content-application .application-argumentation").text(application.argumentation);
+		$(".content-application .application-submitter").text(application.submitter);
+		$(".content-application .application-status").text(application.status);
 	});
 
 	$("#beamer-reset").click(function() {

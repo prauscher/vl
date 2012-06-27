@@ -9,6 +9,8 @@ html
 		script(src='/apiClient/beamer.js')
 		script(src='/apiClient/agenda.js')
 		script(src='/apiClient/timers.js')
+		script(src='/apiClient/appcategorys.js')
+		script(src='/apiClient/applications.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/javascript/viewer/beamer.js')
 
@@ -34,6 +36,12 @@ html
 			div.content-text
 			div.content-html
 			ol.content-agenda
+			div.content-application
+				div.applicationid
+				div.application-submitter
+				div.application-status
+				div.application-text
+				div.application-argumentation
 
 		script(type="text/javascript")
 			var currentSlideID = null;
