@@ -30,6 +30,7 @@ APIClient.prototype.registerTimer = function (timerid) {
 		self.callCallback("updateTimer", [ timerid, updateData.timer ] );
 	});
 	this.socketIo.on('timer-delete:' + timerid, function (data) {
+		self.unregisterTimer(timerid);
 		self.callCallback("deleteTimer", [ timerid ] );
 	});
 }

@@ -51,7 +51,6 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 		self.slideChildren[parentid].slice(self.slideChildren[parentid].indexOf(slideid), 1);
 
 		self.unregisterSlide(slideid);
-
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
 
@@ -59,6 +58,7 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 }
 
 APIClient.prototype.unregisterSlide = function (slideid) {
+	this.socketIo.removeAllListeners('err:slide-not-found:' + slideid);
 	this.socketIo.removeAllListeners('slide-add:' + slideid);
 	this.socketIo.removeAllListeners('slide-change:' + slideid);
 	this.socketIo.removeAllListeners('slide-delete:' + slideid);

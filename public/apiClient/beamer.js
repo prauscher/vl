@@ -53,9 +53,19 @@ APIClient.prototype.registerBeamer = function (beamerid) {
 		self.beamerTimers[beamerid].splice(self.beamerTimers[beamerid].indexOf(data.timerid), 1);
 	});
 	this.socketIo.on('beamer-delete:' + beamerid, function (data) {
+		self.unregisterBeamer(beamerid);
 		self.callCallback("deleteBeamer", [ beamerid ]);
 	});
 	this.socketIo.emit('registerbeamer', { beamerid : beamerid });
+}
+
+APIClient.prototype.unregisterBeamer = function(beamerid) {
+	this.socketIo.removeAllListeners('err:beamer-not-found:' + beamerid);
+	this.socketIo.removeAllListeners('beamer-change:' + beamerid);
+	this.socketIo.removeAllListeners('beamer-flash:' + beamerid);
+	this.socketIo.removeAllListeners('beamer-showtimer:' + beamerid);
+	this.socketIo.removeAllListeners('beamer-hidetimer:' + beamerid);
+	this.socketIo.removeAllListeners('beamer-delete:' + beamerid);
 }
 
 APIClient.prototype.eachBeamerTimer = function(beamerid, callback) {
