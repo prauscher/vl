@@ -19,6 +19,7 @@ function pickBeamer(beamerid) {
 function showBeamerOptions(beamerid, beamer) {
 	if (beamerid == null) {
 		beamerid = generateID();
+		beamer.hidden = true;
 		beamer.scroll = 0;
 		beamer.zoom = 1;
 		$("#beamers #beamer-options #delete-beamer").hide();
