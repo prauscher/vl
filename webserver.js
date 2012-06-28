@@ -47,6 +47,10 @@ exports.createServer = function (config) {
 			}
 		}
 
+		app.get('/admin', generateCallback(function (req, res) {
+			res.render('admin');
+		}));
+
 		app.post('/beamer-identify',		generateCallback(routes.beamer.identify) );
 
 		app.put('/agenda/:slideid/save',	generateCallback(routes.agenda.save) );

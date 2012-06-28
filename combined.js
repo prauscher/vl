@@ -34,13 +34,6 @@ function checkPermissions(req, res, route) {
 		res.redirect('/login');
 	}
 }
-
-app.get('/admin', function (req, res) {
-	checkPermissions(req, res, function () {
-		res.render('admin');
-	});
-});
-
 app.addAdminRoutes(checkPermissions);
 
 console.dir(config);

@@ -11,7 +11,7 @@ var app = webserver.createServer(config);
 // Routes
 
 app.get('/', function (req, res) {
-	res.render('admin');
+	res.redirect('/admin/');
 });
 
 app.addAdminRoutes(function (req, res, route) {
