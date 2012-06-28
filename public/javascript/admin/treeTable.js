@@ -2,6 +2,7 @@
 
 function TreeTable(node, options) {
 	this.node = node;
+	// prepend "a" to avoid prefixes starting with numbers (which will fail due to css-classes)
 	this.prefix = "a" + generateID() + "-";
 	this.moveCallback = null;
 	this.styles = {};
@@ -85,7 +86,11 @@ TreeTable.prototype.add = function (type, id, parenttype, parentid, position, da
 		.append(contentItem);
 
 	if (!position || position == 0) {
-		parentList.prepend(item);
+		if (parentList.children("li." + (this.prefix + type)).length > 0) {
+			parentList.children("li." + (this.prefix + type) + ":eq(0)").before(item);
+		} else {
+			parentList.prepend(item);
+		}
 	} else {
 		parentList.children("li." + (this.prefix + type) + ":eq(" + (position-1) + ")").after(item);
 	}
