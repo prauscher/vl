@@ -69,8 +69,8 @@ function showApplicationOptions(applicationid, application) {
 $(function () {
 	var applicationsTreeTable = new TreeTable("ol#applications", { disableNesting : "application" });
 	applicationsTreeTable.setStyle("appcategory", "icon", {width: "20px"});
+	applicationsTreeTable.setStyle("appcategory", "title", {width: "350px"});
 	applicationsTreeTable.setStyle("application", "icon", {width: "20px"});
-	applicationsTreeTable.setStyle("application", "title", {width: "350px"});
 	applicationsTreeTable.setStyle("application", "title", {width: "350px"});
 	applicationsTreeTable.onMove(function (id, parentid, position, type, parenttype) {
 		if (type == "application") {
