@@ -28,8 +28,26 @@ body
 
 .content-text
 	{white-space:pre-line;}
+
+.content-agenda
+	{margin-left:50px;}
 .content-agenda .done
 	{color:#777777;}
+
+.sidebar
+	{position:absolute; top:130px; right:1em; width:10em; border-radius:0.5em; background-color:#ccc;}
+.sidebar>*
+	{padding:0.2em; margin-bottom:0.3em;}
+.sidebar .sidebar-header
+	{background-color:#000080; color:#fff; text-align:center; border-top-left-radius:0.5em; border-top-right-radius:0.5em; padding:0.3em;}
+.content-application.application-status *
+	{text-align:right;}
+.content-application .application-submitter
+	{text-align:right;}
+.content-application.application-text
+	{margin-right:11em; border:0.1em dotted darkgray; padding:0.2em;}
+.content-application.application-argumentation
+	{margin-right:11em; margin-top:0.3em;}
 
 .flash-danger
 	{background-color:#b94a48;}

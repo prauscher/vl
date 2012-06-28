@@ -181,12 +181,12 @@ $(function () {
 	});
 
 	apiClient.on("updateApplication", function (applicationid, application) {
-		$(".content-application .applicationid").text(applicationid);
-		$(".content-application .application-text").text(application.text);
-		$(".content-application .application-argumentation").text(application.argumentation);
-		$(".content-application .application-submitter").text(application.submitter);
-		$(".content-application .application-status *").hide();
-		$(".content-application .application-status .status-" + application.status).show();
+		$(".applicationid").text(applicationid);
+		$(".application-text").text(application.text);
+		$(".application-argumentation").text(application.argumentation);
+		$(".application-submitter").text(application.submitter);
+		$(".application-status *").hide();
+		$(".application-status .status-" + application.status).show();
 	});
 
 	$("#beamer-reset").click(function() {
