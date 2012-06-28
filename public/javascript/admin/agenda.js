@@ -126,6 +126,10 @@ $(function () {
 		$("#agenda #options #slidecontent-application-applicationid option.application-" + applicationid).text(applicationid + ": " + application.title);
 	});
 
+	apiClient.on("deleteApplication", function (applicationid) {
+		$("#agenda #options #slidecontent-application-applicationid option.application-" + applicationid).remove();
+	});
+
 	$("#new-slide").click(function () {
 		showSlideOptions(null, {});
 	});
