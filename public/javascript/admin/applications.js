@@ -80,7 +80,11 @@ $(function () {
 				apiClient.moveApplication(id, parentid, position);
 			}
 		} else if (type == "appcategory") {
-			apiClient.moveAppCategory(id, parentid, position);
+			if (parenttype != "appcategory") {
+				return false;
+			} else {
+				apiClient.moveAppCategory(id, parentid, position);
+			}
 		}
 	});
 
