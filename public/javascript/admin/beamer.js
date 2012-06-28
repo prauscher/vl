@@ -146,6 +146,8 @@ $(function () {
 			.append($("<td>").addClass("title"))
 			.append(handoverBeamer)
 			.append($("<td>")
+				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
+				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
 				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
 				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
@@ -171,6 +173,15 @@ $(function () {
 		$("#beamers #beamer-" + beamerid + " .color").css("background-color", beamer.color);
 		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).unbind("click").click(function () {
 			showBeamerOptions(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .isvisible").toggle(beamer.hidden != "true").unbind("click").click(function () {
+			beamer.hidden = true;
+			apiClient.saveBeamer(beamerid, beamer);
+		});
+		$("#beamers #beamer-" + beamerid + " .ishidden").toggle(beamer.hidden == "true").unbind("click").click(function () {
+			beamer.hidden = false;
+			apiClient.saveBeamer(beamerid, beamer);
 		});
 
 		$("#beamers #beamer-" + beamerid + " .reset").unbind("click").click(function () {
