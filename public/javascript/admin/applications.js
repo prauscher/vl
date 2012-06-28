@@ -31,7 +31,7 @@ function showApplicationOptions(applicationid, application) {
 		$("#applications #application-options #applicationid").prop("disabled", false);
 		$("#applications #application-options #delete-application").hide();
 	} else {
-		$("#applications #application-options #applicationid").prop("disabled", true);
+		$("#applications #application-options #applicationid").prop("disabled", true).val(applicationid);
 		$("#applications #application-options #delete-application").show();
 	}
 
