@@ -1,7 +1,9 @@
 #error
 	{position:fixed; top:0px; left:0px; height:100%; width:100%; background:-webkit-gradient(linear, left top, left bottom, from(#999), to(#333)); color:white; display:none; z-index:100;}
 #error .message
-	{text-shadow:#fff 0px 1px 0, #000 0 -1px 0; top:40%; position:absolute;}
+	{text-shadow:#fff 0px 1px 0, #000 0 -1px 0; top:40%; position:absolute; font-size:2em; text-align:center; left:0px; right:0px;}
+#error .notes
+	{top:70%; position:absolute; text-align:center; left:0px; right:0px; font-size:1.3em;}
 #waiting
 	{position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:lightgray; opacity:0.4; background-position:center; background-image:url(/images/waiting.gif); background-repeat:no-repeat; z-index:90;}
 #identify
