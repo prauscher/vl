@@ -1,9 +1,3 @@
-exports.getDefaultBeamerID = function (callback) {
-	db.get('defaultbeamerid', function (err, beamerid) {
-		callback(beamerid);
-	});
-}
-
 exports.exists = function(beamerid, callback) {
 	db.exists('beamer:' + beamerid, function (err, exists) {
 		callback(exists);

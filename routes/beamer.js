@@ -2,12 +2,6 @@ exports.showBeamer = function(req,res) {
 	res.render('showBeamer', { beamerid : req.params.beamerid });
 }
 
-exports.showDefaultBeamer = function(req,res) {
-	backend.beamer.getDefaultBeamerID(function (beamerid) {
-		res.render('showBeamer', { beamerid : beamerid });
-	});
-}
-
 exports.save = function(req, res) {
 	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {

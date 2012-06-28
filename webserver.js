@@ -36,7 +36,6 @@ exports.createServer = function (config) {
 
 	// Routes
 
-	app.get('/beamer', routes.beamer.showDefaultBeamer);
 	app.get('/beamer/:beamerid', routes.beamer.showBeamer);
 
 	app.get('/slides/:slideid', routes.agenda.showSlide);
