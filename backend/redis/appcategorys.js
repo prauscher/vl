@@ -27,7 +27,7 @@ exports.get = function(appcategoryid, callback) {
 }
 
 exports.eachChildren = function (appcategoryid, callback) {
-	db.zrange(getAppCategoryKey(appcategoryid), 0, -1, function (err, subappcategoryids) {
+	db.lrange(getAppCategoryKey(appcategoryid), 0, -1, function (err, subappcategoryids) {
 		subappcategoryids.forEach(function (subappcategoryid) {
 			exports.get(subappcategoryid, function (subappcategory) {
 				callback(subappcategoryid, subappcategory);
@@ -37,7 +37,7 @@ exports.eachChildren = function (appcategoryid, callback) {
 }
 
 exports.eachApplication = function (appcategoryid, callback) {
-	db.zrange("appcategorys:" + appcategoryid + ":applications", 0, -1, function (err, applicationids) {
+	db.lrange("appcategorys:" + appcategoryid + ":applications", 0, -1, function (err, applicationids) {
 		applicationids.forEach(function (applicationid) {
 			exports.get(applicationid, function (application) {
 				callback(applicationid, application);
@@ -48,14 +48,12 @@ exports.eachApplication = function (appcategoryid, callback) {
 
 exports.add = function(appcategoryid, appcategory, callbackSuccess) {
 	exports.save(appcategoryid, appcategory, function () {
-		db.zcard(getAppCategoryKey(appcategory.parentid), function (err, appcategorycount) {
-			db.zadd(getAppCategoryKey(appcategory.parentid), appcategorycount, appcategoryid);
-			io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: appcategorycount });
+		db.rpush(getAppCategoryKey(appcategory.parentid), appcategoryid, function(err, pos) {
+			io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos-1 });
+			if (callbackSuccess) {
+				callbackSuccess();
+			}
 		});
-
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
 	});
 }
 
@@ -75,7 +73,7 @@ exports.save = function(appcategoryid, appcategory, callbackSuccess) {
 exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 	exports.get(appcategoryid, function (appcategory) {
 		console.log(getAppCategoryKey(appcategory.parentid) + " => " + getAppCategoryKey(parentid));
-		db._zmove(appcategoryid, getAppCategoryKey(appcategory.parentid), getAppCategoryKey(parentid), position, function () {
+		db._lmove(appcategoryid, getAppCategoryKey(appcategory.parentid), getAppCategoryKey(parentid), position, function () {
 			if (parentid) {
 				appcategory.parentid = parentid;
 			} else {
@@ -95,7 +93,7 @@ exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 
 exports.delete = function(appcategoryid, callbackSuccess) {
 	db.hget('appcategorys:' + appcategoryid, 'parentid', function (err, parentid) {
-		db.zrem(getAppCategoryKey(parentid), appcategoryid, function (err) {
+		db.lrem(getAppCategoryKey(parentid), 0, appcategoryid, function (err) {
 			db.del('appcategorys:' + appcategoryid, function (err) {
 				db.del('appcategorys:' + appcategoryid + ':children');
 				db.del('appcategorys:' + appcategoryid + ':applications');

@@ -11,11 +11,10 @@ exports.get = function(applicationid, callback) {
 }
 
 exports.add = function(applicationid, application, callbackSuccess) {
-	db.zcard('appcategorys:' + application.categoryid + ':applications', function(err, applicationcount) {
-		exports.save(applicationid, application, function () {
-			console.log('appcategorys:' + application.categoryid + ':applications' + " / " + applicationcount + " / " + applicationid);
-			db.zadd('appcategorys:' + application.categoryid + ':applications', applicationcount, applicationid);
-			io.sockets.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: applicationcount });
+	exports.save(applicationid, application, function () {
+		console.log('appcategorys:' + application.categoryid + ':applications' + " / " + applicationcount + " / " + applicationid);
+		db.rpush('appcategorys:' + application.categoryid + ':applications', applicationid, function(err, pos) {
+			io.sockets.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: pos-1 });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -36,7 +35,7 @@ exports.save = function(applicationid, application, callbackSuccess) {
 
 exports.move = function(applicationid, categoryid, position, callbackSuccess) {
 	exports.get(applicationid, function (application) {
-		db._zmove(applicationid, 'appcategorys:' + application.categoryid + ':applications', 'appcategorys:' + categoryid + ':applications', position, function () {
+		db._lmove(applicationid, 'appcategorys:' + application.categoryid + ':applications', 'appcategorys:' + categoryid + ':applications', position, function () {
 			application.categoryid = categoryid;
 			exports.save(applicationid, application, function () {
 				io.sockets.emit('application-delete:' + applicationid, {});
@@ -52,7 +51,7 @@ exports.move = function(applicationid, categoryid, position, callbackSuccess) {
 
 exports.delete = function(applicationid, callbackSuccess) {
 	db.hget('application:' + applicationid, 'categoryid', function (err, categoryid) {
-		db.zrem('appcategorys:' + categoryid + ':applications', applicationid, function (err) {
+		db.lrem('appcategorys:' + categoryid + ':applications', 0, applicationid, function (err) {
 			db.del('applications:' + applicationid, function (err) {
 				db.del('applications:' + applicationid + ':ballots');
 				io.sockets.emit('application-delete:' + applicationid, {});

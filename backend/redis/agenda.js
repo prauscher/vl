@@ -33,7 +33,7 @@ exports.get = function(slideid, callback) {
 }
 
 exports.eachChildren = function(slideid, callback) {
-	db.zrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
+	db.lrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
 		subslideids.forEach(function (subslideid) {
 			exports.get(subslideid, function (subslide) {
 				callback(subslideid, subslide);
@@ -43,11 +43,9 @@ exports.eachChildren = function(slideid, callback) {
 }
 
 function appendSlide(slideid, slide, callbackSuccess) {
-	db.zcard('slides:' + slide.parentid + ':children', function (err, slidecount) {
-		exports.save(slideid, slide, function() {
-			db.zadd('slides:' + slide.parentid + ":children", slidecount, slideid, function (err) {});
-			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : slidecount });
-
+	exports.save(slideid, slide, function() {
+		db.rpush('slides:' + slide.parentid + ":children", slideid, function (err, pos) {
+			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos-1 });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
@@ -89,7 +87,7 @@ exports.save = function(slideid, slide, callbackSuccess) {
 
 exports.move = function(slideid, parentid, position, callbackSuccess) {
 	exports.get(slideid, function (slide) {
-		db._zmove(slideid, 'slides:' + slide.parentid + ':children', 'slides:' + parentid + ':children', position, function () {
+		db._lmove(slideid, 'slides:' + slide.parentid + ':children', 'slides:' + parentid + ':children', position, function () {
 			slide.parentid = parentid;
 			exports.save(slideid, slide, function () {
 				io.sockets.emit('slide-delete:' + slideid, {});
@@ -105,7 +103,7 @@ exports.move = function(slideid, parentid, position, callbackSuccess) {
 
 exports.delete = function(slideid, callbackSuccess) {
 	db.hget('slides:' + slideid, 'parentid', function (err, parentid) {
-		db.zrem('slides:' + parentid + ':children', slideid, function (err) {
+		db.lrem('slides:' + parentid + ':children', 0, slideid, function (err) {
 			db.del('slides:' + slideid, function (err) {
 				db.del('slides:' + slideid + ':children');
 				io.sockets.emit('slide-delete:' + slideid, {});
