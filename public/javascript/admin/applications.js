@@ -80,10 +80,10 @@ $(function () {
 				apiClient.moveApplication(id, parentid, position);
 			}
 		} else if (type == "appcategory") {
-			if (parenttype != "appcategory") {
+			if (parenttype != null && parenttype != "appcategory") {
 				return false;
 			} else {
-				apiClient.moveAppCategory(id, parentid, position);
+				apiClient.moveAppCategory(id, (parentid ? parentid : undefined), position);
 			}
 		}
 	});
