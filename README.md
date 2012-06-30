@@ -10,6 +10,11 @@ First, install [nodejs](http://nodejs.org/) and [redis](http://redis.io/)
 	cd vl
 	npm install
 
+As socket.io currently ships with an old version of the redis client library, please replace
+node_modules/socket.io/node_modules/redis/lib/util.js with the following content:
+
+	exports.util = require("util");
+
 Running
 -------
 
