@@ -135,6 +135,10 @@ $(function () {
 		});
 	});
 
+	apiClient.on("deleteAppCategory", function (appcategoryid) {
+		$(".appCategory-" + appcategoryid).remove();
+	});
+
 	$("#new-appcategory").click(function () {
 		showAppCategoryOptions(null, {});
 	});
