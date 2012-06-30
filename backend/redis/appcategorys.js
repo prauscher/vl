@@ -6,14 +6,6 @@ function getAppCategoryKey(appcategoryid) {
 	}
 }
 
-function getAppCategoryAddPublish(appcategoryid) {
-	if (typeof appcategoryid == 'undefined' || ! appcategoryid) {
-		return "appcategory-add";
-	} else {
-		return "appcategory-add:" + appcategoryid;
-	}
-}
-
 exports.exists = function (appcategoryid, callback) {
 	db.exists('appcategorys:' + appcategoryid, function (err, exists) {
 		callback(exists);
@@ -26,34 +18,27 @@ exports.get = function(appcategoryid, callback) {
 	});
 }
 
-exports.eachChildren = function (appcategoryid, callback) {
+exports.getChildren = function (appcategoryid, callback) {
 	db.lrange(getAppCategoryKey(appcategoryid), 0, -1, function (err, subappcategoryids) {
-		subappcategoryids.forEach(function (subappcategoryid) {
-			exports.get(subappcategoryid, function (subappcategory) {
-				callback(subappcategoryid, subappcategory);
-			});
-		});
+		callback(subappcategoryids);
 	})
 }
 
-exports.eachApplication = function (appcategoryid, callback) {
+exports.getApplications = function (appcategoryid, callback) {
 	db.lrange("appcategorys:" + appcategoryid + ":applications", 0, -1, function (err, applicationids) {
-		applicationids.forEach(function (applicationid) {
-			exports.get(applicationid, function (application) {
-				callback(applicationid, application);
-			});
-		});
+		callback(applicationids);
 	})
 }
 
-exports.add = function(appcategoryid, appcategory, callbackSuccess) {
-	exports.save(appcategoryid, appcategory, function () {
-		db.rpush(getAppCategoryKey(appcategory.parentid), appcategoryid, function(err, pos) {
-			io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos-1 });
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
-		});
+exports.addChildren = function(parentid, appcategoryid, callbackSuccess) {
+	db.rpush(getAppCategoryKey(parentid), appcategoryid, function(err, pos) {
+		callbackSuccess(pos - 1);
+	});
+}
+
+exports.addApplication = function(parentid, applicationid, callbackSuccess) {
+	db.rpush('appcategorys:' + parentid + ':applications', applicationid, function(err, pos) {
+		callbackSuccess(pos - 1);
 	});
 }
 
@@ -61,33 +46,14 @@ exports.save = function(appcategoryid, appcategory, callbackSuccess) {
 	// Need to delete first, so old keys wont get remembered (think of parentid etc)
 	db.del('appcategorys:' + appcategoryid, function (err) {
 		db.hmset('appcategorys:' + appcategoryid, appcategory, function (err) {
-			io.sockets.emit('appcategory-change:' + appcategoryid, { appcategory: appcategory });
-
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
+			callbackSuccess();
 		});
 	});
 }
 
-exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
-	exports.get(appcategoryid, function (appcategory) {
-		console.log(getAppCategoryKey(appcategory.parentid) + " => " + getAppCategoryKey(parentid));
-		db._lmove(appcategoryid, getAppCategoryKey(appcategory.parentid), getAppCategoryKey(parentid), position, function () {
-			if (parentid) {
-				appcategory.parentid = parentid;
-			} else {
-				delete appcategory.parentid;
-			}
-			exports.save(appcategoryid, appcategory, function () {
-				io.sockets.emit('appcategory-delete:' + appcategoryid, {});
-				io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), {appcategoryid: appcategoryid, appcategory: appcategory, position: position});
-
-				if (callbackSuccess) {
-					callbackSuccess();
-				}
-			});
-		});
+exports.move = function(appcategoryid, oldparentid, parentid, position, callbackSuccess) {
+	db._lmove(appcategoryid, getAppCategoryKey(oldparentid), getAppCategoryKey(parentid), position, function () {
+		callbackSuccess();
 	});
 }
 
@@ -98,11 +64,8 @@ exports.delete = function(appcategoryid, callbackSuccess) {
 				db.del('appcategorys:' + appcategoryid + ':children');
 				db.del('appcategorys:' + appcategoryid + ':applications');
 				db.del('appcategorys:' + appcategoryid + ':ballots');
-				io.sockets.emit('appcategory-delete:' + appcategoryid, {});
 
-				if (callbackSuccess) {
-					callbackSuccess();
-				}
+				callbackSuccess();
 			});
 		});
 	});
