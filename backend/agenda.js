@@ -51,7 +51,7 @@ exports.eachChildren = function(slideid, callback) {
 function appendSlide(slideid, slide, callbackSuccess) {
 	core.agenda.save(slideid, slide, function() {
 		core.agenda.addChildren(slide.parentid, slideid, function (pos) {
-			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos-1 });
+			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
