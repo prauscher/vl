@@ -58,16 +58,24 @@ html
 				button.close(data-dismiss="modal") ×
 				h3 Bekanntmachung erstellen
 			form.form-horizontal.modal-body
-				textarea#text
-				label
-					input(type="text",value="30")#timeout.span1
-					| Sekunden
-				label
-					select#type
-						option(value="danger") Error or danger
-						option(value="information") Information
-						option(value="success") Success
-				div#select-beamers
+				.control-group
+					label.control-label Text
+					.controls
+						textarea#text
+				.control-group
+					label.control-label Anzeigezeit
+					.controls
+						input(type="text",value="0:30")#timeout.span1
+				.control-group
+					label.control-label Typ
+					.controls
+						select#type
+							option(value="danger") Error or danger
+							option(value="information") Information
+							option(value="success") Success
+				.control-group
+					label.control-label Beamer
+					.controls#select-beamers
 			div.modal-footer
 				button.btn.btn-primary#save-flash Anzeigen
 				button.btn(data-dismiss="modal") Abbrechen
@@ -87,8 +95,14 @@ html
 					button.close(data-dismiss="modal") ×
 					h3 Beamer bearbeiten
 				form.form-horizontal.modal-body
-					input(type="text")#title
-					input(type="hidden")#color
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#title
+					.control-group
+						label.control-label Farbe
+						.controls
+							input(type="hidden")#color
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-beamer Löschen
 					button.btn(data-dismiss="modal") Schließen
@@ -104,8 +118,11 @@ html
 				div.modal-header
 					button.close(data-dismiss="modal") ×
 					h3 Tagesordnungspunkt bearbeiten
-				div.modal-body
-					input(type="text")#title
+				form.form-horizontal.modal-body
+					.control-group
+						.control-label Name
+						.controls
+							input(type="text")#title
 					div#slidecontent
 						ul.nav.nav-tabs
 							li
@@ -146,9 +163,18 @@ html
 					button.close(data-dismatch="modal") ×
 					h3 Timer anlegen
 				form.form-horizontal.modal-body
-					input(type="text")#title
-					input(type="hidden")#color
-					input(type="text")#value.span1
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#title
+					.control-group
+						label.control-label Farbe
+						.controls
+							input(type="hidden")#color
+					.control-group
+						label.control-label Zeit
+						.controls
+							input(type="text")#value.span1
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-timer Löschen
 					button.btn(data-dismiss="modal") Schließen
@@ -171,17 +197,35 @@ html
 					button.close(data-dismatch="modal") ×
 					h3 Antrag anlegen
 				form.form-horizontal.modal-body
-					input(type="text")#applicationid.span1
-					input(type="text")#title.span3
-					input(type="text")#submitter.span2
-					select#status
-						option(value="open")		Offen
-						option(value="accepted")	Angenommen
-						option(value="rejected")	Abgelehnt
-						option(value="withdrawn")	Zurückgezogen
-						option(value="suspended")	Vertagt
-					textarea#text
-					textarea#argumentation
+					.control-group
+						label.control-label Antragsnummer
+						.controls
+							input(type="text")#applicationid.span1
+					.control-group
+						label.control-label Titel
+						.controls
+							input(type="text")#title.span3
+					.control-group
+						label.control-label Antragsteller
+						.controls
+							input(type="text")#submitter.span2
+					.control-group
+						label.control-label Zustand
+						.controls
+							select#status
+								option(value="open")		Offen
+								option(value="accepted")	Angenommen
+								option(value="rejected")	Abgelehnt
+								option(value="withdrawn")	Zurückgezogen
+								option(value="suspended")	Vertagt
+					.control-group
+						label.control-label Antrag
+						.controls
+							textarea#text
+					.control-group
+						label.control-label Begründung
+						.controls
+							textarea#argumentation
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-application Löschen
 					button.btn(data-dismiss="modal") Schließen
@@ -192,7 +236,10 @@ html
 					button.close(data-dismatch="modal") ×
 					h3 Antragskategorie anlegen
 				form.form-horizontal.modal-body
-					input(type="text")#title
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#title
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-appcategory Löschen
 					button.btn(data-dismiss="modal") Schließen
