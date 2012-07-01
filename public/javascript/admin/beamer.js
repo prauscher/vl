@@ -36,6 +36,9 @@ function showBeamerOptions(beamerid, beamer) {
 		});
 	});
 
+	$("#beamers #beamer-options form").unbind("submit").submit(function () {
+		$("#beamers #beamer-options #save-beamer").click();
+	});
 	$("#beamers #beamer-options #save-beamer").unbind("click").click(function () {
 		beamer.title = $("#beamers #beamer-options #title").val();
 		beamer.color = $("#beamers #beamer-options #color").val();
@@ -44,6 +47,9 @@ function showBeamerOptions(beamerid, beamer) {
 		});
 	});
 
+	$("#beamers #beamer-options").on("shown", function () {
+		$("#beamers #beamer-options #title").focus();
+	});
 	$("#beamers #beamer-options").modal();
 }
 
