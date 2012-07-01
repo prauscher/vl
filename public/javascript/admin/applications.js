@@ -109,7 +109,7 @@ $(function () {
 	});
 
 	apiClient.on("updateApplication", function (applicationid, application) {
-		applicationsTreeTable.get("application", applicationid, "title").text(application.title).unbind("click").click(function() {
+		applicationsTreeTable.get("application", applicationid, "title").text(applicationid + ": " + application.title).unbind("click").click(function() {
 			showApplicationOptions(applicationid, application);
 		});
 	});
