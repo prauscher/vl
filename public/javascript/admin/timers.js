@@ -10,8 +10,7 @@ function showTimerOptions(timerid, timer) {
 	}
 
 	$("#timers #timer-options #title").val(timer.title);
-	// Call destroy to remove earlier timer-option-dialogs
-	$("#timers #timer-options #color").val(timer.color).miniColors("destroy").miniColors();
+	$("#timers #timer-options #color").val(timer.color).miniColors();
 	$("#timers #timer-options #value").val(formatTime(timer.value));
 
 	$("#timers #timer-options #save-timer").unbind("click").click(function () {
