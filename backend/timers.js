@@ -35,7 +35,7 @@ exports.getAll = function(callback) {
 }
 
 exports.add = function(timerid, timer, callbackSuccess) {
-	exports.save(timerid, timer, function() {
+	core.timers.save(timerid, timer, function() {
 		core.timers.add(timerid, function () {
 			io.sockets.emit('timer-add', { timerid : timerid, timer : sanitizeTimer(timer) });
 

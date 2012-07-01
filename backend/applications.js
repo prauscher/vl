@@ -15,7 +15,7 @@ exports.get = function(applicationid, callback) {
 }
 
 exports.add = function(applicationid, application, callbackSuccess) {
-	exports.save(applicationid, application, function () {
+	core.applications.save(applicationid, application, function () {
 		core.appcategorys.addApplication(application.categoryid, applicationid, function (pos) {
 			io.sockets.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: pos-1 });
 

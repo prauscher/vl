@@ -35,7 +35,7 @@ exports.getTimers = function(beamerid, callback) {
 }
 
 exports.add = function(beamerid, beamer, callbackSuccess) {
-	exports.save(beamerid, beamer, function () {
+	core.beamer.save(beamerid, beamer, function () {
 		core.beamer.add(beamerid, function () {
 			io.sockets.emit('beamer-add', { beamerid : beamerid, beamer : beamer });
 

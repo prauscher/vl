@@ -43,7 +43,7 @@ exports.eachApplication = function (appcategoryid, callback) {
 }
 
 exports.add = function(appcategoryid, appcategory, callbackSuccess) {
-	exports.save(appcategoryid, appcategory, function () {
+	core.appcategorys.save(appcategoryid, appcategory, function () {
 		core.appcategorys.addChildren(appcategory.parentid, appcategoryid, function (pos) {
 			io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos });
 			if (callbackSuccess) {
