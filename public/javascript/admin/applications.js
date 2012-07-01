@@ -10,6 +10,9 @@ function showAppCategoryOptions(appcategoryid, appcategory) {
 
 	$("#applications #appcategory-options #title").val(appcategory.title);
 
+	$("#applications #appcategory-options form").on("submit").submit(function () {
+		$("#applications #appcategory-options #save-appcategory").click();
+	});
 	$("#applications #appcategory-options #save-appcategory").unbind("click").click(function () {
 		appcategory.title = $("#applications #appcategory-options #title").val();
 
@@ -23,6 +26,9 @@ function showAppCategoryOptions(appcategoryid, appcategory) {
 		});
 	});
 
+	$("#applications #appcategory-options").on("shown", function () {
+		$("#applications #appcategory-options #title").focus();
+	});
 	$("#applications #appcategory-options").modal();
 }
 
@@ -42,6 +48,9 @@ function showApplicationOptions(applicationid, application) {
 	$("#applications #application-options #text").val(application.text);
 	$("#applications #application-options #argumentation").val(application.argumentation);
 
+	$("#applications #application-options form").unbind("submit").submit(function () {
+		$("#applications #application-options #save-application").click();
+	});
 	$("#applications #application-options #save-application").unbind("click").click(function() {
 		if (applicationid == null) {
 			applicationid = $("#applications #application-options #applicationid").val();
@@ -63,6 +72,9 @@ function showApplicationOptions(applicationid, application) {
 		});
 	});
 
+	$("#applications #application-options").on("shown", function() {
+		$("#applications #application-options #title").focus();
+	});
 	$("#applications #application-options").modal();
 }
 
