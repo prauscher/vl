@@ -40,3 +40,12 @@ var formatTime = function (time) {
 	}
 	return minutes + ":" + seconds;
 }
+
+var parseTime = function (text) {
+	var value = 0;
+	var parts = text.split(":");
+	for (var i = 0; i < parts.length; i++) {
+		value += parts[i] * Math.pow(60, parts.length - i - 1);
+	}
+	return value;
+}

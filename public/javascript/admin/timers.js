@@ -17,12 +17,7 @@ function showTimerOptions(timerid, timer) {
 	$("#timers #timer-options #save-timer").unbind("click").click(function () {
 		timer.title = $("#timers #timer-options #title").val();
 		timer.color = $("#timers #timer-options #color").val();
-
-		timer.value = 0;
-		var parts = $("#timers #timer-options #value").val().split(":");
-		for (var i = 0; i < parts.length; i++) {
-			timer.value += parts[i] * Math.pow(60, parts.length - i - 1);
-		}
+		timer.value = parseTime($("#timers #timer-options #value").val());
 
 		if (!timer.startedValue) {
 			timer.startedValue = timer.value;
