@@ -57,7 +57,7 @@ $(function () {
 			apiClient.stopTimer(timerid, timer);
 		});
 
-		$("#timers #timer-" + timerid + " .title").unbind("click").click(function () {
+		$("#timers #timer-" + timerid + " .title").unbind("click").css("cursor", "pointer").click(function () {
 			showTimerOptions(timerid, timer);
 		});
 	});

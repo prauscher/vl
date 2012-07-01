@@ -11,3 +11,5 @@
 
 ol.ui-sortable, ol.ui-sortable ol
 	{list-style:none; margin-left:15px;}
+ol.ui-sortable div:hover
+	{background-color:#eeeeee;}

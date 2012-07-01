@@ -172,7 +172,7 @@ $(function () {
 		$("#showbeamer #showbeamer-" + beamerid + " .title").text(beamer.title);
 
 		$("#beamers #beamer-" + beamerid + " .color").css("background-color", beamer.color);
-		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).unbind("click").click(function () {
+		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).css("cursor", "pointer").unbind("click").click(function () {
 			showBeamerOptions(beamerid, beamer);
 		});
 

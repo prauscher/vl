@@ -43,7 +43,7 @@ function showSlideOptions(slideid, slide) {
 
 $(function () {
 	var agendaTreeTable = new TreeTable("#agenda ol#slides");
-	agendaTreeTable.setStyle("slide", "title", {width: "350px"});
+	agendaTreeTable.setStyle("slide", "title", {width: "350px", cursor: "pointer"});
 	agendaTreeTable.onMove(function (slideid, parentid, position) {
 		if (parentid == null) {
 			return false;
