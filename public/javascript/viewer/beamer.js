@@ -3,33 +3,61 @@ var currentApplicationID = null;
 var beamerScroll = 0;
 var beamerZoom = 1;
 
-function setBeamerContent (slideid, slide) {
+function configureBeamer(beamerid) {
+	apiClient.registerIdentifyBeamer();
+	apiClient.registerBeamer(beamerid);
+}
+
+function configureSlide(slideid) {
+	if (currentSlideID != null) {
+		apiClient.unregisterSlide(currentSlideID);
+		currentSlideID = null;
+	}
+	$('#content .content-agenda').empty();
+	apiClient.registerSlide(options.slideid, 1);
+	currentSlideID = options.slideid;
+}
+
+function configureApplication(applicationid) {
 	if (currentApplicationID != null) {
 		apiClient.unregisterApplication(currentApplicationID);
 		currentApplicationID = null;
 	}
-	if (slide.type == 'application') {
-		currentApplicationID = slide.applicationid;
-		apiClient.registerApplication(currentApplicationID);
-	}
+	apiClient.registerApplication(applicationid);
+	currentApplicationID = applicationid;
+}
 
-	$('#title').text(slide.title);
-
+function clearView() {
 	$('#content .content-text').hide();
 	$('#content .content-html').hide();
 	$('#content .content-agenda').hide();
 	$('#content .content-application').hide();
-	if (slide.type == 'text') {
-		$('#content .content-text').show();
-		$('#content .content-text').text(slide.text);
-	} else if (slide.type == 'html') {
-		$('#content .content-html').show();
-		$('#content .content-html').html(slide.html);
-	} else if (slide.type == 'agenda') {
+}
+
+function showView(type, options) {
+	clearView();
+
+	$('#title').text(options.title);
+
+	if (type == "text") {
+		$('#content .content-text').text(options.text).show();
+	}
+	if (type == "html") {
+		$('#content .content-html').html(options.html).show();
+	}
+	if (type == "agenda") {
 		$('#content .content-agenda').show();
-	} else if (slide.type == 'application') {
+	}
+	if (type == "application") {
+		$('#title').text(options.application.title);
+		$(".applicationid").text(options.applicationid);
+		$(".application-text").text(options.application.text);
+		$(".application-argumentation").text(options.application.argumentation);
+		$(".application-submitter").text(options.application.submitter);
+		$(".application-status *").hide();
+		$(".application-status .status-" + options.application.status).show();
 		$('#content .content-application').show();
-	}	
+	}
 }
 
 function setViewerData(scroll, zoom) {
@@ -40,17 +68,6 @@ function setViewerData(scroll, zoom) {
 		fontSize: zoom + "em",
 		marginTop: scroll + "em"
 	}, 500);
-}
-
-function setCurrentSlide(slideid) {
-	if (currentSlideID != null) {
-		apiClient.unregisterSlide(currentSlideID);
-		currentSlideID = null;
-	}
-	currentSlideID = slideid;
-	$('#content .content-agenda').empty();
-
-	apiClient.registerSlide(currentSlideID, 1);
 }
 
 function updateCurrentTime() {
@@ -80,11 +97,19 @@ $(function () {
 	apiClient.on('error:slideNotFound', function (slideid) {
 		showError("Die Folie wurde nicht gefunden");
 	});
+
 	apiClient.on('updateBeamer', function (beamerid, beamer) {
 		$("#waiting").fadeOut(300);
 	});
 	apiClient.on('error:beamerNotFound', function (beamerid) {
 		showError("Der Beamer wurde nicht gefunden");
+	});
+
+	apiClient.on('updateApplication', function (applicationid, application) {
+		$("#waiting").fadeOut(300);
+	});
+	apiClient.on('error:applicationNotFound', function (applicationid) {
+		showError("Der Antrag wurde nicht gefunden");
 	});
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
@@ -100,7 +125,18 @@ $(function () {
 
 	apiClient.on("updateSlide", function (slideid, slide) {
 		if (slideid == currentSlideID) {
-			setBeamerContent(slideid, slide);
+			if (slide.type == 'text') {
+				showView("text", { title: slide.title, text: slide.text });
+			}
+			if (slide.type == 'html') {
+				showView("html", { title: slide.title, text: slide.html });
+			}
+			if (slide.type == 'agenda') {
+				showView("agenda", { title: slide.title });
+			}
+			if (slide.type == 'application') {
+				configureApplication(slide.applicationid);
+			}
 		} else {
 			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
 		}
@@ -117,15 +153,13 @@ $(function () {
 		}, timeout * 1000);
 	});
 
-	apiClient.on("updateBeamer", function (beamerid, beamer, currentslide) {
-		if (currentslide == null) {
-			showError("Der Beamer ist nicht konfiguriert", "Es ist keine Folie für den Beamer konfiguriert");
+	apiClient.on("updateBeamer", function (beamerid, beamer) {
+		if (beamer.currentslideid) {
+			configureSlide(beamer.currentslideid);
 		} else {
-			setCurrentSlide(beamer.currentslideid);
-			setBeamerContent(currentSlideID, currentslide);
+			showError("Der Beamer ist nicht konfiguriert", "Es ist keine Folie für den Beamer konfiguriert");
 		}
 		setViewerData(beamer.scroll, beamer.zoom);
-
 		$("#identify").css("background-color", beamer.color).text(beamer.title);
 	});
 
@@ -181,12 +215,7 @@ $(function () {
 	});
 
 	apiClient.on("updateApplication", function (applicationid, application) {
-		$(".applicationid").text(applicationid);
-		$(".application-text").text(application.text);
-		$(".application-argumentation").text(application.argumentation);
-		$(".application-submitter").text(application.submitter);
-		$(".application-status *").hide();
-		$(".application-status .status-" + application.status).show();
+		showView("application", { applicationid: applicationid, application: application });
 	});
 
 	$("#beamer-reset").click(function() {

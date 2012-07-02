@@ -22,9 +22,7 @@ exports.listen = function (app) {
 				if (beamer == null) {
 					socket.emit('err:beamer-not-found:' + data.beamerid, {});
 				} else {
-					backend.agenda.get(beamer.currentslideid, function (currentslide) {
-						socket.emit('beamer-change:' + data.beamerid, {beamer : beamer, currentslide: currentslide});
-					});
+					socket.emit('beamer-change:' + data.beamerid, {beamer : beamer});
 				}
 			});
 

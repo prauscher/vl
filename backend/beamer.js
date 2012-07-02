@@ -48,13 +48,11 @@ exports.add = function(beamerid, beamer, callbackSuccess) {
 
 exports.save = function(beamerid, beamer, callbackSuccess) {
 	core.beamer.save(beamerid, beamer, function () {
-		backend.agenda.get(beamer.currentslideid, function (currentslide) {
-			io.sockets.emit('beamer-change:' + beamerid, { beamer : beamer, currentslide : currentslide });
+		io.sockets.emit('beamer-change:' + beamerid, { beamer : beamer });
 
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
-		});
+		if (callbackSuccess) {
+			callbackSuccess();
+		}
 	});
 }
 

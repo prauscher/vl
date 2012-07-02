@@ -39,7 +39,7 @@ APIClient.prototype.registerBeamer = function (beamerid) {
 	this.socketIo.on('beamer-change:' + beamerid, function (data) {
 		self.beamers[beamerid] = data.beamer;
 
-		self.callCallback("updateBeamer", [ beamerid, data.beamer, data.currentslide ] );
+		self.callCallback("updateBeamer", [ beamerid, data.beamer ] );
 	});
 	this.socketIo.on('beamer-flash:' + beamerid, function (data) {
 		self.callCallback("flashBeamer", [ beamerid, data.flash ]);

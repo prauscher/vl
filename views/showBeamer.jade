@@ -62,13 +62,12 @@ html
 		- if (typeof beamerid != 'undefined')
 			script(type="text/javascript")
 				apiClient.connect(function () {
-					this.registerIdentifyBeamer();
-					this.registerBeamer('#{beamerid}');
+					configureBeamer('#{beamerid}');
 				});
 				$("#beamer-controls").hide();
 		- else if (typeof slideid != 'undefined')
 			script(type="text/javascript")
 				apiClient.connect(function () {
-					setCurrentSlide('#{slideid}');
+					configureSlide('#{slideid}');
 				});
 				$("#beamer-controls").show();
