@@ -34,7 +34,7 @@ function showAppCategoryOptions(appcategoryid, appcategory) {
 
 function showApplicationOptions(applicationid, application) {
 	if (applicationid == null) {
-		$("#applications #application-options #applicationid").prop("disabled", false);
+		$("#applications #application-options #applicationid").prop("disabled", false).val("");
 		$("#applications #application-options #delete-application").hide();
 	} else {
 		$("#applications #application-options #applicationid").prop("disabled", true).val(applicationid);
