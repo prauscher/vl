@@ -71,3 +71,9 @@ html
 					configureSlide('#{slideid}');
 				});
 				$("#beamer-controls").show();
+		- else if (typeof applicationid != 'undefined')
+			script(type="text/javascript")
+				apiClient.connect(function () {
+					configureApplication('#{applicationid}');
+				});
+				$("#beamer-controls").show();

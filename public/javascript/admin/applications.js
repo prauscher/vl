@@ -110,7 +110,9 @@ $(function () {
 	apiClient.on("initApplication", function (applicationid, categoryid, position) {
 		applicationsTreeTable.add("application", applicationid, "appcategory", categoryid, position, {
 			icon: $("<i>").addClass("icon").addClass("icon-file"),
-			title: $("<span>")
+			title: $("<span>"),
+			options: $("<span>")
+				.append($("<a>").attr("href", "/applications/" + applicationid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
 

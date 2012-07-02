@@ -1,3 +1,7 @@
+exports.showApplication = function (req, res) {
+	res.render('showBeamer', { applicationid : req.params.applicationid });
+}
+
 exports.save = function (req, res) {
 	var application = req.body.application;
 

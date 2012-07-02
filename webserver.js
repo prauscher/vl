@@ -40,6 +40,8 @@ exports.createServer = function (config) {
 
 	app.get('/slides/:slideid', routes.agenda.showSlide);
 
+	app.get('/applications/:applicationid', routes.applications.showApplication);
+
 	app.addAdminRoutes = function(callback) {
 		function generateCallback(route) {
 			return function (req, res) {
