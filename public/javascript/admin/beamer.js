@@ -1,4 +1,5 @@
 var currentlyPickedBeamer = null;
+var currentDefaultBeamer = null;
 
 function pickBeamer(beamerid) {
 	currentlyPickedBeamer = beamerid;
@@ -123,6 +124,12 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 }
 
 $(function () {
+	apiClient.on("setDefaultBeamer", function (beamerid) {
+		currentDefaultBeamer = beamerid;
+		$("#beamers .set-default").removeClass("active");
+		$("#beamers #beamer-" + beamerid + " .set-default").addClass("active");
+	});
+
 	apiClient.on("initBeamer", function (beamerid, beamer) {
 		$("#showbeamer ul").append($("<li>").attr("id", "showbeamer-" + beamerid).toggleClass("active", (currentlyPickedBeamer == beamerid))
 			.append($("<a>")
@@ -155,7 +162,7 @@ $(function () {
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
-				.append($("<i>").addClass("icon-share").addClass("set-default").attr("title", "Als Standard setzen"))
+				.append($("<i>").addClass("icon-share").addClass("set-default").attr("title", "Als Standard setzen").toggleClass("active", currentDefaultBeamer == beamerid))
 				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
 				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
 				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))

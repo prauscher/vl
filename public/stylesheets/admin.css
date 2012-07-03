@@ -6,6 +6,11 @@
 .select-beamer.active
 	{opacity:1;}
 
+.set-default
+	{opacity:0.5;}
+.set-default.active
+	{opacity:1;}
+
 .isundone.icon-ok-circle
 	{opacity:0.5;}
 

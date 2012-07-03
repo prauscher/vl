@@ -8,7 +8,7 @@ exports.getDefault = function(callback) {
 
 exports.setDefault = function(beamerid, callback) {
 	core.beamer.setDefault(beamerid, function() {
-		io.sockets.emit('default-beamer-changed', { beamerid : beamerid });
+		io.sockets.emit('beamer-set-default', { beamerid : beamerid });
 
 		if (callback) {
 			callback();

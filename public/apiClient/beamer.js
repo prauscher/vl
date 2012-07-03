@@ -11,6 +11,14 @@ APIClient.prototype.eachBeamer = function (callback) {
 	}
 }
 
+APIClient.prototype.registerDefaultBeamer = function () {
+	var self = this;
+	this.socketIo.on('beamer-set-default', function (data) {
+		self.callCallback("setDefaultBeamer", [ data.beamerid ] );
+	});
+	this.socketIo.emit('registerdefaultbeamer', {});
+}
+
 APIClient.prototype.registerIdentifyBeamer = function () {
 	var self = this;
 	this.socketIo.on('beamer-identify', function (data) {
