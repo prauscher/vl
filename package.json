@@ -5,7 +5,7 @@
    "dependencies": {
       "redis": "",
       "jade": "",
-      "express": "",
+      "express": "<3.0",
       "ws": "",
       "socket.io": ""
    }
