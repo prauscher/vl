@@ -4,14 +4,15 @@
 
 var config = require('./config.js'),
     routes = require('./routes'),
-    webserver = require('./webserver.js');
+    webserver = require('./webserver.js'),
+    backend = require('./backend');
 
 var app = webserver.createServer(config);
 
 // Routes
 
 app.get('/', function (req, res) {
-	res.render('clientOverview');
+	res.redirect('/beamer');
 });
 
 app.get('/login', function (req, res) {

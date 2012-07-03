@@ -1,3 +1,15 @@
+exports.getDefault = function(callback) {
+	db.get('defaultbeamer', function(err, defaultbeamer) {
+		callback(defaultbeamer);
+	});
+}
+
+exports.setDefault = function(beamerid, callback) {
+	db.set('defaultbeamer', beamerid, function(err) {
+		callback();
+	});
+}
+
 exports.exists = function(beamerid, callback) {
 	db.exists('beamer:' + beamerid, function (err, exists) {
 		callback(exists);

@@ -36,6 +36,16 @@ exports.createServer = function (config) {
 
 	// Routes
 
+	app.get('/beamer', function(req, res) {
+		backend.beamer.getDefault(function(defaultbeamer) {
+			if (defaultbeamer) {
+				res.redirect('/beamer/' + defaultbeamer);
+			} else {
+				res.redirect('/beamer/undefined');
+			}
+		});
+	});
+
 	app.get('/beamer/:beamerid', routes.beamer.showBeamer);
 
 	app.get('/slides/:slideid', routes.agenda.showSlide);
@@ -59,6 +69,7 @@ exports.createServer = function (config) {
 		app.post('/agenda/:slideid/delete',	generateCallback(routes.agenda.delete) );
 		app.post('/agenda/:slideid/move',	generateCallback(routes.agenda.move) );
 
+		app.put('/beamer',	generateCallback(routes.beamer.setDefault) );
 		app.put('/beamer/:beamerid/save',	generateCallback(routes.beamer.save) );
 		app.post('/beamer/:beamerid/delete',	generateCallback(routes.beamer.delete) );
 		app.post('/beamer/:beamerid/showtimer',	generateCallback(routes.beamer.showTimer) );

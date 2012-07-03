@@ -155,6 +155,7 @@ $(function () {
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
+				.append($("<i>").addClass("icon-share").addClass("set-default").attr("title", "Als Standard setzen"))
 				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
 				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
 				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
@@ -194,6 +195,10 @@ $(function () {
 			beamer.zoom = 1;
 			beamer.scroll = 0;
 			apiClient.saveBeamer(beamerid, beamer);
+		});
+
+		$("#beamers #beamer-" + beamerid + " .set-default").unbind("click").click(function () {
+			apiClient.setDefaultBeamer(beamerid);
 		});
 
 		$("#beamers #beamer-" + beamerid + " .zoom-in").unbind("click").click(function () {

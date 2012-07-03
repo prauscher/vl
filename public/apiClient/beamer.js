@@ -81,6 +81,15 @@ APIClient.prototype.beamerHasTimer = function(beamerid, timerid, callback) {
 	callback(this.beamerTimers[beamerid].indexOf(timerid) != -1);
 }
 
+APIClient.prototype.setDefaultBeamer = function (beamerid, callbackSuccess) {
+	$.ajax({
+		type: 'PUT',
+		url: '/beamer',
+		data: { beamerid: beamerid },
+		success: callbackSuccess
+	});
+}
+
 APIClient.prototype.saveBeamer = function(beamerid, beamer, callbackSuccess) {
 	$.ajax({
 		type: 'PUT',

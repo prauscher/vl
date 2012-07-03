@@ -1,3 +1,21 @@
+exports.getDefault = function(callback) {
+	core.beamer.getDefault(function (defaultbeamer) {
+		if (callback) {
+			callback(defaultbeamer);
+		}
+	});
+}
+
+exports.setDefault = function(beamerid, callback) {
+	core.beamer.setDefault(beamerid, function() {
+		io.sockets.emit('default-beamer-changed', { beamerid : beamerid });
+
+		if (callback) {
+			callback();
+		}
+	});
+}
+
 exports.exists = function(beamerid, callback) {
 	core.beamer.exists(beamerid, function (exists) {
 		if (callback) {

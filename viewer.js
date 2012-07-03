@@ -11,7 +11,7 @@ var app = webserver.createServer(config);
 // Routes
 
 app.get('/', function (req, res) {
-	res.render('clientOverview');
+	res.redirect('/beamer');
 });
 
 app.listen(config.port, config.host, function(){

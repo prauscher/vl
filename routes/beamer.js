@@ -2,6 +2,12 @@ exports.showBeamer = function(req,res) {
 	res.render('showBeamer', { beamerid : req.params.beamerid });
 }
 
+exports.setDefault = function(req, res) {
+	backend.beamer.setDefault(req.body.beamerid, function (err) {
+		res.send(200);
+	});
+}
+
 exports.save = function(req, res) {
 	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {
