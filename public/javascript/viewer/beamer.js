@@ -14,8 +14,8 @@ function configureSlide(slideid) {
 		currentSlideID = null;
 	}
 	$('#content .content-agenda').empty();
-	apiClient.registerSlide(options.slideid, 1);
-	currentSlideID = options.slideid;
+	apiClient.registerSlide(slideid, 1);
+	currentSlideID = slideid;
 }
 
 function configureApplication(applicationid) {
