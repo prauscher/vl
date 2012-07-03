@@ -56,7 +56,7 @@ function showBeamerOptions(beamerid, beamer) {
 
 function generateSelectBeamerButton(beamerid, callbacks, prefix) {
 	if (prefix == null)
-		prefix = "Beamer :";
+		prefix = "Beamer: ";
 
 	apiClient.getBeamer(beamerid, function (beamer) {
 		callbacks.create($("<img>")
@@ -111,7 +111,7 @@ function generateSelectBeamerSlideButton(beamerid, slideid, callback) {
 			});
 		},
 		create : callback
-	});
+	}, "Anzeigen auf: ");
 }
 
 function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
@@ -124,7 +124,7 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 			}
 		},
 		create : callback
-	});
+	}, "Anzeigen auf: ");
 }
 
 $(function () {
