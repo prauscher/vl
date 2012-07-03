@@ -80,7 +80,7 @@ function updateCurrentTime() {
 	if (minutes < 10) {
 		minutes = "0" + minutes;
 	}
-	$("#currentTime").text(hours + ":" + minutes);
+	$("#currentTime").text("⌚ " + hours + ":" + minutes);
 }
 
 function showError(message, notes) {
@@ -188,7 +188,7 @@ $(function () {
 	});
 
 	apiClient.on("countdownTimer", function (timerid, currentValue) {
-		$("#timers #timer-" + timerid).text(formatTime(currentValue));
+		$("#timers #timer-" + timerid).text("⌛ " + formatTime(currentValue));
 	});
 
 	apiClient.on("deleteTimer", function(timerid) {
