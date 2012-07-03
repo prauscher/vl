@@ -1,7 +1,7 @@
 .select-beamer, #timers .color, #beamers .color
 	{border:1px solid #777777; margin:1px; width:13px; height:13px;}
 
-#beamers i, #beamers .handover-buttons img { cursor: pointer }
+#beamers i, #beamers .handover-buttons img, #beamers .title { cursor: pointer }
 
 .select-beamer
 	{opacity:0.5;}

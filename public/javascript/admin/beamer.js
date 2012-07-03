@@ -54,14 +54,18 @@ function showBeamerOptions(beamerid, beamer) {
 	$("#beamers #beamer-options").modal();
 }
 
-function generateSelectBeamerButton(beamerid, callbacks) {
+function generateSelectBeamerButton(beamerid, callbacks, prefix) {
+	if (prefix == null)
+		prefix = "Beamer :";
+
 	apiClient.getBeamer(beamerid, function (beamer) {
 		callbacks.create($("<img>")
+			.attr("data-prefix", prefix)
 			.attr("src", "/images/empty.gif")
 			.addClass("select-beamer")
 			.addClass("select-beamer-" + beamerid)
 			.css("background-color", beamer.color)
-			.attr("title","Beamer: " + beamer.title)
+			.attr("title", prefix + beamer.title)
 			.toggle(currentlyPickedBeamer == null || currentlyPickedBeamer == beamerid)
 			.click(callbacks.click) );
 	});
@@ -95,7 +99,7 @@ function generateSelectBeamerHandoverButton(sourceBeamerid, targetBeamerid, call
 			});
 		},
 		create : callback
-	});
+	}, "Folie übernehmen von: ");
 }
 
 function generateSelectBeamerSlideButton(beamerid, slideid, callback) {
@@ -232,7 +236,9 @@ $(function () {
 
 		$(".select-beamer-" + beamerid)
 			.css("background-color", beamer.color)
-			.attr("title", "Beamer: " + beamer.title);
+			.each(function(index) {
+				$(this).attr("title", $(this).attr("data-prefix") + beamer.title);
+			});
 	});
 
 	apiClient.on("deleteBeamer", function(beamerid) {
