@@ -159,8 +159,8 @@ $(function () {
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
 			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
 			.append($("<td>").addClass("title"))
-			.append(handoverBeamer)
-			.append($("<td>")
+			.append(handoverBeamer.addClass("handover-buttons"))
+			.append($("<td>").addClass("options")
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass(starIcon).addClass("set-default").attr("title", "Als Standard setzen"))
@@ -187,7 +187,7 @@ $(function () {
 		$("#showbeamer #showbeamer-" + beamerid + " .title").text(beamer.title);
 
 		$("#beamers #beamer-" + beamerid + " .color").css("background-color", beamer.color);
-		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).css("cursor", "pointer").unbind("click").click(function () {
+		$("#beamers #beamer-" + beamerid + " .title").text(beamer.title).unbind("click").click(function () {
 			showBeamerOptions(beamerid, beamer);
 		});
 
