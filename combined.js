@@ -4,8 +4,7 @@
 
 var config = require('./config.js'),
     routes = require('./routes'),
-    webserver = require('./webserver.js'),
-    backend = require('./backend');
+    webserver = require('./webserver.js');
 
 var app = webserver.createServer(config);
 
