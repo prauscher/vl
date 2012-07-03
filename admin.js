@@ -21,9 +21,10 @@ app.addAdminRoutes(function (req, res, route) {
 console.dir(config);
 
 app.listen(config.port, config.host, function() {
-        if (process.getuid() == 0) {
+	if (process.getuid() == 0) {
 		process.setgid(config.setgid);
 		process.setuid(config.setuid);
 	}
-	console.log("Express server listening on http://localhost:%d/ in mode %s", app.address().port, app.settings.env);
 });
+
+console.log("Express server listening on http://localhost:%d/ in mode %s", config.port, app.settings.env);
