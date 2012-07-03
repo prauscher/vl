@@ -18,8 +18,6 @@ app.addAdminRoutes(function (req, res, route) {
 	route(req, res);
 });
 
-console.dir(config);
-
 app.listen(config.port, config.host, function() {
 	if (process.getuid() == 0) {
 		process.setgid(config.setgid);

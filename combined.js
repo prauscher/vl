@@ -36,8 +36,6 @@ function checkPermissions(req, res, route) {
 }
 app.addAdminRoutes(checkPermissions);
 
-console.dir(config);
-
 app.listen(config.port, config.host, function() {
 	if (process.getuid() == 0) {
 		process.setgid(config.setgid);

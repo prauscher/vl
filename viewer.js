@@ -14,9 +14,6 @@ app.get('/', function (req, res) {
 	res.render('clientOverview');
 });
 
-app.on('listening', function() {
-});
-
 app.listen(config.port, config.host, function(){
 	if (process.getuid() == 0) {
 		process.setgid(config.setgid);
