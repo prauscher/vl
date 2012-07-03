@@ -27,7 +27,7 @@ html
 		script(src='/javascript/admin/agenda.js')
 		script(src='/javascript/admin/timers.js')
 		script(src='/javascript/admin/applications.js')
-	body(style="padding-top:90px;")
+	body
 		div.navbar.navbar-fixed-top
 			div.navbar-inner
 				div.container
@@ -52,6 +52,8 @@ html
 									img.select-beamer(src="/images/empty.gif")
 									|  Alle zeigen
 							li.divider
+
+		div.visible-desktop(style="width:100%;height:90px;")
 
 		div#flash-options.modal
 			div.modal-header
