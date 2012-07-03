@@ -6,9 +6,9 @@
 .select-beamer.active
 	{opacity:1;}
 
-.set-default
+.set-default.icon-star-empty
 	{opacity:0.5;}
-.set-default.active
+.set-default.icon-star
 	{opacity:1;}
 
 .isundone.icon-ok-circle

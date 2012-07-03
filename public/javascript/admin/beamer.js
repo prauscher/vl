@@ -126,8 +126,8 @@ function generateSelectBeamerTimerButton(beamerid, timerid, callback) {
 $(function () {
 	apiClient.on("setDefaultBeamer", function (beamerid) {
 		currentDefaultBeamer = beamerid;
-		$("#beamers .set-default").removeClass("active");
-		$("#beamers #beamer-" + beamerid + " .set-default").addClass("active");
+		$("#beamers .set-default").removeClass("icon-star").addClass("icon-star-empty");
+		$("#beamers #beamer-" + beamerid + " .set-default").removeClass("icon-star-empty").addClass("icon-star");
 	});
 
 	apiClient.on("initBeamer", function (beamerid, beamer) {
@@ -154,6 +154,8 @@ $(function () {
 			}
 		});
 
+		var starIcon = (beamerid == currentDefaultBeamer) ? "icon-star" : "icon-star-empty";
+
 		$("#beamers #beamers").append($("<tr>").attr("id", "beamer-" + beamerid)
 			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
 			.append($("<td>").addClass("title"))
@@ -161,8 +163,8 @@ $(function () {
 			.append($("<td>")
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
+				.append($("<i>").addClass(starIcon).addClass("set-default").attr("title", "Als Standard setzen"))
 				.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
-				.append($("<i>").addClass("icon-share").addClass("set-default").attr("title", "Als Standard setzen").toggleClass("active", currentDefaultBeamer == beamerid))
 				.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
 				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
 				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
