@@ -82,7 +82,7 @@ $(function () {
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
-		agendaTreeTable.get("slide", slideid, "title").text(slide.title).unbind("click").click(function() {
+		agendaTreeTable.get("slide", slideid, "title").text(slide.title || "Unbenannt").toggleClass("untitled", !slide.title).unbind("click").click(function() {
 			showSlideOptions(slideid, slide);
 		});
 

@@ -43,7 +43,7 @@ function showTimerOptions(timerid, timer) {
 $(function () {
 	apiClient.on("updateTimer", function (timerid, timer) {
 		$("#timers #timer-" + timerid + " .color").css('background-color', timer.color);
-		$("#timers #timer-" + timerid + " .title").text(timer.title);
+		$("#timers #timer-" + timerid + " .title").text(timer.title || "Unbenannt").toggleClass("untitled", !timer.title);
 		$("#timers #timer-" + timerid + " .current").text(formatTime(timer.current));
 		$("#timers #timer-" + timerid + " .value").text(formatTime(timer.value));
 

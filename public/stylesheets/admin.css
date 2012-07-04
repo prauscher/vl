@@ -3,6 +3,10 @@
 
 #beamers i, #beamers .handover-buttons img, #beamers .title { cursor: pointer }
 
+.untitled { color: silver }
+.untitled:before { content: "‹" }
+.untitled:after { content: "›" }
+
 .select-beamer
 	{opacity:0.5;}
 .select-beamer.active
