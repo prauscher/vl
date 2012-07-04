@@ -129,7 +129,7 @@ $(function () {
 				showView("text", { title: slide.title, text: slide.text });
 			}
 			if (slide.type == 'html') {
-				showView("html", { title: slide.title, text: slide.html });
+				showView("html", { title: slide.title, html: slide.html });
 			}
 			if (slide.type == 'agenda') {
 				showView("agenda", { title: slide.title });
