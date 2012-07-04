@@ -64,7 +64,7 @@ function setViewerData(scroll, zoom) {
 	beamerScroll = scroll;
 	beamerZoom = zoom;
 
-	$("#content").animate({
+	$("#content").stop().animate({
 		fontSize: zoom + "em",
 		marginTop: scroll + "em"
 	}, 500);
