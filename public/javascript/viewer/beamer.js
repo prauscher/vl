@@ -6,6 +6,8 @@ var beamerZoom = 1;
 function configureBeamer(beamerid) {
 	apiClient.registerIdentifyBeamer();
 	apiClient.registerBeamer(beamerid);
+
+	configureSlide();
 }
 
 function configureSlide(slideid) {
@@ -14,8 +16,11 @@ function configureSlide(slideid) {
 		currentSlideID = null;
 	}
 	$('#content .content-agenda').empty();
-	apiClient.registerSlide(slideid, 1);
-	currentSlideID = slideid;
+	configureApplication();
+	if (slideid) {
+		apiClient.registerSlide(slideid, 1);
+		currentSlideID = slideid;
+	}
 }
 
 function configureApplication(applicationid) {
@@ -23,8 +28,10 @@ function configureApplication(applicationid) {
 		apiClient.unregisterApplication(currentApplicationID);
 		currentApplicationID = null;
 	}
-	apiClient.registerApplication(applicationid);
-	currentApplicationID = applicationid;
+	if (applicationid) {
+		apiClient.registerApplication(applicationid);
+		currentApplicationID = applicationid;
+	}
 }
 
 function clearView() {
