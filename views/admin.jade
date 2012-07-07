@@ -289,6 +289,7 @@ html
 		script(type="text/javascript")
 			var apiClient = new APIClient();
 			TimerClient(apiClient);
+			apiClient.registerDefaultBeamer();
 			apiClient.registerBeamers();
 			apiClient.registerAgenda();
 			apiClient.registerTimers();
