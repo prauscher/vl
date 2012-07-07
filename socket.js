@@ -109,6 +109,12 @@ exports.listen = function (app) {
 				}
 			});
 		});
+
+		socket.on('registerpollsites', function (data) {
+			backend.pollsites.getAll(function (pollsiteid, pollsite) {
+				socket.emit('pollsite-add', {pollsiteid: pollsiteid, pollsite: pollsite});
+			});
+		});
 	});
 	return io;
 }

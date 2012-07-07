@@ -18,6 +18,9 @@ $(function () {
 	$("#nav-applications").click(function() {
 		switchNavigation("applications");
 	});
+	$("#nav-pollsites").click(function() {
+		switchNavigation("pollsites");
+	});
 
 	if (location.hash == "#timers") {
 		switchNavigation("timers");
@@ -25,6 +28,8 @@ $(function () {
 		switchNavigation("beamers");
 	} else if (location.hash == "#applications") {
 		switchNavigation("applications");
+	} else if (location.hash == "#pollsites") {
+		switchNavigation("pollsites");
 	} else {
 		switchNavigation("agenda");
 	}

@@ -89,6 +89,9 @@ exports.createServer = function (config) {
 		app.put('/applications/:applicationid/save',	generateCallback(routes.applications.save) );
 		app.post('/applications/:applicationid/delete',	generateCallback(routes.applications.delete) );
 		app.post('/applications/:applicationid/move',	generateCallback(routes.applications.move) );
+
+		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
+		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
 	}
 
 	return app;

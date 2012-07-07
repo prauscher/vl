@@ -9,3 +9,4 @@ exports.agenda = require('./agenda.js');
 exports.timers = require('./timers.js');
 exports.applications = require('./applications.js');
 exports.appcategorys = require('./appcategorys.js');
+exports.pollsites = require('./pollsites.js');

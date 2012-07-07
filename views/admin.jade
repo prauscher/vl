@@ -19,6 +19,7 @@ html
 		script(src='/apiClient/timers.js')
 		script(src='/apiClient/appcategorys.js')
 		script(src='/apiClient/applications.js')
+		script(src='/apiClient/pollsites.js')
 		script(src='/javascript/admin/treeTable.js')
 		script(src='/javascript/admin/index.js')
 		script(src='/javascript/admin/navigation.js')
@@ -27,6 +28,7 @@ html
 		script(src='/javascript/admin/agenda.js')
 		script(src='/javascript/admin/timers.js')
 		script(src='/javascript/admin/applications.js')
+		script(src='/javascript/admin/pollsites.js')
 	body
 		div.navbar.navbar-fixed-top
 			div.navbar-inner
@@ -41,6 +43,8 @@ html
 							a#nav-timers(href="#timers") Timer
 						li.applications
 							a#nav-applications(href="#applications") Anträge
+						li.pollsites
+							a#nav-pollsites(href="#pollsites") Wahllokale
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-beamers.pull-right.btn.btn-info Identifizieren
 					div#showbeamer.btn-group.pull-right
@@ -250,6 +254,37 @@ html
 					button.btn(data-dismiss="modal") Schließen
 					button.btn.btn-primary#save-appcategory Speichern
 
+		div#pollsites.container
+			div#pollsiteoptions.btn-toolbar
+				div.btn-group
+					button#new-pollsite.btn.btn-success Neu
+
+			table#pollsites.table-striped.table-bordered.table-condensed
+				tr
+					th Wahlbüro
+
+			div#pollsite-options.modal
+				div.modal-header
+					button.close(data-dismiss="modal") ×
+					h3 Wahlbüro anlegen
+				form.form-horizontal.modal-body
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#pollsiteid
+					.control-group
+						label.control-label Passwort
+						.controls
+							input(type="password")#password
+					.control-group
+						label.control-label Max. Stimmen
+						.controls
+							input(type="text").span1#maxvotes
+				div.modal-footer
+					button.btn.btn-danger.pull-left#delete-pollsite Löschen
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-primary#save-pollsite Speichern
+
 		script(type="text/javascript")
 			var apiClient = new APIClient();
 			apiClient.connect(function () {
@@ -258,5 +293,6 @@ html
 				this.registerAgenda();
 				this.registerTimers();
 				this.registerAppCategorys();
+				this.registerPollsites();
 			});
 			TimerClient(apiClient);
