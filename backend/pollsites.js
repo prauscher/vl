@@ -27,7 +27,7 @@ exports.getAll = function(callback) {
 exports.add = function(pollsiteid, pollsite, callbackSuccess) {
 	core.pollsites.save(pollsiteid, pollsite, function () {
 		core.pollsites.add(pollsiteid, function() {
-			io.sockets.emit('pollsite-add', { pollsiteid : pollsiteid, pollsite: pollsite });
+			pollsiteSocket.emit('pollsite-add', { pollsiteid : pollsiteid, pollsite: pollsite });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -38,7 +38,7 @@ exports.add = function(pollsiteid, pollsite, callbackSuccess) {
 
 exports.save = function(pollsiteid, pollsite, callbackSuccess) {
 	core.pollsites.save(pollsiteid, pollsite, function () {
-		io.sockets.emit('pollsite-change:' + pollsiteid, { pollsite : pollsite });
+		pollsiteSocket.emit('pollsite-change:' + pollsiteid, { pollsite : pollsite });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -48,7 +48,7 @@ exports.save = function(pollsiteid, pollsite, callbackSuccess) {
 
 exports.delete = function(pollsiteid, callbackSuccess) {
 	core.pollsites.delete(pollsiteid, function () {
-		io.sockets.emit('pollsite-delete:' + pollsiteid, {});
+		pollsiteSocket.emit('pollsite-delete:' + pollsiteid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

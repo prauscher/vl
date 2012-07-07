@@ -1,17 +1,41 @@
 function APIClient() {
 	this.callbacks = {};
-	this.firstConnect = true;
+	this.sockets = {};
+
+	this.socket = io.connect().socket;
 }
 
-APIClient.prototype.connect = function (callback) {
-	var self = this;
+APIClient.prototype.getSocket = function (path, callback) {
+	if (this.sockets[path]) {
+		callback(this.sockets[path]);
+	} else {
+		console.log("connecting to " + path);
+		var socket = this.socket.of(path)
+			.on("connect", function () {
+				console.log("connected to " + path);
+				callback(this);
+			});
+		this.sockets[path] = socket;
+	}
+}
 
-	this.socketIo = io.connect();
-	this.socketIo.on('connect', function () {
-		if (self.firstConnect) {
-			self.firstConnect = false;
-			callback.apply(self, []);
-		}
+APIClient.prototype.listen = function (path, event, callback) {
+	this.getSocket(path, function (socket) {
+		socket.on(event, function (data) {
+			callback(data);
+		});
+	});
+}
+
+APIClient.prototype.unlisten = function (path, event) {
+	this.getSocket(path, function (socket) {
+		socket.removeAllListeners(event);
+	});
+}
+
+APIClient.prototype.emit = function (path, event, data) {
+	this.getSocket(path, function (socket) {
+		socket.emit(event, data);
 	});
 }
 

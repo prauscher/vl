@@ -8,7 +8,7 @@ exports.getDefault = function(callback) {
 
 exports.setDefault = function(beamerid, callback) {
 	core.beamer.setDefault(beamerid, function() {
-		io.sockets.emit('beamer-set-default', { beamerid : beamerid });
+		beamerSocket.emit('beamer-set-default', { beamerid : beamerid });
 
 		if (callback) {
 			callback();
@@ -55,7 +55,7 @@ exports.getTimers = function(beamerid, callback) {
 exports.add = function(beamerid, beamer, callbackSuccess) {
 	core.beamer.save(beamerid, beamer, function () {
 		core.beamer.add(beamerid, function () {
-			io.sockets.emit('beamer-add', { beamerid : beamerid, beamer : beamer });
+			beamerSocket.emit('beamer-add', { beamerid : beamerid, beamer : beamer });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -66,7 +66,7 @@ exports.add = function(beamerid, beamer, callbackSuccess) {
 
 exports.save = function(beamerid, beamer, callbackSuccess) {
 	core.beamer.save(beamerid, beamer, function () {
-		io.sockets.emit('beamer-change:' + beamerid, { beamer : beamer });
+		beamerSocket.emit('beamer-change:' + beamerid, { beamer : beamer });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -76,7 +76,7 @@ exports.save = function(beamerid, beamer, callbackSuccess) {
 
 exports.delete = function(beamerid, callbackSuccess) {
 	core.beamer.delete(beamerid, function () {
-		io.sockets.emit('beamer-delete:' + beamerid, {});
+		beamerSocket.emit('beamer-delete:' + beamerid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -85,7 +85,7 @@ exports.delete = function(beamerid, callbackSuccess) {
 }
 
 exports.flash = function(beamerid, flash, callbackSuccess) {
-	io.sockets.emit('beamer-flash:' + beamerid, { flash : flash });
+	beamerSocket.emit('beamer-flash:' + beamerid, { flash : flash });
 
 	if (callbackSuccess) {
 		callbackSuccess();
@@ -93,7 +93,7 @@ exports.flash = function(beamerid, flash, callbackSuccess) {
 }
 
 exports.identify = function(timeout, callbackSuccess) {
-	io.sockets.emit('beamer-identify', { timeout : timeout });
+	beamerSocket.emit('beamer-identify', { timeout : timeout });
 	if (callbackSuccess) {
 		callbackSuccess();
 	}
@@ -101,7 +101,7 @@ exports.identify = function(timeout, callbackSuccess) {
 
 exports.showtimer = function(beamerid, timerid, timer, callbackSuccess) {
 	core.beamer.showTimer(beamerid, timerid, function () {
-		io.sockets.emit('beamer-showtimer:' + beamerid, { timerid : timerid, timer : timer });
+		beamerSocket.emit('beamer-showtimer:' + beamerid, { timerid : timerid, timer : timer });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -111,7 +111,7 @@ exports.showtimer = function(beamerid, timerid, timer, callbackSuccess) {
 
 exports.hidetimer = function(beamerid, timerid, timer, callbackSuccess) {
 	core.beamer.hideTimer(beamerid, timerid, function () {
-		io.sockets.emit('beamer-hidetimer:' + beamerid, { timerid : timerid, timer : timer });
+		beamerSocket.emit('beamer-hidetimer:' + beamerid, { timerid : timerid, timer : timer });
 		if (callbackSuccess) {
 			callbackSuccess();
 		}

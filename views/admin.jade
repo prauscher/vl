@@ -287,12 +287,9 @@ html
 
 		script(type="text/javascript")
 			var apiClient = new APIClient();
-			apiClient.connect(function () {
-				this.registerDefaultBeamer();
-				this.registerBeamers();
-				this.registerAgenda();
-				this.registerTimers();
-				this.registerAppCategorys();
-				this.registerPollsites();
-			});
 			TimerClient(apiClient);
+			apiClient.registerBeamers();
+			apiClient.registerAgenda();
+			apiClient.registerTimers();
+			apiClient.registerAppCategorys();
+			apiClient.registerPollsites();

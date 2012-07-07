@@ -45,7 +45,7 @@ exports.eachApplication = function (appcategoryid, callback) {
 exports.add = function(appcategoryid, appcategory, callbackSuccess) {
 	core.appcategorys.save(appcategoryid, appcategory, function () {
 		core.appcategorys.addChildren(appcategory.parentid, appcategoryid, function (pos) {
-			io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos });
+			applicationSocket.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
@@ -55,7 +55,7 @@ exports.add = function(appcategoryid, appcategory, callbackSuccess) {
 
 exports.save = function(appcategoryid, appcategory, callbackSuccess) {
 	core.appcategorys.save(appcategoryid, appcategory, function () {
-		io.sockets.emit('appcategory-change:' + appcategoryid, { appcategory: appcategory });
+		applicationSocket.emit('appcategory-change:' + appcategoryid, { appcategory: appcategory });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -72,8 +72,8 @@ exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 				delete appcategory.parentid;
 			}
 			core.appcategorys.save(appcategoryid, appcategory, function () {
-				io.sockets.emit('appcategory-delete:' + appcategoryid, {});
-				io.sockets.emit(getAppCategoryAddPublish(appcategory.parentid), {appcategoryid: appcategoryid, appcategory: appcategory, position: position});
+				applicationSocket.emit('appcategory-delete:' + appcategoryid, {});
+				applicationSocket.emit(getAppCategoryAddPublish(appcategory.parentid), {appcategoryid: appcategoryid, appcategory: appcategory, position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
@@ -85,7 +85,7 @@ exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 
 exports.delete = function(appcategoryid, callbackSuccess) {
 	core.appcategorys.delete(appcategoryid, function() {
-		io.sockets.emit('appcategory-delete:' + appcategoryid, {});
+		applicationSocket.emit('appcategory-delete:' + appcategoryid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

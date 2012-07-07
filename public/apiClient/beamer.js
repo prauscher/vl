@@ -13,67 +13,67 @@ APIClient.prototype.eachBeamer = function (callback) {
 
 APIClient.prototype.registerDefaultBeamer = function () {
 	var self = this;
-	this.socketIo.on('beamer-set-default', function (data) {
+	this.listen("/beamers", 'beamer-set-default', function (data) {
 		self.callCallback("setDefaultBeamer", [ data.beamerid ] );
 	});
-	this.socketIo.emit('registerdefaultbeamer', {});
+	this.emit("/beamers", 'registerdefaultbeamer', {});
 }
 
 APIClient.prototype.registerIdentifyBeamer = function () {
 	var self = this;
-	this.socketIo.on('beamer-identify', function (data) {
+	this.listen("/beamers", 'beamer-identify', function (data) {
 		self.callCallback("identifyBeamer", [ data.timeout ] );
 	});
 }
 
 APIClient.prototype.registerBeamers = function () {
 	var self = this;
-	this.socketIo.on('beamer-add', function (data) {
+	this.listen("/beamers", 'beamer-add', function (data) {
 		self.beamers[data.beamerid] = data.beamer;
 
 		self.registerBeamer(data.beamerid);
 		self.callCallback("initBeamer", [ data.beamerid, data.beamer ] );
 	});
-	this.socketIo.emit('registerbeamers', {});
+	this.emit("/beamers", 'registerbeamers', {});
 }
 
 APIClient.prototype.registerBeamer = function (beamerid) {
 	var self = this;
 	self.beamerTimers[beamerid] = [];
-	this.socketIo.on('err:beamer-not-found:' + beamerid, function (data) {
+	this.listen("/beamers", 'err:beamer-not-found:' + beamerid, function (data) {
 		console.debug("[APIClient] Beamer not found: " + beamerid);
 		self.callCallback("error:beamerNotFound", [ beamerid ]);
 	});
-	this.socketIo.on('beamer-change:' + beamerid, function (data) {
+	this.listen("/beamers", 'beamer-change:' + beamerid, function (data) {
 		self.beamers[beamerid] = data.beamer;
 
 		self.callCallback("updateBeamer", [ beamerid, data.beamer ] );
 	});
-	this.socketIo.on('beamer-flash:' + beamerid, function (data) {
+	this.listen("/beamers", 'beamer-flash:' + beamerid, function (data) {
 		self.callCallback("flashBeamer", [ beamerid, data.flash ]);
 	});
-	this.socketIo.on('beamer-showtimer:' + beamerid, function (data) {
+	this.listen("/beamers", 'beamer-showtimer:' + beamerid, function (data) {
 		self.callCallback("showTimerBeamer", [ beamerid, data.timerid, data.timer ]);
 		self.beamerTimers[beamerid].push(data.timerid);
 	});
-	this.socketIo.on('beamer-hidetimer:' + beamerid, function (data) {
+	this.listen("/beamers", 'beamer-hidetimer:' + beamerid, function (data) {
 		self.callCallback("hideTimerBeamer", [ beamerid, data.timerid, data.timer ]);
 		self.beamerTimers[beamerid].splice(self.beamerTimers[beamerid].indexOf(data.timerid), 1);
 	});
-	this.socketIo.on('beamer-delete:' + beamerid, function (data) {
+	this.listen("/beamers", 'beamer-delete:' + beamerid, function (data) {
 		self.unregisterBeamer(beamerid);
 		self.callCallback("deleteBeamer", [ beamerid ]);
 	});
-	this.socketIo.emit('registerbeamer', { beamerid : beamerid });
+	this.emit("/beamers", 'registerbeamer', { beamerid : beamerid });
 }
 
 APIClient.prototype.unregisterBeamer = function(beamerid) {
-	this.socketIo.removeAllListeners('err:beamer-not-found:' + beamerid);
-	this.socketIo.removeAllListeners('beamer-change:' + beamerid);
-	this.socketIo.removeAllListeners('beamer-flash:' + beamerid);
-	this.socketIo.removeAllListeners('beamer-showtimer:' + beamerid);
-	this.socketIo.removeAllListeners('beamer-hidetimer:' + beamerid);
-	this.socketIo.removeAllListeners('beamer-delete:' + beamerid);
+	this.unlisten("/beamers", 'err:beamer-not-found:' + beamerid);
+	this.unlisten("/beamers", 'beamer-change:' + beamerid);
+	this.unlisten("/beamers", 'beamer-flash:' + beamerid);
+	this.unlisten("/beamers", 'beamer-showtimer:' + beamerid);
+	this.unlisten("/beamers", 'beamer-hidetimer:' + beamerid);
+	this.unlisten("/beamers", 'beamer-delete:' + beamerid);
 }
 
 APIClient.prototype.eachBeamerTimer = function(beamerid, callback) {

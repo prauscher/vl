@@ -14,9 +14,7 @@ app.get('/', function (req, res) {
 	res.redirect('/admin/');
 });
 
-app.addAdminRoutes(function (req, res, route) {
-	route(req, res);
-});
+app.addAdmin();
 
 app.listen(config.port, config.host, function() {
 	if (process.getuid() == 0) {

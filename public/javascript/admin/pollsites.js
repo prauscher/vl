@@ -47,7 +47,6 @@ $(function () {
 	});
 
 	apiClient.on("initPollsite", function (pollsiteid, pollsite) {
-		alert(pollsiteid);
 		$("#pollsites #pollsites").append($("<tr>").attr("id", "pollsite-" + pollsiteid)
 			.append($("<td>").addClass("pollsiteid")) );
 	});

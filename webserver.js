@@ -52,11 +52,17 @@ exports.createServer = function (config) {
 
 	app.get('/applications/:applicationid', routes.applications.showApplication);
 
-	app.addAdminRoutes = function(callback) {
+	global.beamerSocket =		io.registerBeamer();
+	global.timerSocket =		io.registerTimers();
+	global.agendaSocket =		io.registerAgenda();
+	global.applicationSocket =	io.registerApplications();
+
+	// Admin-Only-Stuff
+
+	// callback is temporary out of usage. will fix this later
+	app.addAdmin = function(callback) {
 		function generateCallback(route) {
-			return function (req, res) {
-				callback(req, res, route);
-			}
+			return route;
 		}
 
 		app.get('/admin', generateCallback(function (req, res) {
@@ -69,7 +75,7 @@ exports.createServer = function (config) {
 		app.post('/agenda/:slideid/delete',	generateCallback(routes.agenda.delete) );
 		app.post('/agenda/:slideid/move',	generateCallback(routes.agenda.move) );
 
-		app.put('/beamer',	generateCallback(routes.beamer.setDefault) );
+		app.put('/beamer',			generateCallback(routes.beamer.setDefault) );
 		app.put('/beamer/:beamerid/save',	generateCallback(routes.beamer.save) );
 		app.post('/beamer/:beamerid/delete',	generateCallback(routes.beamer.delete) );
 		app.post('/beamer/:beamerid/showtimer',	generateCallback(routes.beamer.showTimer) );
@@ -92,6 +98,8 @@ exports.createServer = function (config) {
 
 		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
 		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
+
+		global.pollsiteSocket = 	io.registerPollsites();
 	}
 
 	return app;

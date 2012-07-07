@@ -51,7 +51,7 @@ exports.eachChildren = function(slideid, callback) {
 function appendSlide(slideid, slide, callbackSuccess) {
 	core.agenda.save(slideid, slide, function() {
 		core.agenda.addChildren(slide.parentid, slideid, function (pos) {
-			io.sockets.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos });
+			agendaSocket.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
@@ -65,7 +65,7 @@ exports.add = function(slideid, slide, callbackSuccess) {
 			if (rootslide == null) {
 				exports.setRootSlideID(slideid);
 				exports.save(slideid, slide, function() {
-					io.sockets.emit('slide-add', { slideid : slideid });
+					agendaSocket.emit('slide-add', { slideid : slideid });
 
 					if (callbackSuccess) {
 						callbackSuccess();
@@ -83,7 +83,7 @@ exports.add = function(slideid, slide, callbackSuccess) {
 
 exports.save = function(slideid, slide, callbackSuccess) {
 	core.agenda.save(slideid, slide, function () {
-		io.sockets.emit('slide-change:' + slideid, { slide : slide });
+		agendaSocket.emit('slide-change:' + slideid, { slide : slide });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -96,8 +96,8 @@ exports.move = function(slideid, parentid, position, callbackSuccess) {
 		core.agenda.move(slideid, slide.parentid, parentid, position, function () {
 			slide.parentid = parentid;
 			core.agenda.save(slideid, slide, function() {
-				io.sockets.emit('slide-delete:' + slideid, {});
-				io.sockets.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
+				agendaSocket.emit('slide-delete:' + slideid, {});
+				agendaSocket.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
@@ -109,7 +109,7 @@ exports.move = function(slideid, parentid, position, callbackSuccess) {
 
 exports.delete = function(slideid, callbackSuccess) {
 	core.agenda.delete(slideid, function () {
-		io.sockets.emit('slide-delete:' + slideid, {});
+		agendaSocket.emit('slide-delete:' + slideid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

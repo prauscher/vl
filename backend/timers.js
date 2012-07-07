@@ -37,7 +37,7 @@ exports.getAll = function(callback) {
 exports.add = function(timerid, timer, callbackSuccess) {
 	core.timers.save(timerid, timer, function() {
 		core.timers.add(timerid, function () {
-			io.sockets.emit('timer-add', { timerid : timerid, timer : sanitizeTimer(timer) });
+			timerSocket.emit('timer-add', { timerid : timerid, timer : sanitizeTimer(timer) });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -48,7 +48,7 @@ exports.add = function(timerid, timer, callbackSuccess) {
 
 exports.save = function(timerid, timer, callbackSuccess) {
 	core.timers.save(timerid, timer, function () {
-		io.sockets.emit('timer-change:' + timerid, { timer : sanitizeTimer(timer) });
+		timerSocket.emit('timer-change:' + timerid, { timer : sanitizeTimer(timer) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -58,7 +58,7 @@ exports.save = function(timerid, timer, callbackSuccess) {
 
 exports.delete = function(timerid, callbackSuccess) {
 	core.timers.delete(timerid, function () {
-		io.sockets.emit('timer-delete:' + timerid, {});
+		timerSocket.emit('timer-delete:' + timerid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

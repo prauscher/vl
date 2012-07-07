@@ -12,32 +12,32 @@ APIClient.prototype.eachTimer = function (callback) {
 
 APIClient.prototype.registerTimers = function () {
 	var self = this;
-	this.socketIo.on('timer-add', function (data) {
+	this.listen("/timers", 'timer-add', function (data) {
 		self.timers[data.timerid] = data.timer;
 
 		self.registerTimer(data.timerid);
 		self.callCallback("initTimer", [ data.timerid, data.timer ]);
 		self.callCallback("updateTimer", [ data.timerid, data.timer ]);
 	});
-	this.socketIo.emit('registertimers', {});
+	this.emit("/timers", 'registertimers', {});
 }
 
 APIClient.prototype.registerTimer = function (timerid) {
 	var self = this;
-	this.socketIo.on('timer-change:' + timerid, function (updateData) {
+	this.listen("/timers", 'timer-change:' + timerid, function (updateData) {
 		self.timers[timerid] = updateData.timer;
 
 		self.callCallback("updateTimer", [ timerid, updateData.timer ] );
 	});
-	this.socketIo.on('timer-delete:' + timerid, function (data) {
+	this.listen("/timers", 'timer-delete:' + timerid, function (data) {
 		self.unregisterTimer(timerid);
 		self.callCallback("deleteTimer", [ timerid ] );
 	});
 }
 
 APIClient.prototype.unregisterTimer = function (timerid) {
-	this.socketIo.removeAllListeners('timer-change:' + timerid);
-	this.socketIo.removeAllListeners('timer-delete:' + timerid);
+	this.unlisten("/timers", 'timer-change:' + timerid);
+	this.unlisten("/timers", 'timer-delete:' + timerid);
 }
 
 APIClient.prototype.saveTimer = function(timerid, timer, callbackSuccess) {

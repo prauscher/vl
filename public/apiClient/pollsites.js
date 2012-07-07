@@ -12,32 +12,32 @@ APIClient.prototype.eachPollsite = function (callback) {
 
 APIClient.prototype.registerPollsites = function () {
 	var self = this;
-	this.socketIo.on('pollsite-add', function (data) {
+	this.listen("/pollsites", 'pollsite-add', function (data) {
 		self.pollsites[data.pollsiteid] = data.pollsite;
 
 		self.registerPollsite(data.pollsiteid);
 		self.callCallback("initPollsite", [ data.pollsiteid, data.pollsite ]);
 		self.callCallback("updatePollsite", [ data.pollsiteid, data.pollsite ]);
 	});
-	this.socketIo.emit('registerpollsites', {});
+	this.emit("/pollsites", 'registerpollsites', {});
 }
 
 APIClient.prototype.registerPollsite = function (pollsiteid) {
 	var self = this;
-	this.socketIo.on('pollsite-change:' + pollsiteid, function (updateData) {
+	this.listen("/pollsites", 'pollsite-change:' + pollsiteid, function (updateData) {
 		self.pollsites[pollsiteid] = updateData.pollsite;
 
 		self.callCallback("updatePollsite", [ pollsiteid, updateData.pollsite ] );
 	});
-	this.socketIo.on('pollsite-delete:' + pollsiteid, function (data) {
+	this.listen("/pollsites", 'pollsite-delete:' + pollsiteid, function (data) {
 		self.unregisterPollsite(pollsiteid);
 		self.callCallback("deletePollsite", [ pollsiteid ] );
 	});
 }
 
 APIClient.prototype.unregisterPollsite = function (pollsiteid) {
-	this.socketIo.removeAllListeners('pollsite-change:' + pollsiteid);
-	this.socketIo.removeAllListeners('pollsite-delete:' + pollsiteid);
+	this.unlisten("/pollsites", 'pollsite-change:' + pollsiteid);
+	this.unlisten("/pollsites", 'pollsite-delete:' + pollsiteid);
 }
 
 APIClient.prototype.savePollsite = function(pollsiteid, pollsite, callbackSuccess) {

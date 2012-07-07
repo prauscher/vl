@@ -13,23 +13,23 @@ APIClient.prototype.getSlide = function (slideid, callback) {
 
 APIClient.prototype.registerAgenda = function () {
 	var self = this;
-	this.socketIo.on('slide-add', function (data) {
+	this.listen("/agenda", 'slide-add', function (data) {
 		self.slides[data.slideid] = null;
 
 		self.registerSlide(data.slideid);
 		self.callCallback("initSlide", [ data.slideid, null ] );
 	});
-	this.socketIo.emit('registeragenda', {});
+	this.emit("/agenda", 'registeragenda', {});
 }
 
 APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	var self = this;
 	self.slideChildren[slideid] = [];
-	this.socketIo.on('err:slide-not-found:' + slideid, function (data) {
+	this.listen("/agenda", 'err:slide-not-found:' + slideid, function (data) {
 		console.log("[APIClient] Slide not found: " + slideid);
 		self.callCallback("error:slideNotFound", [ slideid ]);
 	});
-	this.socketIo.on('slide-add:' + slideid, function (data) {
+	this.listen("/agenda", 'slide-add:' + slideid, function (data) {
 		self.slides[data.slideid] = null;
 		self.slideChildren[slideid].push(data.slideid);
 
@@ -40,12 +40,12 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 		}
 		self.callCallback("initSlide", [ data.slideid, slideid, data.position ] );
 	});
-	this.socketIo.on('slide-change:' + slideid, function (data) {
+	this.listen("/agenda", 'slide-change:' + slideid, function (data) {
 		self.slides[slideid] = data.slide;
 
 		self.callCallback("updateSlide", [ slideid, data.slide ] );
 	});
-	this.socketIo.on('slide-delete:' + slideid, function (data) {
+	this.listen("/agenda", 'slide-delete:' + slideid, function (data) {
 		var parentid = self.slides[slideid].parentid;
 		delete self.slides[slideid];
 		self.slideChildren[parentid].slice(self.slideChildren[parentid].indexOf(slideid), 1);
@@ -54,14 +54,14 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 		self.callCallback("deleteSlide", [ slideid ] );
 	});
 
-	this.socketIo.emit('registerslide', { slideid: slideid, sendChildren: (typeof maxdepth == 'undefined' || maxdepth > 0) });
+	this.emit("/agenda", 'registerslide', { slideid: slideid, sendChildren: (typeof maxdepth == 'undefined' || maxdepth > 0) });
 }
 
 APIClient.prototype.unregisterSlide = function (slideid) {
-	this.socketIo.removeAllListeners('err:slide-not-found:' + slideid);
-	this.socketIo.removeAllListeners('slide-add:' + slideid);
-	this.socketIo.removeAllListeners('slide-change:' + slideid);
-	this.socketIo.removeAllListeners('slide-delete:' + slideid);
+	this.unlisten("/agenda", 'err:slide-not-found:' + slideid);
+	this.unlisten("/agenda", 'slide-add:' + slideid);
+	this.unlisten("/agenda", 'slide-change:' + slideid);
+	this.unlisten("/agenda", 'slide-delete:' + slideid);
 
 	for (var i in this.slideChildren[slideid]) {
 		this.unregisterSlide(this.slideChildren[slideid][i]);

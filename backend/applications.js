@@ -17,7 +17,7 @@ exports.get = function(applicationid, callback) {
 exports.add = function(applicationid, application, callbackSuccess) {
 	core.applications.save(applicationid, application, function () {
 		core.appcategorys.addApplication(application.categoryid, applicationid, function (pos) {
-			io.sockets.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: pos });
+			applicationSocket.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: pos });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -28,7 +28,7 @@ exports.add = function(applicationid, application, callbackSuccess) {
 
 exports.save = function(applicationid, application, callbackSuccess) {
 	core.applications.save(applicationid, application, function () {
-		io.sockets.emit('application-change:' + applicationid, { application : application });
+		applicationSocket.emit('application-change:' + applicationid, { application : application });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -41,8 +41,8 @@ exports.move = function(applicationid, categoryid, position, callbackSuccess) {
 		core.applications.move(applicationid, application.categoryid, categoryid, position, function () {
 			application.categoryid = categoryid;
 			exports.save(applicationid, application, function () {
-				io.sockets.emit('application-delete:' + applicationid, {});
-				io.sockets.emit('application-add:' + application.categoryid, {applicationid: applicationid, position: position});
+				applicationSocket.emit('application-delete:' + applicationid, {});
+				applicationSocket.emit('application-add:' + application.categoryid, {applicationid: applicationid, position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
@@ -54,7 +54,7 @@ exports.move = function(applicationid, categoryid, position, callbackSuccess) {
 
 exports.delete = function(applicationid, callbackSuccess) {
 	core.appcategorys.delete(appcategoryid, function () {
-		io.sockets.emit('application-delete:' + applicationid, {});
+		applicationSocket.emit('application-delete:' + applicationid, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

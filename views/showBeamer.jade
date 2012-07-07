@@ -11,7 +11,6 @@ html
 		script(src='/apiClient/timers.js')
 		script(src='/apiClient/appcategorys.js')
 		script(src='/apiClient/applications.js')
-		script(src='/apiClient/pollsites.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/javascript/viewer/beamer.js')
 
@@ -62,19 +61,13 @@ html
 
 		- if (typeof beamerid != 'undefined')
 			script(type="text/javascript")
-				apiClient.connect(function () {
-					configureBeamer('#{beamerid}');
-				});
+				configureBeamer('#{beamerid}');
 				$("#beamer-controls").hide();
 		- else if (typeof slideid != 'undefined')
 			script(type="text/javascript")
-				apiClient.connect(function () {
-					configureSlide('#{slideid}');
-				});
+				configureSlide('#{slideid}');
 				$("#beamer-controls").show();
 		- else if (typeof applicationid != 'undefined')
 			script(type="text/javascript")
-				apiClient.connect(function () {
-					configureApplication('#{applicationid}');
-				});
+				configureApplication('#{applicationid}');
 				$("#beamer-controls").show();
