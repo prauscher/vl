@@ -21,9 +21,6 @@ function showSlideOptions(slideid, slide) {
 	$("#agenda #options #slidecontent-text-text").val(slide.text);
 	$("#agenda #options #slidecontent-html-html").val(slide.html);
 
-	$("#agenda #options form").unbind("submit").submit(function() {
-		$("#agenda #options #save-slide").click();
-	});
 	$("#agenda #options #save-slide").unbind("click").click(function() {
 		slide.title = $("#agenda #options input#title").val();
 

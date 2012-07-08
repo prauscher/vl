@@ -10,4 +10,7 @@ $(function () {
 		.on("shown", function() {
 			$(this).find("input:enabled:first").focus();
 		});
+	$(".modal form").unbind("submit").submit(function() {
+		$(this).parent().find(".save").click();
+	});
 });

@@ -37,9 +37,6 @@ function showProjectorOptions(projectorid, projector) {
 		});
 	});
 
-	$("#projectors #projector-options form").unbind("submit").submit(function () {
-		$("#projectors #projector-options #save-projector").click();
-	});
 	$("#projectors #projector-options #save-projector").unbind("click").click(function () {
 		projector.title = $("#projectors #projector-options #title").val();
 		projector.color = $("#projectors #projector-options #color").val();

@@ -84,7 +84,7 @@ html
 					label.control-label Beamer
 					.controls#select-projectors
 			div.modal-footer
-				button.btn.btn-primary#save-flash Anzeigen
+				button.btn.btn-primary.save#save-flash Anzeigen
 				button.btn(data-dismiss="modal") Abbrechen
 
 		div#projectors.container
@@ -112,9 +112,9 @@ html
 						.controls
 							input(type="hidden")#color
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-projector Löschen
+					button.btn.btn-danger.pull-left.delete#delete-projector Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-projector Speichern
+					button.btn.btn-primary.save#save-projector Speichern
 
 		div#agenda.container
 			div#slideoptions.btn-toolbar
@@ -152,9 +152,9 @@ html
 							div.tab-pane#slidecontent-agenda
 								| Die Folie zeigt die komplette Tagesordnung.
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-slide Löschen
+					button.btn.btn-danger.pull-left.delete#delete-slide Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-slide Speichern
+					button.btn.btn-primary.save#save-slide Speichern
 
 		div#timers.container
 			div#timeroptions.btn-toolbar
@@ -186,9 +186,9 @@ html
 						.controls
 							input(type="text")#value.span1
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-timer Löschen
+					button.btn.btn-danger.pull-left.delete#delete-timer Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-timer Speichern
+					button.btn.btn-primary.save#save-timer Speichern
 
 		div#motions.container
 			div#motionoptions.btn-toolbar
@@ -237,9 +237,9 @@ html
 						.controls
 							textarea#argumentation
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-motion Löschen
+					button.btn.btn-danger.pull-left.delete#delete-motion Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-motion Speichern
+					button.btn.btn-primary.save#save-motion Speichern
 
 			div#motionclass-options.modal
 				div.modal-header
@@ -251,9 +251,9 @@ html
 						.controls
 							input(type="text")#title
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-motionclass Löschen
+					button.btn.btn-danger.pull-left.delete#delete-motionclass Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-motionclass Speichern
+					button.btn.btn-primary.save#save-motionclass Speichern
 
 		div#pollsites.container
 			div#pollsiteoptions.btn-toolbar
@@ -282,9 +282,9 @@ html
 						.controls
 							input(type="text").span1#maxvotes
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-pollsite Löschen
+					button.btn.btn-danger.pull-left.delete#delete-pollsite Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-pollsite Speichern
+					button.btn.btn-primary.save#save-pollsite Speichern
 
 		script(type="text/javascript")
 			var apiClient = new APIClient();

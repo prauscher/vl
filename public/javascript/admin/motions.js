@@ -10,9 +10,6 @@ function showMotionClassOptions(motionclassid, motionclass) {
 
 	$("#motions #motionclass-options #title").val(motionclass.title);
 
-	$("#motions #motionclass-options form").on("submit").submit(function () {
-		$("#motions #motionclass-options #save-motionclass").click();
-	});
 	$("#motions #motionclass-options #save-motionclass").unbind("click").click(function () {
 		motionclass.title = $("#motions #motionclass-options #title").val();
 
@@ -45,9 +42,6 @@ function showMotionOptions(motionid, motion) {
 	$("#motions #motion-options #text").val(motion.text);
 	$("#motions #motion-options #argumentation").val(motion.argumentation);
 
-	$("#motions #motion-options form").unbind("submit").submit(function () {
-		$("#motions #motion-options #save-motion").click();
-	});
 	$("#motions #motion-options #save-motion").unbind("click").click(function() {
 		if (motionid == null) {
 			motionid = $("#motions #motion-options #motionid").val();

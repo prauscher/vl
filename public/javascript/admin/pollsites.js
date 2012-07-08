@@ -10,9 +10,6 @@ function showPollsiteOptions(pollsiteid, pollsite) {
 	$("#pollsites #pollsite-options #password").val(pollsite.password);
 	$("#pollsites #pollsite-options #maxvotes").val(pollsite.maxvotes);
 
-	$("#pollsites #pollsite-options form").unbind("submit").submit(function () {
-		$("#pollsites #pollsite-options #save-pollsite").click();
-	});
 	$("#pollsites #pollsite-options #save-pollsite").unbind("click").click(function () {
 		if (pollsiteid == null) {
 			pollsiteid = $("#pollsites #pollsite-options #pollsiteid").val();

@@ -13,9 +13,6 @@ function showTimerOptions(timerid, timer) {
 	$("#timers #timer-options #color").val(timer.color).miniColors();
 	$("#timers #timer-options #value").val(formatTime(timer.value));
 
-	$("#timers #timer-options form").unbind("submit").submit(function () {
-		$("#timers #timer-options #save-timer").click();
-	});
 	$("#timers #timer-options #save-timer").unbind("click").click(function () {
 		timer.title = $("#timers #timer-options #title").val();
 		timer.color = $("#timers #timer-options #color").val();
