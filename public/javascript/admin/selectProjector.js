@@ -3,7 +3,8 @@ $(function () {
 		options : {
 			prefix : "Projector ",
 			clickProjector : null,
-			defaultActive : false
+			defaultActive : false,
+			except : [ ]
 		},
 
 		addProjector : function (projectorid, projector) {
@@ -12,13 +13,14 @@ $(function () {
 				.attr("src", "/images/empty.gif")
 				.addClass("select-projector")
 				.addClass("select-projector-" + projectorid)
-				.css("background-color", projector.color)
 				.attr("title", this.options.prefix + projector.title)
 				.toggle(currentlyPickedProjector == null || currentlyPickedProjector == projectorid)
 				.toggleClass("active", this.options.defaultActive)
+				.toggleClass("disabled", $.inArray(projectorid, this.options.except) != -1)
+				.css("background-color", projector.color)
 				.click(function () {
 					self.options.clickProjector && self.options.clickProjector.apply(self, [ projectorid, $(this).hasClass("active") ]);
-				}) );
+				}));
 		},
 
 		updateProjector : function (projectorid, projector) {

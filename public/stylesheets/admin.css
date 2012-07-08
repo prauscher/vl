@@ -11,6 +11,8 @@
 	{opacity:0.5;}
 .select-projector.active
 	{opacity:1;}
+.select-projector.disabled
+	{opacity:1; border: 1px dashed black; background-color: inherit !important }
 
 .set-default.icon-star-empty
 	{opacity:0.5;}
