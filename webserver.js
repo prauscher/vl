@@ -2,11 +2,12 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-    socket = require('./socket.js');
+var config = require('./config.js'),
+    express = require('express'),
+    socket = require('./socket.js'),
     routes = require('./routes');
 
-exports.createServer = function (config) {
+exports.createServer = function () {
 	var app = express.createServer();
 
 	global.backend = require('./backend');
@@ -36,28 +37,34 @@ exports.createServer = function (config) {
 
 	// Routes
 
-	app.get('/beamer', function(req, res) {
-		backend.beamer.getDefault(function(defaultbeamer) {
-			if (defaultbeamer) {
-				res.redirect('/beamer/' + defaultbeamer);
-			} else {
-				res.redirect('/beamer/undefined');
-			}
+	app.setStart = function(path) {
+		app.get('/', function(req,res) {
+			res.redirect(path);
 		});
-	});
+	}
 
-	app.get('/beamer/:beamerid', routes.beamer.showBeamer);
+	app.addViewer = function () {
+		app.get('/beamer', function(req, res) {
+			backend.beamer.getDefault(function(defaultbeamer) {
+				if (defaultbeamer) {
+					res.redirect('/beamer/' + defaultbeamer);
+				} else {
+					res.redirect('/beamer/undefined');
+				}
+			});
+		});
 
-	app.get('/slides/:slideid', routes.agenda.showSlide);
+		app.get('/beamer/:beamerid', routes.beamer.showBeamer);
 
-	app.get('/applications/:applicationid', routes.applications.showApplication);
+		app.get('/slides/:slideid', routes.agenda.showSlide);
 
-	global.beamerSocket =		io.registerBeamer();
-	global.timerSocket =		io.registerTimers();
-	global.agendaSocket =		io.registerAgenda();
-	global.applicationSocket =	io.registerApplications();
+		app.get('/applications/:applicationid', routes.applications.showApplication);
 
-	// Admin-Only-Stuff
+		global.beamerSocket =		io.registerBeamer();
+		global.timerSocket =		io.registerTimers();
+		global.agendaSocket =		io.registerAgenda();
+		global.applicationSocket =	io.registerApplications();
+	}
 
 	// callback is temporary out of usage. will fix this later
 	app.addAdmin = function(callback) {
@@ -99,7 +106,19 @@ exports.createServer = function (config) {
 		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
 		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
 
-		global.pollsiteSocket = 	io.registerPollsites();
+		global.pollsiteSocket =	io.registerPollsites();
+	}
+
+	// Showtime!
+
+	app.start = function() {
+		app.listen(config.port, config.host, function() {
+			if (process.getuid() == 0) {
+				process.setgid(config.setgid);
+				process.setuid(config.setuid);
+			}
+		});
+		console.log("Express server listening on http://%s:%d/ in mode %s", config.host || "localhost", config.port, app.settings.env);
 	}
 
 	return app;

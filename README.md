@@ -15,6 +15,27 @@ node_modules/socket.io/node_modules/redis/lib/util.js with the following content
 
 	exports.util = require("util");
 
+Configuration
+-------------
+
+Each daemon requires a file for configuration. This files are JSON and may contain the following options:
+
+* host
+
+  if specified, the application will only listen on this host. By default it will listen on any host.
+* port *required*
+
+  on which port the application will listen. for ports below 1024 you will need to run as root on unix-hosts. See setuid in those cases
+* setuid
+
+  setuid and setgid specify the user- and groupid, which the process will switch to when running as root. This is important when you want the daemon to listen on ports below 1024 on unix-hosts.
+* setgid
+
+  see setuid
+* backend *required*
+
+  Which backend-provider to use. Right now, you may only choose "redis" and specify further options in the redis-key.
+
 Running
 -------
 
