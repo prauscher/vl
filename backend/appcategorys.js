@@ -1,39 +1,44 @@
-function getAppCategoryAddPublish(appcategoryid) {
-	if (typeof appcategoryid == 'undefined' || ! appcategoryid) {
+function getAppCategoryAddPublish(id) {
+	if (typeof id == 'undefined' || ! id) {
 		return "appcategory-add";
 	} else {
-		return "appcategory-add:" + appcategoryid;
+		return "appcategory-add:" + id;
 	}
 }
 
-exports.exists = function (appcategoryid, callback) {
-	core.appcategorys.exists(appcategoryid, function (exists) {
+function sanitize(item) {
+	return item;
+}
+var db = core.appcategorys;
+
+exports.exists = function (id, callback) {
+	db.exists(id, function (exists) {
 		if (callback) {
 			callback(exists);
 		}
 	});
 }
 
-exports.get = function(appcategoryid, callback) {
-	core.appcategorys.get(appcategoryid, function (appcategory) {
+exports.get = function (id, callback) {
+	db.get(id, function (item) {
 		if (callback) {
-			callback(appcategory);
+			callback(sanitize(item));
 		}
 	});
 }
 
-exports.eachChildren = function (appcategoryid, callback) {
-	core.appcategorys.getChildren(appcategoryid, function (subappcategoryids) {
-		subappcategoryids.forEach(function (subappcategoryid) {
-			exports.get(subappcategoryid, function (subappcategory) {
-				callback(subappcategoryid, subappcategory);
+exports.eachChildren = function (id, callback) {
+	db.getChildren(id, function (subids) {
+		subids.forEach(function (subid) {
+			exports.get(subid, function (subitem) {
+				callback(subid, subitem);
 			});
 		});
 	})
 }
 
-exports.eachApplication = function (appcategoryid, callback) {
-	core.appcategorys.getApplications(appcategoryid, function (applicationids) {
+exports.eachApplication = function (id, callback) {
+	db.getApplications(id, function (applicationids) {
 		applicationids.forEach(function (applicationid) {
 			exports.get(applicationid, function (application) {
 				callback(applicationid, application);
@@ -42,10 +47,10 @@ exports.eachApplication = function (appcategoryid, callback) {
 	})
 }
 
-exports.add = function(appcategoryid, appcategory, callbackSuccess) {
-	core.appcategorys.save(appcategoryid, appcategory, function () {
-		core.appcategorys.addChildren(appcategory.parentid, appcategoryid, function (pos) {
-			applicationSocket.emit(getAppCategoryAddPublish(appcategory.parentid), { appcategoryid: appcategoryid, position: pos });
+exports.add = function (id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		db.addChildren(item.parentid, id, function (pos) {
+			applicationSocket.emit(getAppCategoryAddPublish(item.parentid), { appcategoryid: id, position: pos });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
@@ -53,9 +58,9 @@ exports.add = function(appcategoryid, appcategory, callbackSuccess) {
 	});
 }
 
-exports.save = function(appcategoryid, appcategory, callbackSuccess) {
-	core.appcategorys.save(appcategoryid, appcategory, function () {
-		applicationSocket.emit('appcategory-change:' + appcategoryid, { appcategory: appcategory });
+exports.save = function (id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		applicationSocket.emit('appcategory-change:' + id, { appcategory: sanitize(item) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -63,17 +68,17 @@ exports.save = function(appcategoryid, appcategory, callbackSuccess) {
 	});
 }
 
-exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
-	exports.get(appcategoryid, function (appcategory) {
-		core.appcategorys.move(appcategoryid, appcategory.parentid, parentid, position, function () {
+exports.move = function (id, parentid, position, callbackSuccess) {
+	exports.get(id, function (item) {
+		db.move(id, item.parentid, parentid, position, function () {
 			if (parentid) {
-				appcategory.parentid = parentid;
+				item.parentid = parentid;
 			} else {
-				delete appcategory.parentid;
+				delete item.parentid;
 			}
-			core.appcategorys.save(appcategoryid, appcategory, function () {
-				applicationSocket.emit('appcategory-delete:' + appcategoryid, {});
-				applicationSocket.emit(getAppCategoryAddPublish(appcategory.parentid), {appcategoryid: appcategoryid, appcategory: appcategory, position: position});
+			db.save(id, item, function () {
+				applicationSocket.emit('appcategory-delete:' + id, {});
+				applicationSocket.emit(getAppCategoryAddPublish(item.parentid), {appcategoryid: id, appcategory: sanitize(item), position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
@@ -83,9 +88,9 @@ exports.move = function(appcategoryid, parentid, position, callbackSuccess) {
 	});
 }
 
-exports.delete = function(appcategoryid, callbackSuccess) {
-	core.appcategorys.delete(appcategoryid, function() {
-		applicationSocket.emit('appcategory-delete:' + appcategoryid, {});
+exports.delete = function (id, callbackSuccess) {
+	db.delete(id, function () {
+		applicationSocket.emit('appcategory-delete:' + id, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();

@@ -2,12 +2,6 @@ exports.showBeamer = function(req,res) {
 	res.render('showBeamer', { beamerid : req.params.beamerid });
 }
 
-exports.setDefault = function(req, res) {
-	backend.beamer.setDefault(req.body.beamerid, function (err) {
-		res.send(200);
-	});
-}
-
 exports.save = function(req, res) {
 	backend.beamer.exists(req.params.beamerid, function (exists) {
 		if (! exists) {
@@ -28,6 +22,12 @@ exports.delete = function(req, res) {
 	});
 }
 
+exports.setDefault = function(req, res) {
+	backend.beamer.setDefault(req.body.beamerid, function (err) {
+		res.send(200);
+	});
+}
+
 exports.flash = function (req, res) {
 	backend.beamer.flash(req.params.beamerid, req.body.flash, function () {
 		res.send(200);
@@ -36,7 +36,7 @@ exports.flash = function (req, res) {
 
 exports.showTimer = function (req, res) {
 	backend.timers.get(req.body.timerid, function (timer) {
-		backend.beamer.showtimer(req.params.beamerid, req.body.timerid, timer, function() {
+		backend.beamer.showTimer(req.params.beamerid, req.body.timerid, timer, function() {
 			res.send(200);
 		});
 	});
@@ -44,7 +44,7 @@ exports.showTimer = function (req, res) {
 
 exports.hideTimer = function (req, res) {
 	backend.timers.get(req.body.timerid, function (timer) {
-		backend.beamer.hidetimer(req.params.beamerid, req.body.timerid, timer, function() {
+		backend.beamer.hideTimer(req.params.beamerid, req.body.timerid, timer, function() {
 			res.send(200);
 		});
 	});

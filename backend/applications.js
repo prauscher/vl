@@ -1,23 +1,28 @@
-exports.exists = function (applicationid, callback) {
-	core.applications.exists(applicationid, function (exists) {
+function sanitize(item) {
+	return item;
+}
+var db = core.applications;
+
+exports.exists = function (id, callback) {
+	db.exists(id, function (exists) {
 		if (callback) {
 			callback(exists);
 		}
 	});
 }
 
-exports.get = function(applicationid, callback) {
-	core.applications.get(applicationid, function (application) {
+exports.get = function (id, callback) {
+	db.get(id, function (item) {
 		if (callback) {
-			callback(application);
+			callback(sanitize(item));
 		}
 	});
 }
 
-exports.add = function(applicationid, application, callbackSuccess) {
-	core.applications.save(applicationid, application, function () {
-		core.appcategorys.addApplication(application.categoryid, applicationid, function (pos) {
-			applicationSocket.emit('application-add:' + application.categoryid, { applicationid : applicationid, position: pos });
+exports.add = function (id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		core.appcategorys.addApplication(item.categoryid, id, function (pos) {
+			applicationSocket.emit('application-add:' + item.categoryid, { applicationid : id, position: pos });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -26,9 +31,9 @@ exports.add = function(applicationid, application, callbackSuccess) {
 	});
 }
 
-exports.save = function(applicationid, application, callbackSuccess) {
-	core.applications.save(applicationid, application, function () {
-		applicationSocket.emit('application-change:' + applicationid, { application : application });
+exports.save = function (id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		applicationSocket.emit('application-change:' + id, { application : sanitize(item) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -36,28 +41,28 @@ exports.save = function(applicationid, application, callbackSuccess) {
 	});
 }
 
-exports.move = function(applicationid, categoryid, position, callbackSuccess) {
-	exports.get(applicationid, function (application) {
-		core.applications.move(applicationid, application.categoryid, categoryid, position, function () {
-			application.categoryid = categoryid;
-			exports.save(applicationid, application, function () {
-				applicationSocket.emit('application-delete:' + applicationid, {});
-				applicationSocket.emit('application-add:' + application.categoryid, {applicationid: applicationid, position: position});
+exports.delete = function (id, callbackSuccess) {
+	db.delete(id, function () {
+		applicationSocket.emit('application-delete:' + id, {});
+
+		if (callbackSuccess) {
+			callbackSuccess();
+		}
+	});
+}
+
+exports.move = function (id, categoryid, position, callbackSuccess) {
+	exports.get(id, function (item) {
+		db.move(id, item.categoryid, categoryid, position, function () {
+			item.categoryid = categoryid;
+			exports.save(id, item, function () {
+				applicationSocket.emit('application-delete:' + id, {});
+				applicationSocket.emit('application-add:' + item.categoryid, {applicationid: id, position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
 				}
 			});
 		});
-	});
-}
-
-exports.delete = function(applicationid, callbackSuccess) {
-	core.appcategorys.delete(appcategoryid, function () {
-		applicationSocket.emit('application-delete:' + applicationid, {});
-
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
 	});
 }

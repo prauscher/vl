@@ -5,7 +5,4 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 
-var config = JSON.parse(fs.readFileSync(process.argv[2]));
-
-for (k in config)
-    exports[k] = config[k];
+module.exports = JSON.parse(fs.readFileSync(process.argv[2]));

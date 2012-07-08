@@ -1,13 +1,13 @@
 exports.getRootSlideID = function (callback) {
-	core.agenda.getRootSlideID(function (rootslideid) {
+	db.getRootSlideID(function (rootid) {
 		if (callback) {
-			callback(rootslideid);
+			callback(rootid);
 		}
 	});
 }
 
-exports.setRootSlideID = function (rootslideid, callbackSuccess) {
-	core.agenda.setRootSlideID(rootslideid, function () {
+exports.setRootSlideID = function (rootid, callbackSuccess) {
+	db.setRootSlideID(rootid, function () {
 		if (callbackSuccess) {
 			callbackSuccess();
 		}
@@ -15,43 +15,48 @@ exports.setRootSlideID = function (rootslideid, callbackSuccess) {
 }
 
 exports.getRootSlide = function (callback) {
-	exports.getRootSlideID(function (rootslideid) {
-		exports.get(rootslideid, function (rootslide) {
-			callback(rootslideid, rootslide);
+	exports.getRootSlideID(function (rootid) {
+		exports.get(rootid, function (rootitem) {
+			callback(rootid, rootitem);
 		});
 	});
 }
 
-exports.exists = function (slideid, callback) {
-	core.agenda.exists(slideid, function (exists) {
+function sanitize(item) {
+	return item;
+}
+var db = core.agenda;
+
+exports.exists = function (id, callback) {
+	db.exists(id, function (exists) {
 		if (callback) {
 			callback(exists);
 		}
 	});
 }
 
-exports.get = function(slideid, callback) {
-	core.agenda.get(slideid, function (slide) {
+exports.get = function (id, callback) {
+	db.get(id, function (item) {
 		if (callback) {
-			callback(slide);
+			callback(sanitize(item));
 		}
 	});
 }
 
-exports.eachChildren = function(slideid, callback) {
-	core.agenda.getChildren(slideid, function(subslideids) {
-		subslideids.forEach(function (subslideid) {
-			exports.get(subslideid, function (subslide) {
-				callback(subslideid, subslide);
+exports.eachChildren = function (id, callback) {
+	db.getChildren(id, function (subids) {
+		subids.forEach(function (subid) {
+			exports.get(subid, function (subitem) {
+				callback(subid, sanitize(subitem));
 			});
 		});
 	});
 }
 
-function appendSlide(slideid, slide, callbackSuccess) {
-	core.agenda.save(slideid, slide, function() {
-		core.agenda.addChildren(slide.parentid, slideid, function (pos) {
-			agendaSocket.emit('slide-add:' + slide.parentid, { slideid : slideid, position : pos });
+function appendSlide(id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		db.addChildren(item.parentid, id, function (pos) {
+			agendaSocket.emit('slide-add:' + item.parentid, { slideid : id, position : pos });
 			if (callbackSuccess) {
 				callbackSuccess();
 			}
@@ -59,31 +64,31 @@ function appendSlide(slideid, slide, callbackSuccess) {
 	});
 }
 
-exports.add = function(slideid, slide, callbackSuccess) {
-	if (! slide.parentid) {
-		exports.getRootSlide(function (rootslideid, rootslide) {
-			if (rootslide == null) {
-				exports.setRootSlideID(slideid);
-				exports.save(slideid, slide, function() {
-					agendaSocket.emit('slide-add', { slideid : slideid });
+exports.add = function (id, item, callbackSuccess) {
+	if (! item.parentid) {
+		exports.getRootSlide(function (rootid, rootitem) {
+			if (rootitem == null) {
+				exports.setRootSlideID(id);
+				exports.save(id, item, function () {
+					agendaSocket.emit('slide-add', { slideid : id });
 
 					if (callbackSuccess) {
 						callbackSuccess();
 					}
 				});
 			} else {
-				slide.parentid = rootslideid;
-				appendSlide(slideid, slide, callbackSuccess);
+				item.parentid = rootid;
+				appendSlide(id, item, callbackSuccess);
 			}
 		});
 	} else {
-		appendSlide(slideid, slide, callbackSuccess);
+		appendSlide(id, item, callbackSuccess);
 	}
 }
 
-exports.save = function(slideid, slide, callbackSuccess) {
-	core.agenda.save(slideid, slide, function () {
-		agendaSocket.emit('slide-change:' + slideid, { slide : slide });
+exports.save = function (id, item, callbackSuccess) {
+	db.save(id, item, function () {
+		agendaSocket.emit('slide-change:' + id, { slide : item });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -91,13 +96,13 @@ exports.save = function(slideid, slide, callbackSuccess) {
 	});
 }
 
-exports.move = function(slideid, parentid, position, callbackSuccess) {
-	exports.get(slideid, function (slide) {
-		core.agenda.move(slideid, slide.parentid, parentid, position, function () {
-			slide.parentid = parentid;
-			core.agenda.save(slideid, slide, function() {
-				agendaSocket.emit('slide-delete:' + slideid, {});
-				agendaSocket.emit('slide-add:' + slide.parentid, {slideid : slideid, slide: slide, position: position});
+exports.move = function (id, parentid, position, callbackSuccess) {
+	exports.get(id, function (item) {
+		db.move(id, item.parentid, parentid, position, function () {
+			item.parentid = parentid;
+			db.save(id, item, function () {
+				agendaSocket.emit('slide-delete:' + id, {});
+				agendaSocket.emit('slide-add:' + item.parentid, {slideid : id, slide: item, position: position});
 
 				if (callbackSuccess) {
 					callbackSuccess();
@@ -107,9 +112,9 @@ exports.move = function(slideid, parentid, position, callbackSuccess) {
 	});
 }
 
-exports.delete = function(slideid, callbackSuccess) {
-	core.agenda.delete(slideid, function () {
-		agendaSocket.emit('slide-delete:' + slideid, {});
+exports.delete = function (id, callbackSuccess) {
+	db.delete(id, function () {
+		agendaSocket.emit('slide-delete:' + id, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();
