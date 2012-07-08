@@ -1,72 +1,29 @@
 // vim:noet:sw=8:
 
-function showMotionClassOptions(motionclassid, motionclass) {
-	if (motionclassid == null) {
-		motionclassid = generateID();
-		$("#motions #motionclass-options #delete-motionclass").hide();
-	} else {
-		$("#motions #motionclass-options #delete-motionclass").show();
-	}
-
-	$("#motions #motionclass-options #title").val(motionclass.title);
-
-	$("#motions #motionclass-options #save-motionclass").unbind("click").click(function () {
-		motionclass.title = $("#motions #motionclass-options #title").val();
-
-		apiClient.saveMotionClass(motionclassid, motionclass, function () {
-			$("#motions #motionclass-options").modal("hide");
-		});
-	});
-	$("#motions #motionclass-options #delete-motionclass").unbind("click").click(function () {
-		apiClient.deleteMotionClass(motionclassid, function () {
-			$("#motions #motionclass-options").modal("hide");
-		});
-	});
-
-	$("#motions #motionclass-options").modal();
-}
-
-function showMotionOptions(motionid, motion) {
-	if (motionid == null) {
-		$("#motions #motion-options #motionid").prop("disabled", false).val("");
-		$("#motions #motion-options #delete-motion").hide();
-	} else {
-		$("#motions #motion-options #motionid").prop("disabled", true).val(motionid);
-		$("#motions #motion-options #delete-motion").show();
-	}
-
-	$("#motions #motion-options #title").val(motion.title);
-	$("#motions #motion-options #submitter").val(motion.submitter);
-	$("#motions #motion-options #status option").removeAttr("selected");
-	$("#motions #motion-options #status option[value=" + motion.status + "]").attr("selected", "selected");
-	$("#motions #motion-options #text").val(motion.text);
-	$("#motions #motion-options #argumentation").val(motion.argumentation);
-
-	$("#motions #motion-options #save-motion").unbind("click").click(function() {
-		if (motionid == null) {
-			motionid = $("#motions #motion-options #motionid").val();
-		}
-
-		motion.title = $("#motions #motion-options #title").val();
-		motion.submitter = $("#motions #motion-options #submitter").val();
-		motion.status = $("#motions #motion-options #status option:selected").val();
-		motion.text = $("#motions #motion-options #text").val();
-		motion.argumentation = $("#motions #motion-options #argumentation").val();
-
-		apiClient.saveMotion(motionid, motion, function() {
-			$("#motions #motion-options").modal('hide')
-		});
-	});
-	$("#motions #motion-options #delete-motion").unbind("click").click(function() {
-		apiClient.deleteMotion(motionid, function () {
-			$("#motions #motion-options").modal('hide');
-		});
-	});
-
-	$("#motions #motion-options").modal();
-}
-
 $(function () {
+	var showMotionClassOptions = generateShowOptionsModal({
+		modal : "#motions #motionclass-options",
+		fields: [
+			{ property : "title", field : "#title", type : "text" }
+		],
+		saveCallback : apiClient.saveMotionClass,
+		deleteCallback : apiClient.deleteMotionClass
+	});
+
+	var showMotionOptions = generateShowOptionsModal({
+		modal : "#motions #motion-options",
+		idfield : "#motionid",
+		fields : [
+			{ property : "title", field : "#title", type : "text" },
+			{ property : "submitter", field : "#submitter", type : "text" },
+			{ property : "status", field : "#status", type : "text" },
+			{ property : "text", field : "#text", type : "text" },
+			{ property : "argumentation", field : "argumentation", type : "text" }
+		],
+		saveCallback : apiClient.saveMotion,
+		deleteCallback : apiClient.deleteMotion
+	});
+
 	var motionsTreeTable = new TreeTable("ol#motions", { disableNesting : "motion" });
 	motionsTreeTable.setStyle("motionclass", "icon", {width: "20px"});
 	motionsTreeTable.setStyle("motionclass", "title", {width: "350px", cursor: "pointer"});

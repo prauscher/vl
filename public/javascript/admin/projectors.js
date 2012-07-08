@@ -1,37 +1,21 @@
 var currentDefaultProjector = null;
 
-function showProjectorOptions(projectorid, projector) {
-	if (projectorid == null) {
-		projectorid = generateID();
-		projector.hidden = true;
-		projector.scroll = 0;
-		projector.zoom = 1;
-		$("#projectors #projector-options #delete-projector").hide();
-	} else {
-		$("#projectors #projector-options #delete-projector").show();
-	}
-
-	$("#projectors #projector-options #title").val(projector.title);
-	$("#projectors #projector-options #color").val(projector.color).miniColors();
-
-	$("#projectors #projector-options #delete-projector").unbind("click").click(function () {
-		apiClient.deleteProjector(projectorid, function () {
-			$("#projectors #projector-options").modal('hide');
-		});
-	});
-
-	$("#projectors #projector-options #save-projector").unbind("click").click(function () {
-		projector.title = $("#projectors #projector-options #title").val();
-		projector.color = $("#projectors #projector-options #color").val();
-		apiClient.saveProjector(projectorid, projector, function () {
-			$("#projectors #projector-options").modal('hide');
-		});
-	});
-
-	$("#projectors #projector-options").modal();
-}
-
 $(function () {
+	var showProjectorOptions = generateShowOptionsModal({
+		modal : "#projectors #projector-options",
+		initItem : function (id, item) {
+			item.hidden = true;
+			item.scroll = 0;
+			item.zoom = 1;
+		},
+		fields : [
+			{ property : "title", field : "#title", type : "text" },
+			{ property : "color", field : "#color", type : "color" }
+		],
+		saveCallback : apiClient.saveProjector,
+		deleteCallback : apiClient.deleteProjector
+	});
+
 	apiClient.on("setDefaultProjector", function (projectorid) {
 		currentDefaultProjector = projectorid;
 		$("#projectors .set-default").removeClass("icon-star").addClass("icon-star-empty");

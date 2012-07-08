@@ -1,39 +1,17 @@
 // vim:noet:sw=8:
 
-function showPollsiteOptions(pollsiteid, pollsite) {
-	if (pollsiteid == null) {
-		$("#pollsites #pollsite-options #pollsiteid").prop("disabled", false).val("");
-		$("#pollsites #pollsite-options #delete-pollsite").hide();
-	} else {
-		$("#pollsites #pollsite-options #pollsiteid").prop("disabled", true).val(pollsiteid);
-		$("#pollsites #pollsite-options #delete-pollsite").show();
-	}
-
-	$("#pollsites #pollsite-options #password").val(pollsite.password);
-	$("#pollsites #pollsite-options #maxvotes").val(pollsite.maxvotes);
-
-	$("#pollsites #pollsite-options #save-pollsite").unbind("click").click(function () {
-		if (pollsiteid == null) {
-			pollsiteid = $("#pollsites #pollsite-options #pollsiteid").val();
-		}
-
-		pollsite.password = $("#pollsites #pollsite-options #password").val();
-		pollsite.maxvotes = $("#pollsites #pollsite-options #maxvotes").val();
-
-		apiClient.savePollsite(pollsiteid, pollsite, function () {
-			$("#pollsites #pollsite-options").modal('hide');
-		});
-	});
-	$("#pollsites #pollsite-options #delete-pollsite").unbind("click").click(function () {
-		apiClient.deletePollsite(pollsiteid, function () {
-			$("#pollsites #pollsite-options").modal('hide');
-		});
-	});
-
-	$("#pollsites #pollsite-options").modal();
-}
-
 $(function () {
+	var showPollsiteOptions = generateShowOptionsModal({
+		modal : "#pollsites #pollsite-options",
+		idfield : "#pollsiteid",
+		fields : [
+			{ property : "password", field : "#password", type : "text" },
+			{ property : "maxvotes", field : "#maxvotes", type : "text" }
+		],
+		saveCallback : apiClient.savePollsite,
+		deleteCallback : apiClient.deletePollsite
+	});
+
 	apiClient.on("updatePollsite", function (pollsiteid, pollsite) {
 		$("#pollsites #pollsite-" + pollsiteid + " .pollsiteid").text(pollsiteid);
 
