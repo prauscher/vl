@@ -5,6 +5,7 @@ $(function () {
 			item.running = false;
 			item.value = 0;
 			item.startValue = 0;
+			item.color = generateColor();
 		},
 		fields : [
 			{ property : "title", field : "#title", type : "text" },

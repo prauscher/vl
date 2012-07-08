@@ -7,6 +7,7 @@ $(function () {
 			item.hidden = true;
 			item.scroll = 0;
 			item.zoom = 1;
+			item.color = generateColor();
 		},
 		fields : [
 			{ property : "title", field : "#title", type : "text" },

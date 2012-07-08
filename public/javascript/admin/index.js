@@ -2,6 +2,25 @@ function generateID() {
 	return Math.random().toString(36).substring(2);
 }
 
+function generateColor() {
+	var rand = Math.random();
+	var r, g, b;
+	switch (Math.floor(Math.random() * 6)) {
+		case 0: r = 1;		g = rand;	b = 0; break;
+		case 1: r = rand;	g = 1;		b = 0; break;
+		case 2: r = 0;		g = 1;		b = rand; break;
+		case 3: r = 0;		g = rand;	b = 1; break;
+		case 4: r = rand;	g = 0;		b = 1; break;
+		case 5: r = 1;		g = 0;		b = rand; break;
+	}
+
+	function formatByte(x) {
+		return ("0" + Math.floor(255.0 * x).toString(16)).substr(-2);
+	}
+
+	return "#" + formatByte(r) + formatByte(g) + formatByte(b);
+}
+
 function generateShowOptionsModal(options) {
 	return function (id, item) {
 		$(options.modal).find(".delete").toggle(options.deleteCallback && id != null);
