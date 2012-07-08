@@ -46,7 +46,7 @@ module.exports.prototype.delete = function(id, callbackSuccess) {
 	db.srem(this.dbprefix, id, function (err) {
 		db.del(self.dbprefix + ':' + id, function (err) {
 			if (self.hooks.delete) {
-				self.hooks.delete(id);
+				self.hooks.delete.apply(self, [ id ]);
 			}
 			callbackSuccess();
 		});
