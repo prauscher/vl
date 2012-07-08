@@ -46,11 +46,12 @@ exports.createServer = function () {
 
 	app.addViewer = function () {
 		app.get('/projector', function(req, res) {
-			backend.projector.getDefault(function(defaultprojector) {
+			backend.projectors.getDefault(function(defaultprojector) {
 				if (defaultprojector) {
-					res.redirect('/projector/' + defaultprojector);
+					res.redirect('/projectors/' + defaultprojector);
 				} else {
-					res.redirect('/projector/undefined');
+					// cause an errorpromt "Projector unconfigured"
+					res.redirect('/projectors/undefined');
 				}
 			});
 		});
