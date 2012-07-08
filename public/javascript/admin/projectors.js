@@ -48,9 +48,6 @@ function showProjectorOptions(projectorid, projector) {
 		});
 	});
 
-	$("#projectors #projector-options").on("shown", function () {
-		$("#projectors #projector-options #title").focus();
-	});
 	$("#projectors #projector-options").modal();
 }
 

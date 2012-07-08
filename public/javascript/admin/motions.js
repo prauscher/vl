@@ -26,9 +26,6 @@ function showMotionClassOptions(motionclassid, motionclass) {
 		});
 	});
 
-	$("#motions #motionclass-options").on("shown", function () {
-		$("#motions #motionclass-options #title").focus();
-	});
 	$("#motions #motionclass-options").modal();
 }
 
@@ -72,9 +69,6 @@ function showMotionOptions(motionid, motion) {
 		});
 	});
 
-	$("#motions #motion-options").on("shown", function() {
-		$("#motions #motion-options #title").focus();
-	});
 	$("#motions #motion-options").modal();
 }
 

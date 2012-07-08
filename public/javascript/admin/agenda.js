@@ -41,9 +41,6 @@ function showSlideOptions(slideid, slide) {
 		});
 	});
 
-	$("#agenda #options").on("shown", function() {
-		$("#agenda #options input#title").focus();
-	});
 	$("#agenda #options").modal();
 }
 

@@ -34,9 +34,6 @@ function showTimerOptions(timerid, timer) {
 		});
 	});
 
-	$("#timers #timer-options").on("shown", function() {
-		$("#timers #timer-options #title").focus();
-	});
 	$("#timers #timer-options").modal();
 }
 

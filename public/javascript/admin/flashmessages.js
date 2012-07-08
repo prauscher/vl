@@ -30,9 +30,6 @@ $(function () {
 			});
 		});
 
-		$("#flash-options").on("shown", function() {
-			$("#flash-options #text").focus();
-		});
 		$("#flash-options").modal();
 	});
 });

@@ -3,7 +3,11 @@ function generateID() {
 }
 
 $(function () {
-	$(".modal").hide().on("hide", function() {
-		$(this).find(".miniColors").miniColors("destroy");
-	});
+	$(".modal").hide()
+		.on("hide", function() {
+			$(this).find(".miniColors").miniColors("destroy");
+		})
+		.on("shown", function() {
+			$(this).find("input:enabled:first").focus();
+		});
 });

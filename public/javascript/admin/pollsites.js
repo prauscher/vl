@@ -31,9 +31,6 @@ function showPollsiteOptions(pollsiteid, pollsite) {
 		});
 	});
 
-	$("#pollsites #pollsite-options").on("shown", function() {
-		$("#pollsites #pollsite-options #pollsiteid").focus();
-	});
 	$("#pollsites #pollsite-options").modal();
 }
 
