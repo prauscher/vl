@@ -1,25 +1,10 @@
+var backendRouter = require('./backend.js');
+
+exports.save = backendRouter.generateSave(backend.beamer, "beamerid", "beamer");
+exports.delete = backendRouter.generateDelete(backend.beamer, "beamerid");
+
 exports.showBeamer = function(req,res) {
 	res.render('showBeamer', { beamerid : req.params.beamerid });
-}
-
-exports.save = function(req, res) {
-	backend.beamer.exists(req.params.beamerid, function (exists) {
-		if (! exists) {
-			backend.beamer.add(req.params.beamerid, req.body.beamer, function () {
-				res.send(200);
-			});
-		} else {
-			backend.beamer.save(req.params.beamerid, req.body.beamer, function () {
-				res.send(200);
-			});
-		}
-	});
-};
-
-exports.delete = function(req, res) {
-	backend.beamer.delete(req.params.beamerid, function (err) {
-		res.send(200);
-	});
 }
 
 exports.setDefault = function(req, res) {

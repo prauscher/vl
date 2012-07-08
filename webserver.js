@@ -4,8 +4,7 @@
 
 var config = require('./config.js'),
     express = require('express'),
-    socket = require('./socket.js'),
-    routes = require('./routes');
+    socket = require('./socket.js');
 
 exports.createServer = function () {
 	var app = express.createServer();
@@ -36,6 +35,8 @@ exports.createServer = function () {
 	});
 
 	// Routes
+
+	var routes = require('./routes');
 
 	app.setStart = function(path) {
 		app.get('/', function(req,res) {
