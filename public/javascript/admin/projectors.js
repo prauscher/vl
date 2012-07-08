@@ -35,19 +35,19 @@ $(function () {
 							targetProjector.zoom = sourceProjector.zoom;
 							targetProjector.scroll = sourceProjector.scroll;
 							targetProjector.currentslideid = sourceProjector.currentslideid;
-							apiClient.saveProjector(targetProjectorid, targetProjector);
+							apiClient.saveProjector(projectorid, targetProjector);
 
 							apiClient.eachProjectorTimer(projectorid, function (timerid, timer) {
 								apiClient.projectorHasTimer(sourceProjectorid, timerid, function (hasTimer) {
 									if (! hasTimer) {
-										apiClient.hideTimerProjector(targetProjectorid, timerid);
+										apiClient.hideTimerProjector(projectorid, timerid);
 									}
 								});
 							});
 							apiClient.eachProjectorTimer(sourceProjectorid, function (timerid, timer) {
-								apiClient.projectorHasTimer(targetProjectorid, timerid, function (hasTimer) {
+								apiClient.projectorHasTimer(projectorid, timerid, function (hasTimer) {
 									if (! hasTimer) {
-										apiClient.showTimerProjector(targetProjectorid, timerid);
+										apiClient.showTimerProjector(projectorid, timerid);
 									}
 								});
 							});
