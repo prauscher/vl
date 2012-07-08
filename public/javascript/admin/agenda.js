@@ -5,7 +5,7 @@ function showSlideOptions(slideid, slide) {
 		slideid = generateID();
 		slide.hidden = true;
 		slide.isdone = false;
-		slide.type = "agenda";
+		slide.type = "text";
 		$("#agenda #options #delete-slide").hide();
 	} else {
 		$("#agenda #options #delete-slide").show();
