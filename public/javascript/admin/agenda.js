@@ -29,7 +29,7 @@ function showSlideOptions(slideid, slide) {
 
 		slide.text = $("#agenda #options #slidecontent-text-text").val();
 		slide.html = $("#agenda #options #slidecontent-html-html").val();
-		slide.applicationid = $("#agenda #options #slidecontent-application-applicationid option:selected").val();
+		slide.motionid = $("#agenda #options #slidecontent-motion-motionid option:selected").val();
 
 		apiClient.saveSlide(slideid, slide, function() {
 			$("#agenda #options").modal('hide')
@@ -55,19 +55,19 @@ $(function () {
 	});
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
-		var selectBeamers = $("<span>");
-		apiClient.eachBeamer(function (beamerid, beamer) {
-			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
-				if (beamer.currentslideid == slideid) {
-					selectBeamerButton.addClass("active");
+		var selectProjectors = $("<span>");
+		apiClient.eachProjector(function (projectorid, projector) {
+			generateSelectProjectorSlideButton(projectorid, slideid, function (selectProjectorButton) {
+				if (projector.currentslideid == slideid) {
+					selectProjectorButton.addClass("active");
 				}
-				selectBeamers.append(selectBeamerButton);
+				selectProjectors.append(selectProjectorButton);
 			});
 		});
 
 		agendaTreeTable.add("slide", slideid, "slide", parentid, position, {
 			"title": $("<span>"),
-			"select-beamers" : selectBeamers,
+			"select-projectors" : selectProjectors,
 			"options": $("<span>")
 				.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Als nicht erledigt markieren"))
 				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Als erledigt markieren"))
@@ -106,30 +106,30 @@ $(function () {
 		agendaTreeTable.remove("slide", slideid);
 	});
 
-	apiClient.on("initBeamer", function (beamerid, beamer) {
+	apiClient.on("initProjector", function (projectorid, projector) {
 		apiClient.eachSlide(function (slideid, slide) {
-			generateSelectBeamerSlideButton(beamerid, slideid, function (selectBeamerButton) {
-				agendaTreeTable.get("slide", slideid, "select-beamers").append(selectBeamerButton);
+			generateSelectProjectorSlideButton(projectorid, slideid, function (selectProjectorButton) {
+				agendaTreeTable.get("slide", slideid, "select-projectors").append(selectProjectorButton);
 			});
 		});
 	});
 
-	apiClient.on("updateBeamer", function (beamerid, beamer) {
-		$("#agenda .select-beamer-" + beamerid).removeClass("active");
-		agendaTreeTable.get("slide", beamer.currentslideid, "select-beamers").children(".select-beamer-" + beamerid).addClass("active");
+	apiClient.on("updateProjector", function (projectorid, projector) {
+		$("#agenda .select-projector-" + projectorid).removeClass("active");
+		agendaTreeTable.get("slide", projector.currentslideid, "select-projectors").children(".select-projector-" + projectorid).addClass("active");
 	});
 
-	apiClient.on("initApplication", function (applicationid, categoryid, position) {
-		$("#agenda #options #slidecontent-application-applicationid").append(
-			$("<option>").addClass("application-" + applicationid).attr("value", applicationid) )
+	apiClient.on("initMotion", function (motionid, classid, position) {
+		$("#agenda #options #slidecontent-motion-motionid").append(
+			$("<option>").addClass("motion-" + motionid).attr("value", motionid) )
 	});
 
-	apiClient.on("updateApplication", function (applicationid, application) {
-		$("#agenda #options #slidecontent-application-applicationid option.application-" + applicationid).text(applicationid + ": " + application.title);
+	apiClient.on("updateMotion", function (motionid, motion) {
+		$("#agenda #options #slidecontent-motion-motionid option.motion-" + motionid).text(motionid + ": " + motion.title);
 	});
 
-	apiClient.on("deleteApplication", function (applicationid) {
-		$("#agenda #options #slidecontent-application-applicationid option.application-" + applicationid).remove();
+	apiClient.on("deleteMotion", function (motionid) {
+		$("#agenda #options #slidecontent-motion-motionid option.motion-" + motionid).remove();
 	});
 
 	$("#new-slide").click(function () {

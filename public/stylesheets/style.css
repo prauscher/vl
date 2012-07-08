@@ -13,7 +13,7 @@ body
 	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em; overflow:hidden;}
 #header
 	{position:fixed; top:0px; left:0px; height:110px; width:100%; background-color:#ee9922; background-image:url(/images/logo.png); background-repeat:no-repeat; background-position:10px 10px; opacity:0.9;}
-#beamer-controls
+#projector-controls
 	{position:fixed; top:0px; right:20px; height:18px; background-color:#cccccc; border-bottom-left-radius:5px; border-bottom-right-radius:5px; padding:2px; opacity:0.8;}
 #flashs
 	{position:fixed; top:110px; left:0px; width:100%; opacity:0.7; z-index:80;}
@@ -40,13 +40,13 @@ body
 	{padding:0.2em; margin-bottom:0.3em;}
 .sidebar .sidebar-header
 	{background-color:#000080; color:#fff; text-align:center; border-top-left-radius:0.5em; border-top-right-radius:0.5em; padding:0.3em;}
-.content-application.application-status *
+.content-motion.motion-status *
 	{text-align:right;}
-.content-application .application-submitter
+.content-motion .motion-submitter
 	{text-align:right;}
-.content-application.application-text
+.content-motion.motion-text
 	{margin-right:11em; border:0.1em dotted darkgray; padding:0.2em;}
-.content-application.application-argumentation
+.content-motion.motion-argumentation
 	{margin-right:11em; margin-top:0.3em;}
 
 .flash-danger
@@ -56,15 +56,15 @@ body
 .flash-success
 	{background-color:#468847;}
 
-#beamer-controls>*
+#projector-controls>*
 	{width:14px; height:14px; background-image:url(/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
-#beamer-reset
+#projector-reset
 	{background-position:-216px -24px;}
-#beamer-zoom-in
+#projector-zoom-in
 	{background-position:-336px 0px;}
-#beamer-zoom-out
+#projector-zoom-out
 	{background-position:-360px 0px;}
-#beamer-scroll-up
+#projector-scroll-up
 	{background-position:-288px -120px;}
-#beamer-scroll-down
+#projector-scroll-down
 	{background-position:-313px -119px;}

@@ -6,8 +6,8 @@ $(function () {
 		$("body>#" + item).show();
 	}
 
-	$("#nav-beamers").click(function() {
-		switchNavigation("beamers");
+	$("#nav-projectors").click(function() {
+		switchNavigation("projectors");
 	});
 	$("#nav-agenda").click(function() {
 		switchNavigation("agenda");
@@ -15,8 +15,8 @@ $(function () {
 	$("#nav-timers").click(function() {
 		switchNavigation("timers");
 	});
-	$("#nav-applications").click(function() {
-		switchNavigation("applications");
+	$("#nav-motions").click(function() {
+		switchNavigation("motions");
 	});
 	$("#nav-pollsites").click(function() {
 		switchNavigation("pollsites");
@@ -24,10 +24,10 @@ $(function () {
 
 	if (location.hash == "#timers") {
 		switchNavigation("timers");
-	} else if (location.hash == "#beamers") {
-		switchNavigation("beamers");
-	} else if (location.hash == "#applications") {
-		switchNavigation("applications");
+	} else if (location.hash == "#projectors") {
+		switchNavigation("projectors");
+	} else if (location.hash == "#motions") {
+		switchNavigation("motions");
 	} else if (location.hash == "#pollsites") {
 		switchNavigation("pollsites");
 	} else {

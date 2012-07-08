@@ -1,15 +1,15 @@
-.select-beamer, #timers .color, #beamers .color
+.select-projector, #timers .color, #projectors .color
 	{border:1px solid #777777; margin:1px; width:13px; height:13px;}
 
-#beamers i, #beamers .handover-buttons img, #beamers .title { cursor: pointer }
+#projectors i, #projectors .handover-buttons img, #projectors .title { cursor: pointer }
 
 .untitled { color: silver }
 .untitled:before { content: "‹" }
 .untitled:after { content: "›" }
 
-.select-beamer
+.select-projector
 	{opacity:0.5;}
-.select-beamer.active
+.select-projector.active
 	{opacity:1;}
 
 .set-default.icon-star-empty

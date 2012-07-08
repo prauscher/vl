@@ -45,26 +45,26 @@ exports.createServer = function () {
 	}
 
 	app.addViewer = function () {
-		app.get('/beamer', function(req, res) {
-			backend.beamer.getDefault(function(defaultbeamer) {
-				if (defaultbeamer) {
-					res.redirect('/beamer/' + defaultbeamer);
+		app.get('/projector', function(req, res) {
+			backend.projector.getDefault(function(defaultprojector) {
+				if (defaultprojector) {
+					res.redirect('/projector/' + defaultprojector);
 				} else {
-					res.redirect('/beamer/undefined');
+					res.redirect('/projector/undefined');
 				}
 			});
 		});
 
-		app.get('/beamer/:beamerid', routes.beamer.showBeamer);
+		app.get('/projectors/:projectorid', routes.projectors.showProjector);
 
 		app.get('/slides/:slideid', routes.agenda.showSlide);
 
-		app.get('/applications/:applicationid', routes.applications.showApplication);
+		app.get('/motions/:motionid', routes.motions.showMotion);
 
-		global.beamerSocket =		io.registerBeamer();
-		global.timerSocket =		io.registerTimers();
-		global.agendaSocket =		io.registerAgenda();
-		global.applicationSocket =	io.registerApplications();
+		global.projectorSocket	= io.registerProjector();
+		global.timerSocket	= io.registerTimers();
+		global.agendaSocket	= io.registerAgenda();
+		global.motionSocket	= io.registerMotions();
 	}
 
 	// callback is temporary out of usage. will fix this later
@@ -77,18 +77,18 @@ exports.createServer = function () {
 			res.render('admin');
 		}));
 
-		app.post('/beamer-identify',		generateCallback(routes.beamer.identify) );
+		app.post('/identify-projectors',	generateCallback(routes.projectors.identify) );
 
 		app.put('/agenda/:slideid/save',	generateCallback(routes.agenda.save) );
 		app.post('/agenda/:slideid/delete',	generateCallback(routes.agenda.delete) );
 		app.post('/agenda/:slideid/move',	generateCallback(routes.agenda.move) );
 
-		app.put('/beamer',			generateCallback(routes.beamer.setDefault) );
-		app.put('/beamer/:beamerid/save',	generateCallback(routes.beamer.save) );
-		app.post('/beamer/:beamerid/delete',	generateCallback(routes.beamer.delete) );
-		app.post('/beamer/:beamerid/showtimer',	generateCallback(routes.beamer.showTimer) );
-		app.post('/beamer/:beamerid/hidetimer',	generateCallback(routes.beamer.hideTimer) );
-		app.post('/beamer/:beamerid/flash',	generateCallback(routes.beamer.flash) );
+		app.put('/projectors',			generateCallback(routes.projectors.setDefault) );
+		app.put('/projectors/:projectorid/save',	generateCallback(routes.projectors.save) );
+		app.post('/projectors/:projectorid/delete',	generateCallback(routes.projectors.delete) );
+		app.post('/projectors/:projectorid/showtimer',	generateCallback(routes.projectors.showTimer) );
+		app.post('/projectors/:projectorid/hidetimer',	generateCallback(routes.projectors.hideTimer) );
+		app.post('/projectors/:projectorid/flash',	generateCallback(routes.projectors.flash) );
 
 		app.put('/timers/:timerid/save',	generateCallback(routes.timers.save) );
 		app.post('/timers/:timerid/delete',	generateCallback(routes.timers.delete) );
@@ -96,13 +96,13 @@ exports.createServer = function () {
 		app.post('/timers/:timerid/pause',	generateCallback(routes.timers.pause) );
 		app.post('/timers/:timerid/stop',	generateCallback(routes.timers.stop) );
 
-		app.put('/appcategorys/:appcategoryid/save',	generateCallback(routes.appcategorys.save) );
-		app.post('/appcategorys/:appcategoryid/delete',	generateCallback(routes.appcategorys.delete) );
-		app.post('/appcategorys/:appcategoryid/move',	generateCallback(routes.appcategorys.move) );
+		app.put('/motionclasses/:motionclassid/save',	generateCallback(routes.motionclasses.save) );
+		app.post('/motionclasses/:motionclassid/delete',	generateCallback(routes.motionclasses.delete) );
+		app.post('/motionclasses/:motionclassid/move',	generateCallback(routes.motionclasses.move) );
 
-		app.put('/applications/:applicationid/save',	generateCallback(routes.applications.save) );
-		app.post('/applications/:applicationid/delete',	generateCallback(routes.applications.delete) );
-		app.post('/applications/:applicationid/move',	generateCallback(routes.applications.move) );
+		app.put('/motions/:motionid/save',	generateCallback(routes.motions.save) );
+		app.post('/motions/:motionid/delete',	generateCallback(routes.motions.delete) );
+		app.post('/motions/:motionid/move',	generateCallback(routes.motions.move) );
 
 		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
 		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );

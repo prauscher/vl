@@ -22,9 +22,9 @@ global.db._lmove = function(item, sourceKey, destinationKey, destinationPosition
 
 exports.socketIoStore = new socketio.RedisStore({ redisPub: config.redis, redisSub: config.redis, redisClient: config.redis });
 
-exports.beamer = require('./beamer.js');
+exports.projectors = require('./projectors.js');
 exports.agenda = require('./agenda.js');
 exports.timers = require('./timers.js');
-exports.applications = require('./applications.js');
-exports.appcategorys = require('./appcategorys.js');
+exports.motions = require('./motions.js');
+exports.motionclasses = require('./motionclasses.js');
 exports.pollsites = require('./pollsites.js');

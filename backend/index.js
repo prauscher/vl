@@ -4,9 +4,9 @@ global.core = require('./' + config.backend);
 
 exports.socketIoStore = core.socketIoStore;
 
-exports.beamer = require('./beamer.js');
+exports.projectors = require('./projectors.js');
 exports.agenda = require('./agenda.js');
 exports.timers = require('./timers.js');
-exports.applications = require('./applications.js');
-exports.appcategorys = require('./appcategorys.js');
+exports.motions = require('./motions.js');
+exports.motionclasses = require('./motionclasses.js');
 exports.pollsites = require('./pollsites.js');

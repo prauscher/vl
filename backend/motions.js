@@ -1,7 +1,7 @@
 function sanitize(item) {
 	return item;
 }
-var db = core.applications;
+var db = core.motions;
 
 exports.exists = function (id, callback) {
 	db.exists(id, function (exists) {
@@ -21,8 +21,8 @@ exports.get = function (id, callback) {
 
 exports.add = function (id, item, callbackSuccess) {
 	db.save(id, item, function () {
-		core.appcategorys.addApplication(item.categoryid, id, function (pos) {
-			applicationSocket.emit('application-add:' + item.categoryid, { applicationid : id, position: pos });
+		core.motionclasses.addMotion(item.classid, id, function (pos) {
+			motionSocket.emit('motion-add:' + item.classid, { motionid : id, position: pos });
 
 			if (callbackSuccess) {
 				callbackSuccess();
@@ -33,7 +33,7 @@ exports.add = function (id, item, callbackSuccess) {
 
 exports.save = function (id, item, callbackSuccess) {
 	db.save(id, item, function () {
-		applicationSocket.emit('application-change:' + id, { application : sanitize(item) });
+		motionSocket.emit('motion-change:' + id, { motion : sanitize(item) });
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -43,7 +43,7 @@ exports.save = function (id, item, callbackSuccess) {
 
 exports.delete = function (id, callbackSuccess) {
 	db.delete(id, function () {
-		applicationSocket.emit('application-delete:' + id, {});
+		motionSocket.emit('motion-delete:' + id, {});
 
 		if (callbackSuccess) {
 			callbackSuccess();
@@ -51,13 +51,13 @@ exports.delete = function (id, callbackSuccess) {
 	});
 }
 
-exports.move = function (id, categoryid, position, callbackSuccess) {
+exports.move = function (id, newclassid, position, callbackSuccess) {
 	exports.get(id, function (item) {
-		db.move(id, item.categoryid, categoryid, position, function () {
-			item.categoryid = categoryid;
+		db.move(id, item.classid, newclassid, position, function () {
+			item.classid = newclassid;
 			exports.save(id, item, function () {
-				applicationSocket.emit('application-delete:' + id, {});
-				applicationSocket.emit('application-add:' + item.categoryid, {applicationid: id, position: position});
+				motionSocket.emit('motion-delete:' + id, {});
+				motionSocket.emit('motion-add:' + item.classid, { motionid: id, position: position });
 
 				if (callbackSuccess) {
 					callbackSuccess();

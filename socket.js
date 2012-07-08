@@ -7,32 +7,32 @@ exports.listen = function (app) {
 		io.set('store', backend.socketIoStore);
 	});
 
-	io.registerBeamer = function () {
-		return io.of("/beamers").on("connection", function (socket) {
-			socket.on('registerdefaultbeamer', function (data) {
-				backend.beamer.getDefault(function (beamerid) {
-					socket.emit('beamer-set-default', {beamerid: beamerid});
+	io.registerProjector = function () {
+		return io.of("/projectors").on("connection", function (socket) {
+			socket.on('registerdefaultprojector', function (data) {
+				backend.projectors.getDefault(function (projectorid) {
+					socket.emit('projector-set-default', {projectorid: projectorid});
 				});
 			});
 
-			socket.on('registerbeamers', function (data) {
-				backend.beamer.getAll(function (beamerid, beamer) {
-					socket.emit('beamer-add', {beamerid: beamerid, beamer: beamer});
+			socket.on('registerprojectors', function (data) {
+				backend.projectors.getAll(function (projectorid, projector) {
+					socket.emit('projector-add', {projectorid: projectorid, projector: projector});
 				});
 			});
 
-			socket.on('registerbeamer', function (data) {
-				// Initialize Beamerstate
-				backend.beamer.get(data.beamerid, function (beamer) {
-					if (beamer == null) {
-						socket.emit('err:beamer-not-found:' + data.beamerid, {});
+			socket.on('registerprojector', function (data) {
+				// Initialize Projectorstate
+				backend.projectors.get(data.projectorid, function (projector) {
+					if (projector == null) {
+						socket.emit('err:projector-not-found:' + data.projectorid, {});
 					} else {
-						socket.emit('beamer-change:' + data.beamerid, {beamer : beamer});
+						socket.emit('projector-change:' + data.projectorid, {projector : projector});
 					}
 				});
 
-				backend.beamer.getTimers(data.beamerid, function (timerid, timer) {
-					socket.emit('beamer-showtimer:' + data.beamerid, { timerid : timerid, timer : timer });
+				backend.projectors.getTimers(data.projectorid, function (timerid, timer) {
+					socket.emit('projector-showtimer:' + data.projectorid, { timerid : timerid, timer : timer });
 				});
 			});
 		});
@@ -78,44 +78,44 @@ exports.listen = function (app) {
 		});
 	}
 
-	io.registerApplications = function () {
-		return io.of("/applications").on("connection", function (socket) {
-			socket.on('registerappcategorys', function (data) {
+	io.registerMotions = function () {
+		return io.of("/motions").on("connection", function (socket) {
+			socket.on('registermotionclasses', function (data) {
 				// client may ask for children
 				var position = 0;
-				backend.appcategorys.eachChildren(null, function(appcategoryid, appcategory) {
-					socket.emit('appcategory-add', {appcategoryid: appcategoryid, position: position++});
+				backend.motionclasses.eachChildren(null, function(motionclassid, motionclass) {
+					socket.emit('motionclass-add', {motionclassid: motionclassid, position: position++});
 				});
 			});
 
-			socket.on('registerappcategory', function (data) {
-				backend.appcategorys.get(data.appcategoryid, function (appcategory) {
-					if (appcategory == null) {
-						socket.emit('err:appcategory-not-found:' + data.appcategoryid, {});
+			socket.on('registermotionclass', function (data) {
+				backend.motionclasses.get(data.motionclassid, function (motionclass) {
+					if (motionclass == null) {
+						socket.emit('err:motionclass-not-found:' + data.motionclassid, {});
 					} else {
-						socket.emit('appcategory-change:' + data.appcategoryid, { appcategory: appcategory });
+						socket.emit('motionclass-change:' + data.motionclassid, { motionclass: motionclass });
 					}
 				});
 
 				// Send children
 				var position = 0;
-				backend.appcategorys.eachChildren(data.appcategoryid, function (appcategoryid, appcategory) {
-					socket.emit('appcategory-add:' + data.appcategoryid, { appcategoryid: appcategoryid, position: position++ });
+				backend.motionclasses.eachChildren(data.motionclassid, function (motionclassid, motionclass) {
+					socket.emit('motionclass-add:' + data.motionclassid, { motionclassid: motionclassid, position: position++ });
 				});
 
-				// Send applications
-				var applicationPosition = 0;
-				backend.appcategorys.eachApplication(data.appcategoryid, function (applicationid, application) {
-					socket.emit('application-add:' + data.appcategoryid, { applicationid: applicationid, position: applicationPosition++ });
+				// Send motions
+				var motionPosition = 0;
+				backend.motionclasses.eachMotion(data.motionclassid, function (motionid, motion) {
+					socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
 				});
 			});
 
-			socket.on('registerapplication', function (data) {
-				backend.applications.get(data.applicationid, function (application) {
-					if (application == null) {
-						socket.emit('err:application-not-found:' + data.applicationid, {});
+			socket.on('registermotion', function (data) {
+				backend.motions.get(data.motionid, function (motion) {
+					if (motion == null) {
+						socket.emit('err:motion-not-found:' + data.motionid, {});
 					} else {
-						socket.emit('application-change:' + data.applicationid, { application : application });
+						socket.emit('motion-change:' + data.motionid, { motion : motion });
 					}
 				});
 			});

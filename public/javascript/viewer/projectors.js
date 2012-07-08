@@ -1,11 +1,11 @@
 var currentSlideID = null;
-var currentApplicationID = null;
-var beamerScroll = 0;
-var beamerZoom = 1;
+var currentMotionID = null;
+var projectorScroll = 0;
+var projectorZoom = 1;
 
-function configureBeamer(beamerid) {
-	apiClient.registerIdentifyBeamer();
-	apiClient.registerBeamer(beamerid);
+function configureProjector(projectorid) {
+	apiClient.registerIdentifyProjector();
+	apiClient.registerProjector(projectorid);
 
 	configureSlide();
 }
@@ -16,21 +16,21 @@ function configureSlide(slideid) {
 		currentSlideID = null;
 	}
 	$('#content .content-agenda').empty();
-	configureApplication();
+	configureMotion();
 	if (slideid) {
 		apiClient.registerSlide(slideid, 1);
 		currentSlideID = slideid;
 	}
 }
 
-function configureApplication(applicationid) {
-	if (currentApplicationID != null) {
-		apiClient.unregisterApplication(currentApplicationID);
-		currentApplicationID = null;
+function configureMotion(motionid) {
+	if (currentMotionID != null) {
+		apiClient.unregisterMotion(currentMotionID);
+		currentMotionID = null;
 	}
-	if (applicationid) {
-		apiClient.registerApplication(applicationid);
-		currentApplicationID = applicationid;
+	if (motionid) {
+		apiClient.registerMotion(motionid);
+		currentMotionID = motionid;
 	}
 }
 
@@ -38,7 +38,7 @@ function clearView() {
 	$('#content .content-text').hide();
 	$('#content .content-html').hide();
 	$('#content .content-agenda').hide();
-	$('#content .content-application').hide();
+	$('#content .content-motion').hide();
 }
 
 function showView(type, options) {
@@ -55,21 +55,21 @@ function showView(type, options) {
 	if (type == "agenda") {
 		$('#content .content-agenda').show();
 	}
-	if (type == "application") {
-		$('#title').text(options.application.title);
-		$(".applicationid").text(options.applicationid);
-		$(".application-text").text(options.application.text);
-		$(".application-argumentation").text(options.application.argumentation);
-		$(".application-submitter").text(options.application.submitter);
-		$(".application-status *").hide();
-		$(".application-status .status-" + options.application.status).show();
-		$('#content .content-application').show();
+	if (type == "motion") {
+		$('#title').text(options.motion.title);
+		$(".motionid").text(options.motionid);
+		$(".motion-text").text(options.motion.text);
+		$(".motion-argumentation").text(options.motion.argumentation);
+		$(".motion-submitter").text(options.motion.submitter);
+		$(".motion-status *").hide();
+		$(".motion-status .status-" + options.motion.status).show();
+		$('#content .content-motion').show();
 	}
 }
 
 function setViewerData(scroll, zoom) {
-	beamerScroll = scroll;
-	beamerZoom = zoom;
+	projectorScroll = scroll;
+	projectorZoom = zoom;
 
 	$("#content").stop().animate({
 		fontSize: zoom + "em",
@@ -105,17 +105,17 @@ $(function () {
 		showError("Die Folie wurde nicht gefunden");
 	});
 
-	apiClient.on('updateBeamer', function (beamerid, beamer) {
+	apiClient.on('updateProjector', function (projectorid, projector) {
 		$("#waiting").fadeOut(300);
 	});
-	apiClient.on('error:beamerNotFound', function (beamerid) {
-		showError("Der Beamer wurde nicht gefunden");
+	apiClient.on('error:projectorNotFound', function (projectorid) {
+		showError("Der Projector wurde nicht gefunden");
 	});
 
-	apiClient.on('updateApplication', function (applicationid, application) {
+	apiClient.on('updateMotion', function (motionid, motion) {
 		$("#waiting").fadeOut(300);
 	});
-	apiClient.on('error:applicationNotFound', function (applicationid) {
+	apiClient.on('error:motionNotFound', function (motionid) {
 		showError("Der Antrag wurde nicht gefunden");
 	});
 
@@ -141,8 +141,8 @@ $(function () {
 			if (slide.type == 'agenda') {
 				showView("agenda", { title: slide.title });
 			}
-			if (slide.type == 'application') {
-				configureApplication(slide.applicationid);
+			if (slide.type == 'motion') {
+				configureMotion(slide.motionid);
 			}
 		} else {
 			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
@@ -153,28 +153,28 @@ $(function () {
 		$("#content .content-agenda #agenda-" + slideid).remove();
 	});
 
-	apiClient.on("identifyBeamer", function (timeout) {
+	apiClient.on("identifyProjector", function (timeout) {
 		$("#identify").fadeIn(100);
 		window.setTimeout(function () {
 			$("#identify").fadeOut(300);
 		}, timeout * 1000);
 	});
 
-	apiClient.on("updateBeamer", function (beamerid, beamer) {
-		if (beamer.currentslideid) {
-			configureSlide(beamer.currentslideid);
+	apiClient.on("updateProjector", function (projectorid, projector) {
+		if (projector.currentslideid) {
+			configureSlide(projector.currentslideid);
 		} else {
-			showError("Der Beamer ist nicht konfiguriert", "Es ist keine Folie für den Beamer konfiguriert");
+			showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
 		}
-		setViewerData(beamer.scroll, beamer.zoom);
-		$("#identify").css("background-color", beamer.color).text(beamer.title);
+		setViewerData(projector.scroll, projector.zoom);
+		$("#identify").css("background-color", projector.color).text(projector.title);
 	});
 
-	apiClient.on("deleteBeamer", function (beamerid) {
-		showError("Der Beamer wurde gelöscht");
+	apiClient.on("deleteProjector", function (projectorid) {
+		showError("Der Projector wurde gelöscht");
 	});
 
-	apiClient.on("flashBeamer", function (beamerid, flash) {
+	apiClient.on("flashProjector", function (projectorid, flash) {
 		var flashContainer = $("<div>")
 			.addClass("flash-" + flash.type)
 			.text(flash.text);
@@ -202,7 +202,7 @@ $(function () {
 		$("#timers #timer-" + timerid).remove();
 	});
 
-	apiClient.on("showTimerBeamer", function (beamerid, timerid, timer) {
+	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
 		this.registerTimer(timerid);
 		if ($("#timers #timer-" + timerid).length < 1) {
 			var timerContainer = $("<div>").attr("id", "timer-" + timerid);
@@ -216,29 +216,29 @@ $(function () {
 		$("#timers #timer-" + timerid).show();
 	});
 
-	apiClient.on("hideTimerBeamer", function (beamerid, timerid, timer) {
+	apiClient.on("hideTimerProjector", function (projectorid, timerid, timer) {
 		this.unregisterTimer(timerid);
 		$("#timers #timer-" + timerid).hide();
 	});
 
-	apiClient.on("updateApplication", function (applicationid, application) {
-		showView("application", { applicationid: applicationid, application: application });
+	apiClient.on("updateMotion", function (motionid, motion) {
+		showView("motion", { motionid: motionid, motion: motion });
 	});
 
-	$("#beamer-reset").click(function() {
+	$("#projector-reset").click(function() {
 		setViewerData(0, 1);
 	});
-	$("#beamer-zoom-in").click(function () {
-		setViewerData(beamerScroll, beamerZoom * 1.1);
+	$("#projector-zoom-in").click(function () {
+		setViewerData(projectorScroll, projectorZoom * 1.1);
 	});
-	$("#beamer-zoom-out").click(function () {
-		setViewerData(beamerScroll, beamerZoom / 1.1);
+	$("#projector-zoom-out").click(function () {
+		setViewerData(projectorScroll, projectorZoom / 1.1);
 	});
-	$("#beamer-scroll-up").click(function () {
-		setViewerData(beamerScroll - 1, beamerZoom);
+	$("#projector-scroll-up").click(function () {
+		setViewerData(projectorScroll - 1, projectorZoom);
 	});
-	$("#beamer-scroll-down").click(function () {
-		setViewerData(beamerScroll + 1, beamerZoom);
+	$("#projector-scroll-down").click(function () {
+		setViewerData(projectorScroll + 1, projectorZoom);
 	});
 
 	updateCurrentTime();

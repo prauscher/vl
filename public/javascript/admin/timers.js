@@ -67,10 +67,10 @@ $(function () {
 	});
 
 	apiClient.on("initTimer", function (timerid, timer) {
-		var selectBeamer = $("<td>").addClass("select-beamers");
-		apiClient.eachBeamer(function (beamerid, beamer) {
-			generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
-				selectBeamer.append(selectBeamerButton);
+		var selectProjector = $("<td>").addClass("select-projectors");
+		apiClient.eachProjector(function (projectorid, projector) {
+			generateSelectProjectorTimerButton(projectorid, timerid, function (selectProjectorButton) {
+				selectProjector.append(selectProjectorButton);
 			});
 		});
 
@@ -78,7 +78,7 @@ $(function () {
 			.append($("<td>").append($("<img>").addClass('color').attr("src", "/images/empty.gif")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
-			.append(selectBeamer)
+			.append(selectProjector)
 			.append($("<td>")
 				.append($("<i>").addClass("start").addClass("icon-play").attr("title", "Starten"))
 				.append($("<i>").addClass("pause").addClass("icon-pause").attr("title", "Pausieren"))
@@ -89,10 +89,10 @@ $(function () {
 		$("#timer-" + timerid).remove();
 	});
 
-	apiClient.on("initBeamer", function (beamerid, beamer) {
+	apiClient.on("initProjector", function (projectorid, projector) {
 		apiClient.eachTimer(function (timerid, timer) {
-			generateSelectBeamerTimerButton(beamerid, timerid, function (selectBeamerButton) {
-				$("#timers #timer-" + timerid + " .select-beamers").append(selectBeamerButton);
+			generateSelectProjectorTimerButton(projectorid, timerid, function (selectProjectorButton) {
+				$("#timers #timer-" + timerid + " .select-projectors").append(selectProjectorButton);
 			});
 		});
 	});

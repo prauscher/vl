@@ -1,7 +1,7 @@
 var backendRouter = require('./backend.js');
 
 exports.showSlide = function (req, res) {
-	res.render('showBeamer', { slideid : req.params.slideid });
+	res.render('showProjector', { slideid : req.params.slideid });
 }
 
 exports.save = backendRouter.generateSave(backend.agenda, "slideid", "slide");

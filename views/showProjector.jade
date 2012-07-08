@@ -6,13 +6,13 @@ html
 		script(src='/javascript/jquery-1.7.2.min.js')
 		script(src='/socket.io/socket.io.js')
 		script(src='/apiClient/index.js')
-		script(src='/apiClient/beamer.js')
+		script(src='/apiClient/projectors.js')
 		script(src='/apiClient/agenda.js')
 		script(src='/apiClient/timers.js')
-		script(src='/apiClient/appcategorys.js')
-		script(src='/apiClient/applications.js')
+		script(src='/apiClient/motionclasses.js')
+		script(src='/apiClient/motions.js')
 		script(src='/javascript/timerClient.js')
-		script(src='/javascript/viewer/beamer.js')
+		script(src='/javascript/viewer/projectors.js')
 
 	body
 		div#error
@@ -22,12 +22,12 @@ html
 		div#identify
 
 		div#header
-		div#beamer-controls
-			div#beamer-reset(title="Ansicht zurücksetzen")
-			div#beamer-zoom-in(title="Schrift vergrößern")
-			div#beamer-zoom-out(title="Schrift verkleinern")
-			div#beamer-scroll-up(title="Hinaufscrollen")
-			div#beamer-scroll-down(title="Hinabscrollen")
+		div#projector-controls
+			div#projector-reset(title="Ansicht zurücksetzen")
+			div#projector-zoom-in(title="Schrift vergrößern")
+			div#projector-zoom-out(title="Schrift verkleinern")
+			div#projector-scroll-up(title="Hinaufscrollen")
+			div#projector-scroll-down(title="Hinabscrollen")
 		div#currentTime
 		div#flashs
 		div#timers
@@ -37,19 +37,19 @@ html
 			div.content-html
 			ol.content-agenda
 			div.sidebar
-				div.sidebar-header.content-application.applicationid
-				div.content-application.application-status
+				div.sidebar-header.content-motion.motionid
+				div.content-motion.motion-status
 					| Status
 					.status-open Offen
 					.status-accepted Angenommen
 					.status-rejected Abgelehnt
 					.status-withdrawn Zurückgezogen
 					.status-suspended Vertagt
-				div.content-application
+				div.content-motion
 					| Antragsteller
-					.application-submitter
-			div.content-application.application-text
-			div.content-application.application-argumentation
+					.motion-submitter
+			div.content-motion.motion-text
+			div.content-motion.motion-argumentation
 
 		script(type="text/javascript")
 			var currentSlideID = null;
@@ -59,15 +59,15 @@ html
 			var apiClient = new APIClient();
 			TimerClient(apiClient);
 
-		- if (typeof beamerid != 'undefined')
+		- if (typeof projectorid != 'undefined')
 			script(type="text/javascript")
-				configureBeamer('#{beamerid}');
-				$("#beamer-controls").hide();
+				configureProjector('#{projectorid}');
+				$("#projector-controls").hide();
 		- else if (typeof slideid != 'undefined')
 			script(type="text/javascript")
 				configureSlide('#{slideid}');
-				$("#beamer-controls").show();
-		- else if (typeof applicationid != 'undefined')
+				$("#projector-controls").show();
+		- else if (typeof motionid != 'undefined')
 			script(type="text/javascript")
-				configureApplication('#{applicationid}');
-				$("#beamer-controls").show();
+				configureMotion('#{motionid}');
+				$("#projector-controls").show();

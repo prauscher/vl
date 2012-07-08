@@ -1,10 +1,10 @@
 $(function () {
 	$("#new-flash").click(function () {
-		$("#flash-options #select-beamers").empty();
-		apiClient.eachBeamer(function (beamerid, beamer) {
-			generateSelectBeamerButton(beamerid, {
-				create : function (selectBeamerButton) {
-					$("#flash-options #select-beamers").append(selectBeamerButton.addClass("active"));
+		$("#flash-options #select-projectors").empty();
+		apiClient.eachProjector(function (projectorid, projector) {
+			generateSelectProjectorButton(projectorid, {
+				create : function (selectProjectorButton) {
+					$("#flash-options #select-projectors").append(selectProjectorButton.addClass("active"));
 				},
 				click : function () {
 					$(this).toggleClass("active", ! $(this).hasClass("active"));
@@ -21,9 +21,9 @@ $(function () {
 		});
 		$("#flash-options #save-flash").unbind("click").click(function () {
 			var flash = { text : $("#flash-options #text").val(), type : $("#flash-options #type option:selected").val(), timeout : parseTime($("#flash-options #timeout").val()) };
-			apiClient.eachBeamer(function (beamerid, beamer) {
-				if ($("#flash-options #select-beamers .select-beamer-" + beamerid).hasClass("active")) {
-					apiClient.flashBeamer(beamerid, flash, function () {
+			apiClient.eachProjector(function (projectorid, projector) {
+				if ($("#flash-options #select-projectors .select-projector-" + projectorid).hasClass("active")) {
+					apiClient.flashProjector(projectorid, flash, function () {
 						$("#flash-options").modal('hide');
 					});
 				}

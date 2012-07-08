@@ -14,20 +14,20 @@ html
 		script(src='/socket.io/socket.io.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/apiClient/index.js')
-		script(src='/apiClient/beamer.js')
+		script(src='/apiClient/projectors.js')
 		script(src='/apiClient/agenda.js')
 		script(src='/apiClient/timers.js')
-		script(src='/apiClient/appcategorys.js')
-		script(src='/apiClient/applications.js')
+		script(src='/apiClient/motionclasses.js')
+		script(src='/apiClient/motions.js')
 		script(src='/apiClient/pollsites.js')
 		script(src='/javascript/admin/treeTable.js')
 		script(src='/javascript/admin/index.js')
 		script(src='/javascript/admin/navigation.js')
-		script(src='/javascript/admin/beamer.js')
-		script(src='/javascript/admin/beamer-flash.js')
+		script(src='/javascript/admin/projectors.js')
+		script(src='/javascript/admin/flashmessages.js')
 		script(src='/javascript/admin/agenda.js')
 		script(src='/javascript/admin/timers.js')
-		script(src='/javascript/admin/applications.js')
+		script(src='/javascript/admin/motions.js')
 		script(src='/javascript/admin/pollsites.js')
 		title Versammlungsleiter
 	body
@@ -36,25 +36,25 @@ html
 				div.container
 					a.brand Versammlungsleiter
 					ul.nav
-						li.beamers
-							a#nav-beamers(href="#beamers") Beamereinstellungen
+						li.projectors
+							a#nav-projectors(href="#projectors") Beamereinstellungen
 						li.agenda
 							a#nav-agenda(href="#agenda") Tagesordnung
 						li.timers
 							a#nav-timers(href="#timers") Timer
-						li.applications
-							a#nav-applications(href="#applications") Anträge
+						li.motions
+							a#nav-motions(href="#motions") Anträge
 						li.pollsites
 							a#nav-pollsites(href="#pollsites") Wahllokale
 					a#new-flash.pull-right.btn.btn-danger.btn Info
-					a#identify-beamers.pull-right.btn.btn-info Identifizieren
-					div#showbeamer.btn-group.pull-right
+					a#identify-projectors.pull-right.btn.btn-info Identifizieren
+					div#showprojector.btn-group.pull-right
 						a.btn.dropdown-toggle(data-toggle="dropdown") Beamer
 							span.caret
 						ul.dropdown-menu
-							li#showbeamers
+							li#showprojectors
 								a
-									img.select-beamer(src="/images/empty.gif")
+									img.select-projector(src="/images/empty.gif")
 									|  Alle zeigen
 							li.divider
 
@@ -82,23 +82,23 @@ html
 							option(value="success") Success
 				.control-group
 					label.control-label Beamer
-					.controls#select-beamers
+					.controls#select-projectors
 			div.modal-footer
 				button.btn.btn-primary#save-flash Anzeigen
 				button.btn(data-dismiss="modal") Abbrechen
 
-		div#beamers.container
-			div#beameroptions.btn-toolbar
+		div#projectors.container
+			div#projectoroptions.btn-toolbar
 				div.btn-group
-					button#new-beamer.btn.btn-success Neu
+					button#new-projector.btn.btn-success Neu
 
-			table#beamers.table-striped.table-bordered.table-condensed
+			table#projectors.table-striped.table-bordered.table-condensed
 				tr
 					th
 					th Beamer
 					th(colspan=2) Optionen
 
-			div#beamer-options.modal
+			div#projector-options.modal
 				div.modal-header
 					button.close(data-dismiss="modal") ×
 					h3 Beamer bearbeiten
@@ -112,9 +112,9 @@ html
 						.controls
 							input(type="hidden")#color
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-beamer Löschen
+					button.btn.btn-danger.pull-left#delete-projector Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-beamer Speichern
+					button.btn.btn-primary#save-projector Speichern
 
 		div#agenda.container
 			div#slideoptions.btn-toolbar
@@ -141,7 +141,7 @@ html
 							li
 								a(data-toggle="tab",href="#slidecontent-html").slidecontent-html HTML
 							li
-								a(data-toggle="tab",href="#slidecontent-application").slidecontent-application Antrag
+								a(data-toggle="tab",href="#slidecontent-motion").slidecontent-motion Antrag
 						div.tab-content
 							div.tab-pane#slidecontent-agenda
 								| Nothing to show here
@@ -149,8 +149,8 @@ html
 								textarea#slidecontent-text-text
 							div.tab-pane#slidecontent-html
 								textarea#slidecontent-html-html
-							div.tab-pane#slidecontent-application
-								select#slidecontent-application-applicationid
+							div.tab-pane#slidecontent-motion
+								select#slidecontent-motion-motionid
 				div.modal-footer
 					button.btn.btn-danger.pull-left#delete-slide Löschen
 					button.btn(data-dismiss="modal") Schließen
@@ -190,19 +190,19 @@ html
 					button.btn(data-dismiss="modal") Schließen
 					button.btn.btn-primary#save-timer Speichern
 
-		div#applications.container
-			div#applicationoptions.btn-toolbar
+		div#motions.container
+			div#motionoptions.btn-toolbar
 				div.btn-group
 					a.btn.btn-success.dropdown-toggle(data-toggle="dropdown")
 						Neuer Antrag
 						span.caret
-					ul.dropdown-menu.new-application-categorys
+					ul.dropdown-menu.new-motion-classes
 				div.btn-group
-					button#new-appcategory.btn.btn-success Neue Kategorie
+					button#new-motionclass.btn.btn-success Neue Kategorie
 
-			ol#applications
+			ol#motions
 
-			div#application-options.modal
+			div#motion-options.modal
 				div.modal-header
 					button.close(data-dismiss="modal") ×
 					h3 Antrag anlegen
@@ -210,7 +210,7 @@ html
 					.control-group
 						label.control-label Antragsnummer
 						.controls
-							input(type="text")#applicationid.span1
+							input(type="text")#motionid.span1
 					.control-group
 						label.control-label Titel
 						.controls
@@ -237,11 +237,11 @@ html
 						.controls
 							textarea#argumentation
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-application Löschen
+					button.btn.btn-danger.pull-left#delete-motion Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-application Speichern
+					button.btn.btn-primary#save-motion Speichern
 
-			div#appcategory-options.modal
+			div#motionclass-options.modal
 				div.modal-header
 					button.close(data-dismiss="modal") ×
 					h3 Antragskategorie anlegen
@@ -251,9 +251,9 @@ html
 						.controls
 							input(type="text")#title
 				div.modal-footer
-					button.btn.btn-danger.pull-left#delete-appcategory Löschen
+					button.btn.btn-danger.pull-left#delete-motionclass Löschen
 					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary#save-appcategory Speichern
+					button.btn.btn-primary#save-motionclass Speichern
 
 		div#pollsites.container
 			div#pollsiteoptions.btn-toolbar
@@ -289,9 +289,9 @@ html
 		script(type="text/javascript")
 			var apiClient = new APIClient();
 			TimerClient(apiClient);
-			apiClient.registerDefaultBeamer();
-			apiClient.registerBeamers();
+			apiClient.registerDefaultProjector();
+			apiClient.registerProjectors();
 			apiClient.registerAgenda();
 			apiClient.registerTimers();
-			apiClient.registerAppCategorys();
+			apiClient.registerMotionClasses();
 			apiClient.registerPollsites();
