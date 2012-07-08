@@ -1,5 +1,7 @@
-.select-projector, #timers .color, #projectors .color
-	{border:1px solid #777777; margin:1px; width:13px; height:13px;}
+.select-projector, #timers .color, #projectors .color {
+	border:1px solid #777777; margin:1px; width:13px; height:13px;
+	border-radius: 4px
+}
 
 #projectors i, #projectors .handover-buttons img, #projectors .title { cursor: pointer }
 
@@ -8,11 +10,11 @@
 .untitled:after { content: "›" }
 
 .select-projector
-	{opacity:0.5;}
+	{ opacity: 0.5; border-style: dotted }
 .select-projector.active
-	{opacity:1;}
+	{ opacity: 1; border-style: solid }
 .select-projector.disabled
-	{opacity:1; border: 1px dashed black; background-color: inherit !important }
+	{ visibility: hidden }
 
 .set-default.icon-star-empty
 	{opacity:0.5;}
