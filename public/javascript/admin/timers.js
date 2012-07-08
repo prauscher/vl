@@ -1,40 +1,20 @@
-function showTimerOptions(timerid, timer) {
-	if (timerid == null) {
-		timerid = generateID();
-		timer.running = false;
-		timer.value = 0;
-		timer.startValue = 0;
-		$("#timers #timer-options #delete-timer").hide();
-	} else {
-		$("#timers #timer-options #delete-timer").show();
-	}
-
-	$("#timers #timer-options #title").val(timer.title);
-	$("#timers #timer-options #color").val(timer.color).miniColors();
-	$("#timers #timer-options #value").val(formatTime(timer.value));
-
-	$("#timers #timer-options #save-timer").unbind("click").click(function () {
-		timer.title = $("#timers #timer-options #title").val();
-		timer.color = $("#timers #timer-options #color").val();
-		timer.value = parseTime($("#timers #timer-options #value").val());
-
-		if (!timer.startedValue) {
-			timer.startedValue = timer.value;
-		}
-		apiClient.saveTimer(timerid, timer, function () {
-			$("#timers #timer-options").modal('hide');
-		});
-	});
-	$("#timers #timer-options #delete-timer").unbind("click").click(function () {
-		apiClient.deleteTimer(timerid, function () {
-			$("#timers #timer-options").modal('hide');
-		});
-	});
-
-	$("#timers #timer-options").modal();
-}
-
 $(function () {
+	var showTimerOptions = generateShowOptionsModal({
+		modal : "#timers #timer-options",
+		initItem : function (id, item) {
+			item.running = false;
+			item.value = 0;
+			item.startValue = 0;
+		},
+		fields : [
+			{ property : "title", field : "#title", type : "text" },
+			{ property : "color", field : "#color", type : "color" },
+			{ property : "value", field : "#value", type : "time" }
+		],
+		saveCallback : apiClient.saveTimer,
+		deleteCallback : apiClient.deleteTimer
+	});
+
 	apiClient.on("updateTimer", function (timerid, timer) {
 		$("#timers #timer-" + timerid + " .color").css('background-color', timer.color);
 		$("#timers #timer-" + timerid + " .title").text(timer.title || "Unbenannt").toggleClass("untitled", !timer.title);
@@ -61,18 +41,20 @@ $(function () {
 	});
 
 	apiClient.on("initTimer", function (timerid, timer) {
-		var selectProjector = $("<td>").addClass("select-projectors");
-		apiClient.eachProjector(function (projectorid, projector) {
-			generateSelectProjectorTimerButton(projectorid, timerid, function (selectProjectorButton) {
-				selectProjector.append(selectProjectorButton);
-			});
-		});
-
 		$("#timers #timers").append($("<tr>").attr("id", "timer-" + timerid)
 			.append($("<td>").append($("<img>").addClass('color').attr("src", "/images/empty.gif")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
-			.append(selectProjector)
+			.append($("<td>").addClass("select-projectors").selectProjector({
+				prefix : "Anzeigen auf ",
+				clickProjector : function (projectorid, isActive) {
+					if (isActive) {
+						apiClient.hideTimerProjector(projectorid, timerid);
+					} else {
+						apiClient.showTimerProjector(projectorid, timerid);
+					}
+				}
+			}))
 			.append($("<td>")
 				.append($("<i>").addClass("start").addClass("icon-play").attr("title", "Starten"))
 				.append($("<i>").addClass("pause").addClass("icon-pause").attr("title", "Pausieren"))
@@ -83,12 +65,12 @@ $(function () {
 		$("#timer-" + timerid).remove();
 	});
 
-	apiClient.on("initProjector", function (projectorid, projector) {
-		apiClient.eachTimer(function (timerid, timer) {
-			generateSelectProjectorTimerButton(projectorid, timerid, function (selectProjectorButton) {
-				$("#timers #timer-" + timerid + " .select-projectors").append(selectProjectorButton);
-			});
-		});
+	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
+		$("#timer-" + timerid + " .select-projectors").selectProjector("toggleActive", [ projectorid, true ]);
+	});
+
+	apiClient.on("hideTimerProjector", function (projectorid, timerid, timer) {
+		$("#timer-" + timerid + " .select-projectors").selectProjector("toggleActive", [ projectorid, false ]);
 	});
 
 	$("#new-timer").click(function () {

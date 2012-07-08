@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function showPollsiteOptions(pollsiteid, pollsite) {
 	if (pollsiteid == null) {
 		$("#pollsites #pollsite-options #pollsiteid").prop("disabled", false).val("");
