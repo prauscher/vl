@@ -61,7 +61,7 @@ function generateShowOptionsModal(options) {
 		});
 
 		$(options.modal).find(".delete").unbind("click").click(function () {
-			options.deleteCallback(id, item, function() {
+			options.deleteCallback(id, function() {
 				$(options.modal).modal('hide');
 			});
 		});
