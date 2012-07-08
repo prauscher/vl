@@ -30,6 +30,7 @@ $(function () {
 			.append($("<td>").addClass("title"))
 			.append($("<td>").addClass("handover-buttons").selectProjector({
 				prefix : "Folie übernehmen von ",
+				defaultActive : true,
 				clickProjector : function (sourceProjectorid) {
 					apiClient.getProjector(sourceProjectorid, function (sourceProjector) {
 						apiClient.getProjector(projectorid, function (targetProjector) {
