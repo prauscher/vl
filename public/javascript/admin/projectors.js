@@ -29,6 +29,7 @@ $(function () {
 			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").addClass("handover-buttons").selectProjector({
+				prefix : "Folie übernehmen von ",
 				clickProjector : function (sourceProjectorid) {
 					apiClient.getProjector(sourceProjectorid, function (sourceProjector) {
 						apiClient.getProjector(projectorid, function (targetProjector) {
