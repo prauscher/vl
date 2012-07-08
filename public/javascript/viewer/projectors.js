@@ -73,7 +73,7 @@ function setViewerData(scroll, zoom) {
 
 	$("#content").stop().animate({
 		fontSize: zoom + "em",
-		marginTop: scroll + "em"
+		marginTop: (scroll * 3) + "em"
 	}, 500);
 }
 
