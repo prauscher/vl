@@ -1,75 +1,35 @@
-exports.getRootSlideID = function (callback) {
-	db.getRootSlideID(function (rootid) {
-		if (callback) {
-			callback(rootid);
-		}
-	});
-}
+var HierarchicalStructure = require('./structure/hierarchical.js');
 
-exports.setRootSlideID = function (rootid, callbackSuccess) {
-	db.setRootSlideID(rootid, function () {
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
-	});
-}
+module.exports = new HierarchicalStructure({
+	sanitize : function (item) {
+		return item;
+	},
+	broadcastAdd : function (parentid, id, pos) {
+		agendaSocket.emit('slide-add:' + parentid, { slideid : id, position : pos });
+	},
+	broadcastChange : function (id, item) {
+		agendaSocket.emit('slide-change:' + id, { slide : item });
+	},
+	broadcastMove : function (id, parentid, item, position) {
+		agendaSocket.emit('slide-delete:' + id, {});
+		agendaSocket.emit('slide-add:' + parentid, {slideid : id, slide: item, position: position});
+	},
+	broadcastDelete : function (id) {
+		agendaSocket.emit('slide-delete:' + id, {});
+	},
+	backend : core.agenda
+});
 
-exports.getRootSlide = function (callback) {
-	exports.getRootSlideID(function (rootid) {
-		exports.get(rootid, function (rootitem) {
-			callback(rootid, rootitem);
-		});
-	});
-}
+// Do not use a private variable here: It will mess up the this-pointer
+module.exports._add = module.exports.add;
 
-function sanitize(item) {
-	return item;
-}
-var db = core.agenda;
-
-exports.exists = function (id, callback) {
-	db.exists(id, function (exists) {
-		if (callback) {
-			callback(exists);
-		}
-	});
-}
-
-exports.get = function (id, callback) {
-	db.get(id, function (item) {
-		if (callback) {
-			callback(sanitize(item));
-		}
-	});
-}
-
-exports.eachChildren = function (id, callback) {
-	db.getChildren(id, function (subids) {
-		subids.forEach(function (subid) {
-			exports.get(subid, function (subitem) {
-				callback(subid, sanitize(subitem));
-			});
-		});
-	});
-}
-
-function appendSlide(id, item, callbackSuccess) {
-	db.save(id, item, function () {
-		db.addChildren(item.parentid, id, function (pos) {
-			agendaSocket.emit('slide-add:' + item.parentid, { slideid : id, position : pos });
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
-		});
-	});
-}
-
-exports.add = function (id, item, callbackSuccess) {
+module.exports.add = function (id, item, callbackSuccess) {
+	var self = this;
 	if (! item.parentid) {
-		exports.getRootSlide(function (rootid, rootitem) {
+		this.getRootSlide(function (rootid, rootitem) {
 			if (rootitem == null) {
-				exports.setRootSlideID(id);
-				exports.save(id, item, function () {
+				self.setRootSlideID(id);
+				self.save(id, item, function () {
 					agendaSocket.emit('slide-add', { slideid : id });
 
 					if (callbackSuccess) {
@@ -78,46 +38,35 @@ exports.add = function (id, item, callbackSuccess) {
 				});
 			} else {
 				item.parentid = rootid;
-				appendSlide(id, item, callbackSuccess);
+				self._add(id, item, callbackSuccess);
 			}
 		});
 	} else {
-		appendSlide(id, item, callbackSuccess);
+		self._add(id, item, callbackSuccess);
 	}
 }
 
-exports.save = function (id, item, callbackSuccess) {
-	db.save(id, item, function () {
-		agendaSocket.emit('slide-change:' + id, { slide : item });
+module.exports.getRootSlideID = function (callback) {
+	core.agenda.getRootSlideID(function (rootid) {
+		if (callback) {
+			callback(rootid);
+		}
+	});
+}
 
+module.exports.setRootSlideID = function (rootid, callbackSuccess) {
+	core.agenda.setRootSlideID(rootid, function () {
 		if (callbackSuccess) {
 			callbackSuccess();
 		}
 	});
 }
 
-exports.move = function (id, parentid, position, callbackSuccess) {
-	exports.get(id, function (item) {
-		db.move(id, item.parentid, parentid, position, function () {
-			item.parentid = parentid;
-			db.save(id, item, function () {
-				agendaSocket.emit('slide-delete:' + id, {});
-				agendaSocket.emit('slide-add:' + item.parentid, {slideid : id, slide: item, position: position});
-
-				if (callbackSuccess) {
-					callbackSuccess();
-				}
-			});
+module.exports.getRootSlide = function (callback) {
+	var self = this;
+	this.getRootSlideID(function (rootid) {
+		self.get(rootid, function (rootitem) {
+			callback(rootid, rootitem);
 		});
-	});
-}
-
-exports.delete = function (id, callbackSuccess) {
-	db.delete(id, function () {
-		agendaSocket.emit('slide-delete:' + id, {});
-
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
 	});
 }
