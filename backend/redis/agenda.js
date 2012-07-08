@@ -31,8 +31,11 @@ exports.addChildren = function(parentid, slideid, callback) {
 }
 
 exports.save = function(slideid, slide, callbackSuccess) {
-	db.hmset('slides:' + slideid, slide, function (err) {
-		callbackSuccess();
+	// Need to delete first, so old keys wont get remembered (think of parentid etc)
+	db.del('slides:' + slideid, function (err) {
+		db.hmset('slides:' + slideid, slide, function (err) {
+			callbackSuccess();
+		});
 	});
 }
 
