@@ -42,7 +42,7 @@ Running
 After you successfully installed node, redis and the required npm modules, set up the configuration for admin and viewer
 instances. Both config files are JSON and allow the same options, examples are provided in admin.conf and viewer.conf.
 
-You can now start the beamer interface using
+You can now start the projector interface using
 
 	node viewer.js viewer.conf
 
@@ -52,4 +52,4 @@ To run the admin interface use
 
 	node admin.js admin.conf
 
-and go ahead just like with the beamer interface.
+and go ahead just like with the projector interface.
