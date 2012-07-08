@@ -242,5 +242,5 @@ $(function () {
 	});
 
 	updateCurrentTime();
-	window.setInterval(updateCurrentTime ,1000);
+	window.setInterval(updateCurrentTime, 1000);
 });

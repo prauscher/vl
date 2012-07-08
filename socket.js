@@ -51,11 +51,10 @@ exports.listen = function (app) {
 	io.registerAgenda = function () {
 		return io.of("/agenda").on("connection", function (socket) {
 			socket.on('registeragenda', function (data) {
-				// Send rootslide. client may ask for children
-				backend.agenda.getRootSlideID(function (rootslideid) {
-					if (rootslideid != null) {
-						socket.emit('slide-add', {slideid: rootslideid});
-					}
+				// client may ask for children
+				var position = 0;
+				backend.agenda.eachChildren(null, function(slideid, slide) {
+					socket.emit('slide-add', {slideid: slideid, position: position++});
 				});
 			});
 

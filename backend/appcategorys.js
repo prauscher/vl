@@ -1,7 +1,7 @@
 var HierarchicalStructure = require('./structure/hierarchical.js');
 
 module.exports = new HierarchicalStructure({
-	sanitize : function(item) {
+	sanitize : function (item) {
 		return item;
 	},
 	broadcastAdd : function (parentid, id, pos) {

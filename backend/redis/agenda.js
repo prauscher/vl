@@ -1,13 +1,9 @@
-exports.getRootSlideID = function (callback) {
-	db.get('rootslideid', function (err, rootslideid) {
-		callback(rootslideid);
-	});
-}
-
-exports.setRootSlideID = function (rootslideid, callbackSuccess) {
-	db.set('rootslideid', rootslideid, function () {
-		callbackSuccess();
-	});
+function getSlideChildrenKey(id) {
+	if (typeof id == 'undefined' || ! id) {
+		return "slides";
+	} else {
+		return "slides:" + id + ":children";
+	}
 }
 
 exports.exists = function (slideid, callback) {
@@ -23,13 +19,13 @@ exports.get = function(slideid, callback) {
 }
 
 exports.getChildren = function(slideid, callback) {
-	db.lrange('slides:' + slideid + ':children', 0, -1, function (err, subslideids) {
+	db.lrange(getSlideChildrenKey(slideid), 0, -1, function (err, subslideids) {
 		callback(subslideids);
 	});
 }
 
 exports.addChildren = function(parentid, slideid, callback) {
-	db.rpush('slides:' + parentid + ":children", slideid, function (err, pos) {
+	db.rpush(getSlideChildrenKey(parentid), slideid, function (err, pos) {
 		callback(pos - 1);
 	});
 }
@@ -41,16 +37,16 @@ exports.save = function(slideid, slide, callbackSuccess) {
 }
 
 exports.move = function(slideid, oldparentid, parentid, position, callbackSuccess) {
-	db._lmove(slideid, 'slides:' + oldparentid + ':children', 'slides:' + parentid + ':children', position, function () {
+	db._lmove(slideid, getSlideChildrenKey(oldparentid), getSlideChildrenKey(parentid), position, function () {
 		callbackSuccess();
 	});
 }
 
 exports.delete = function(slideid, callbackSuccess) {
 	db.hget('slides:' + slideid, 'parentid', function (err, parentid) {
-		db.lrem('slides:' + parentid + ':children', 0, slideid, function (err) {
+		db.lrem(getSlideChildrenKey(parentid), 0, slideid, function (err) {
 			db.del('slides:' + slideid, function (err) {
-				db.del('slides:' + slideid + ':children');
+				db.del(getSlideChildrenKey(slideid));
 
 				callbackSuccess();
 			});

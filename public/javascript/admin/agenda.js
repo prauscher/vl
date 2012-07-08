@@ -51,11 +51,7 @@ $(function () {
 	var agendaTreeTable = new TreeTable("#agenda ol#slides");
 	agendaTreeTable.setStyle("slide", "title", {width: "350px", cursor: "pointer"});
 	agendaTreeTable.onMove(function (slideid, parentid, position) {
-		if (parentid == null) {
-			return false;
-		} else {
-			apiClient.moveSlide(slideid, parentid, position);
-		}
+		apiClient.moveSlide(slideid, (parentid ? parentid : undefined), position);
 	});
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {

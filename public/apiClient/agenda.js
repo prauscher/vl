@@ -17,7 +17,7 @@ APIClient.prototype.registerAgenda = function () {
 		self.slides[data.slideid] = null;
 
 		self.registerSlide(data.slideid);
-		self.callCallback("initSlide", [ data.slideid, null ] );
+		self.callCallback("initSlide", [ data.slideid, null, data.position ] );
 	});
 	this.emit("/agenda", 'registeragenda', {});
 }
@@ -47,8 +47,10 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	});
 	this.listen("/agenda", 'slide-delete:' + slideid, function (data) {
 		var parentid = self.slides[slideid].parentid;
-		delete self.slides[slideid];
-		self.slideChildren[parentid].slice(self.slideChildren[parentid].indexOf(slideid), 1);
+		if (parentid) {
+			delete self.slides[slideid];
+			self.slideChildren[parentid].slice(self.slideChildren[parentid].indexOf(slideid), 1);
+		}
 
 		self.unregisterSlide(slideid);
 		self.callCallback("deleteSlide", [ slideid ] );
