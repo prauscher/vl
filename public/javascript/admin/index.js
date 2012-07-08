@@ -76,7 +76,7 @@ $(function () {
 			$(this).find(".miniColors").miniColors("destroy");
 		})
 		.on("shown", function() {
-			$(this).find("input:enabled:first").focus();
+			$(this).find("input:enabled, textarea:enabled").first().focus();
 		});
 	$(".modal form").unbind("submit").submit(function() {
 		$(this).parent().find(".save").click();
