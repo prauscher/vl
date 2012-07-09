@@ -35,19 +35,19 @@ exports.delete = function(motionid, callbackSuccess) {
 }
 
 exports.addBallot = function (motionid, ballotid, callback) {
-	db.sadd('motions:' + motionid + ':ballots', ballotid, function (err) {
+	db.rpush('motions:' + motionid + ':ballots', ballotid, function (err) {
 		callback();
 	});
 }
 
 exports.deleteBallot = function (motionid, ballotid, callback) {
-	db.srem('motions:' + motionid + ':ballots', ballotid, function (err) {
+	db.lrem('motions:' + motionid + ':ballots', 0, ballotid, function (err) {
 		callback();
 	});
 }
 
 exports.getBallots = function (motionid, callback) {
-	db.smembers('motions:' + motionid + ':ballots', function (err, ballotids) {
+	db.lrange('motions:' + motionid + ':ballots', 0, -1, function (err, ballotids) {
 		callback(ballotids);
 	});
 }

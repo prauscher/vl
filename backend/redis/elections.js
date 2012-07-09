@@ -5,19 +5,19 @@ module.exports = new FlatStructure({
 });
 
 module.exports.addBallot = function (electionid, ballotid, callback) {
-	db.sadd('elections:' + electionid + ':ballots', ballotid, function (err) {
+	db.rpush('elections:' + electionid + ':ballots', ballotid, function (err) {
 		callback();
 	});
 }
 
 module.exports.deleteBallot = function (electionid, ballotid, callback) {
-	db.srem('elections:' + electionid + ':ballots', ballotid, function (err) {
+	db.lrem('elections:' + electionid + ':ballots', 0, ballotid, function (err) {
 		callback();
 	});
 }
 
 module.exports.getBallots = function (electionid, callback) {
-	db.smembers('elections:' + electionid + ':ballots', function (err, ballotids) {
+	db.lrange('elections:' + electionid + ':ballots', 0, -1, function (err, ballotids) {
 		callback(ballotids);
 	});
 }
