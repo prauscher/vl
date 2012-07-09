@@ -41,10 +41,6 @@ $(function () {
 		$("#ballot-list").modal();
 	}
 
-	function initBallot (ballotid) {
-		$("#ballot-list #ballot-list").append($("<div>").addClass("well").addClass("ballot-" + ballotid));
-	}
-
 	apiClient.on("initElectionBallot", function (electionid, ballotid) {
 		if (electionid == currentElectionID) {
 			initBallot(ballotid);
@@ -57,8 +53,36 @@ $(function () {
 		}
 	});
 
+	function initBallot (ballotid) {
+		$("#ballot-list #ballot-list").append($("<div>").addClass("well").addClass("ballot-" + ballotid)
+			.append($("<span>").addClass("close").text("×").addClass("delete"))
+			.append($("<form>").addClass("form-horizontal")
+				.append($("<div>").addClass("control-group")
+					.append($("<label>").addClass("control-label").text("Stimmen"))
+					.append($("<div>").addClass("controls")
+						.append($("<input>").attr("type", "text").addClass("span1").addClass("countedvotes").prop("disabled", true))
+						.append(" / ")
+						.append($("<input>").attr("type", "text").addClass("span1").addClass("maxvotes"))
+						.append($("<div>").addClass("progress progress-striped")
+							.append($("<div>").addClass("bar").addClass("countedprogress"))) ) ) ) );
+	}
+
 	apiClient.on("updateBallot", function (ballotid, ballot) {
-		$("#ballot-list #ballot-list .ballot-" + ballotid).text(ballot.maxvotes);
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .delete").unbind("click").click(function () {
+			if (currentMotionID != null) {
+				apiClient.motionDeleteBallot(currentMotionID, ballotid);
+			}
+			if (currentElectionID != null) {
+				apiClient.motionDeleteBallot(currentElectionID, ballotid);
+			}
+		});
+
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedprogress").css("width", Math.floor(100 * ballot.countedvotes / ballot.maxvotes) + "%");
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedvotes").val(ballot.countedvotes);
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .maxvotes").val(ballot.maxvotes).unbind("click").change(function () {
+			ballot.maxvotes = $(this).val();
+			apiClient.saveBallot(ballotid, ballot);
+		});
 	});
 
 	apiClient.on("deleteBallot", function (ballotid) {
