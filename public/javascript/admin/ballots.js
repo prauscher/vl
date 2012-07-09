@@ -15,7 +15,11 @@ $(function () {
 			apiClient.registerElectionBallots(options.electionid);
 			currentElectionID = options.electionid;
 			$("#ballot-list #new-ballot").unbind("click").click(function () {
-				apiClient.electionAddBallot(options.electionid, generateID(), {});
+				// Ballot must not be empty, else the system will think it does not exist
+				apiClient.electionAddBallot(options.electionid, generateID(), {
+					countedvotes : 0,
+					maxvotes : 0
+				});
 			});
 		}
 		if (options.motionid) {
@@ -26,7 +30,11 @@ $(function () {
 			apiClient.registerMotionBallots(options.motionid);
 			currentMotionID = options.motionid;
 			$("#ballot-list #new-ballot").unbind("click").click(function () {
-				apiClient.motionAddBallot(options.motionid, generateID(), {});
+				// Ballot must not be empty, else the system will think it does not exist
+				apiClient.motionAddBallot(options.motionid, generateID(), {
+					countedvotes : 0,
+					maxvotes : 0
+				});
 			});
 		}
 
