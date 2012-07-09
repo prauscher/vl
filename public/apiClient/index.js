@@ -9,10 +9,10 @@ APIClient.prototype.getSocket = function (path, callback) {
 	if (this.sockets[path]) {
 		callback(this.sockets[path]);
 	} else {
-		console.log("connecting to " + path);
+		console.log("[APIClient] connecting to " + path);
 		var socket = this.socket.of(path)
 			.on("connect", function () {
-				console.log("connected to " + path);
+				console.log("[APIClient] connected to " + path);
 				callback(this);
 			});
 		this.sockets[path] = socket;
