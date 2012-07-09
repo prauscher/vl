@@ -3,7 +3,13 @@ var currentMotionID = null;
 var projectorScroll = 0;
 var projectorZoom = 1;
 
+function resetView() {
+	$("#error").hide();
+	$("#waiting").show();
+}
+
 function configureProjector(projectorid) {
+	resetView();
 	apiClient.registerIdentifyProjector();
 	apiClient.registerProjector(projectorid);
 
@@ -18,6 +24,7 @@ function configureSlide(slideid) {
 	$('#content .content-agenda').empty();
 	configureMotion();
 	if (slideid) {
+		resetView();
 		apiClient.registerSlide(slideid, 1);
 		currentSlideID = slideid;
 	}
@@ -29,6 +36,7 @@ function configureMotion(motionid) {
 		currentMotionID = null;
 	}
 	if (motionid) {
+		resetView();
 		apiClient.registerMotion(motionid);
 		currentMotionID = motionid;
 	}
