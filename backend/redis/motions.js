@@ -33,3 +33,9 @@ exports.delete = function(motionid, callbackSuccess) {
 		});
 	});
 }
+
+exports.getBallots = function (motionid, callback) {
+	db.smembers('motions:' + motionid + ':ballots', function (err, ballotids) {
+		callback(ballotids);
+	});
+}

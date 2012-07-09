@@ -15,3 +15,13 @@ module.exports = new FlatStructure({
 	},
 	backend : core.elections
 });
+
+module.exports.eachBallot = function (electionid, callback) {
+	core.elections.getBallots(electionid, function (ballotids) {
+		ballotids.forEach(function (ballotid, n) {
+			backend.ballots.get(ballotid, function (ballot) {
+				callback(ballotid, ballot);
+			});
+		});
+	});
+}

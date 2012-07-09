@@ -21,6 +21,7 @@ html
 		script(src='/apiClient/motions.js')
 		script(src='/apiClient/pollsites.js')
 		script(src='/apiClient/elections.js')
+		script(src='/apiClient/ballots.js')
 		script(src='/javascript/admin/treeTable.js')
 		script(src='/javascript/admin/selectProjector.js')
 		script(src='/javascript/admin/index.js')
@@ -68,10 +69,9 @@ html
 
 		div#ballot-list.modal
 			div.modal-header
-				button.close(data-dismiss="modal") ×
+				button.btn.btn-success.pull-right#new-ballot Wahlgang anlegen
 				h3 Wahlgänge
-			div.modal-body
-				
+			div.modal-body#ballot-list
 			div.modal-footer
 				button.btn(data-dismiss="modal") Schließen
 				button.btn.btn-primary Ok

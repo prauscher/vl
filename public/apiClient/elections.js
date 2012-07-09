@@ -10,6 +10,19 @@ APIClient.prototype.eachElection = function (callback) {
 	}
 }
 
+APIClient.prototype.registerElectionBallots = function (electionid) {
+	var self = this;
+	this.listen("/elections", 'election-addballot:' + electionid, function (data) {
+		self.registerBallot(data.ballotid);
+		self.callCallback("initElectionBallot", [ electionid, data.ballotid ]);
+	});
+	this.emit("/elections", 'registerballotballots', { electionid: electionid });
+}
+
+APIClient.prototype.unregisterElectionBallots = function (electionid) {
+	this.unlisten("/elections", 'election-addballot:' + electionid);
+}
+
 APIClient.prototype.registerElections = function () {
 	var self = this;
 	this.listen("/elections", 'election-add', function (data) {

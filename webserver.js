@@ -64,11 +64,14 @@ exports.createServer = function () {
 
 		app.get('/elections/:electionid', routes.elections.showElection);
 
+		app.get('/ballots/:ballotid', routes.ballots.showBallot);
+
 		global.projectorSocket	= io.registerProjector();
 		global.timerSocket	= io.registerTimers();
 		global.agendaSocket	= io.registerAgenda();
 		global.motionSocket	= io.registerMotions();
 		global.electionSocket	= io.registerElections();
+		global.ballotSocket	= io.registerBallots();
 	}
 
 	// callback is temporary out of usage. will fix this later
@@ -100,9 +103,9 @@ exports.createServer = function () {
 		app.post('/timers/:timerid/pause',	generateCallback(routes.timers.pause) );
 		app.post('/timers/:timerid/stop',	generateCallback(routes.timers.stop) );
 
-		app.put('/motionclasses/:motionclassid/save',	generateCallback(routes.motionclasses.save) );
+		app.put('/motionclasses/:motionclassid/save',		generateCallback(routes.motionclasses.save) );
 		app.post('/motionclasses/:motionclassid/delete',	generateCallback(routes.motionclasses.delete) );
-		app.post('/motionclasses/:motionclassid/move',	generateCallback(routes.motionclasses.move) );
+		app.post('/motionclasses/:motionclassid/move',		generateCallback(routes.motionclasses.move) );
 
 		app.put('/motions/:motionid/save',	generateCallback(routes.motions.save) );
 		app.post('/motions/:motionid/delete',	generateCallback(routes.motions.delete) );
@@ -113,6 +116,9 @@ exports.createServer = function () {
 
 		app.put('/elections/:electionid/save',		generateCallback(routes.elections.save) );
 		app.post('/elections/:electionid/delete',	generateCallback(routes.elections.delete) );
+
+		app.put('/ballots/:ballotid/save',	generateCallback(routes.ballots.save) );
+		app.post('/ballots/:ballotid/delete',	generateCallback(routes.ballots.delete) );
 
 		global.pollsiteSocket =	io.registerPollsites();
 	}

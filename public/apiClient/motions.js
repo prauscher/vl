@@ -10,6 +10,19 @@ APIClient.prototype.getMotion = function (motionid, callback) {
 	callback(this.motions[motionid]);
 }
 
+APIClient.prototype.registerMotionBallots = function (motionid) {
+	var self = this;
+	this.listen("/motions", 'motion-addballot:' + motionid, function (data) {
+		self.registerBallot(data.ballotid);
+		self.callCallback("initMotionBallot", [ motionid, data.ballotid ]);
+	});
+	this.emit("/motions", 'registermotionballots', { motionid: motionid });
+}
+
+APIClient.prototype.unregisterMotionBallots = function (motionid) {
+	this.unlisten("/motions", 'motion-addballot:' + motionid);
+}
+
 APIClient.prototype.registerMotion = function (motionid) {
 	var self = this;
 	this.listen("/motions", 'err:motion-not-found:' + motionid, function (data) {
@@ -54,7 +67,7 @@ APIClient.prototype.moveMotion = function (motionid, classid, position, callback
 	});
 }
 
-APIClient.prototype.deleteMotion = function(motionid, callbackSuccess) {
+APIClient.prototype.deleteMotion = function (motionid, callbackSuccess) {
 	$.ajax({
 		type: 'POST',
 		url: '/motions/' + motionid + '/delete',

@@ -119,6 +119,12 @@ exports.listen = function (app) {
 					}
 				});
 			});
+
+			socket.on('registermotionballots', function (data) {
+				backend.motions.eachBallot(data.motionid, function (ballotid) {
+					socket.emit('motion-addballot:' + data.motionid, { ballotid : ballotid });
+				});
+			});
 		});
 	}
 
@@ -146,6 +152,26 @@ exports.listen = function (app) {
 						socket.emit('err:election-not-found:' + data.electionid, {});
 					} else {
 						socket.emit('election-change:' + data.electionid, { election : election });
+					}
+				});
+			});
+
+			socket.on('registerelectionballots', function (data) {
+				backend.elections.eachBallot(data.electionid, function (ballotid) {
+					socket.emit('election-addballot:' + data.electionid, { ballotid : ballotid });
+				});
+			});
+		});
+	}
+
+	io.registerBallots = function() {
+		return io.of("/ballots").on("connection", function (socket) {
+			socket.on('registerballot', function (data) {
+				backend.ballots.get(data.ballotid, function (ballot) {
+					if (ballot == null) {
+						socket.emit('err:ballot-not-found:' + data.ballotid, {});
+					} else {
+						socket.emit('ballot-change:' + data.ballotid, { ballot : ballot });
 					}
 				});
 			});
