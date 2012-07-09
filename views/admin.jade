@@ -50,7 +50,7 @@ html
 						li.pollsites
 							a#nav-pollsites(href="#pollsites") Wahllokale
 						li.elections
-							a#nav-elections(href="#elections") Wahlgänge
+							a#nav-elections(href="#elections") Wahlen
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-projectors.pull-right.btn.btn-info Identifizieren
 					div#showprojector.btn-group.pull-right
@@ -298,7 +298,7 @@ html
 
 			table#elections.table-striped.table-bordered.table-condensed
 				tr
-					th Wahlgang
+					th Wahlen
 
 			div#election-options.modal
 				div.modal-header
@@ -309,14 +309,6 @@ html
 						label.control-label Name
 						.controls
 							input(type="text")#title
-					.control-group
-						label.control-label Farbe
-						.controls
-							input(type="hidden")#color
-					.control-group
-						label.control-label Max. Stimmen
-						.controls
-							input(type="text").span1#maxvotes
 				div.modal-footer
 					button.btn.btn-danger.pull-left.delete Löschen
 					button.btn(data-dismiss="modal") Schließen
