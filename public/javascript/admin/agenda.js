@@ -18,6 +18,20 @@ $(function () {
 				item.type = e.target.className.split("-").pop();
 			});
 		},
+		fillItem : function (modal, id, item) {
+			if (item.type != "text") {
+				delete item.text;
+			}
+			if (item.type != "html") {
+				delete item.html;
+			}
+			if (item.type != "motion") {
+				delete item.motionid;
+			}
+			if (item.type != "election") {
+				delete item.electionid;
+			}
+		},
 		saveCallback : apiClient.saveSlide,
 		deleteCallback : apiClient.deleteSlide
 	});
