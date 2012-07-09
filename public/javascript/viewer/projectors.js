@@ -1,5 +1,6 @@
 var currentSlideID = null;
 var currentMotionID = null;
+var currentElectionID = null;
 var projectorScroll = 0;
 var projectorZoom = 1;
 
@@ -23,6 +24,7 @@ function configureSlide(slideid) {
 	}
 	$('#content .content-agenda').empty();
 	configureMotion();
+	configureElection();
 	if (slideid) {
 		resetView();
 		apiClient.registerSlide(slideid, 1);
@@ -42,11 +44,24 @@ function configureMotion(motionid) {
 	}
 }
 
+function configureElection(electionid) {
+	if (currentElectionID != null) {
+		apiClient.unregisterElection(currentElectionID);
+		currentElectionID = null;
+	}
+	if (electionid) {
+		resetView();
+		apiClient.registerElection(electionid);
+		currentElectionID = electionid;
+	}
+}
+
 function clearView() {
 	$('#content .content-text').hide();
 	$('#content .content-html').hide();
 	$('#content .content-agenda').hide();
 	$('#content .content-motion').hide();
+	$('#content .content-election').hide();
 }
 
 function showView(type, options) {
@@ -72,6 +87,9 @@ function showView(type, options) {
 		$(".motion-status *").hide();
 		$(".motion-status .status-" + options.motion.status).show();
 		$('#content .content-motion').show();
+	}
+	if (type == "election") {
+		$('#title').text(options.election.title);
 	}
 }
 
@@ -127,6 +145,13 @@ $(function () {
 		showError("Der Antrag wurde nicht gefunden");
 	});
 
+	apiClient.on('updateElection', function (electionid, election) {
+		$("#waiting").fadeOut(300);
+	});
+	apiClient.on('error:electionNotFound', function (electionid) {
+		showError("Die Wahl wurde nicht gefunden");
+	});
+
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
 			var item = $("<li>").attr("id", "agenda-" + slideid);
@@ -151,6 +176,9 @@ $(function () {
 			}
 			if (slide.type == 'motion') {
 				configureMotion(slide.motionid);
+			}
+			if (slide.type == 'election') {
+				configureElection(slide.electionid);
 			}
 		} else {
 			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
@@ -231,6 +259,10 @@ $(function () {
 
 	apiClient.on("updateMotion", function (motionid, motion) {
 		showView("motion", { motionid: motionid, motion: motion });
+	});
+
+	apiClient.on("updateElection", function (electionid, election) {
+		showView("election", { electionid: electionid, election: election });
 	});
 
 	$("#projector-reset").click(function() {

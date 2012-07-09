@@ -9,7 +9,8 @@ $(function () {
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "text", field : "#slidecontent-text-text", type : "text" },
 			{ property : "html", field : "#slidecontent-html-html", type : "text" },
-			{ property : "motionid", field : "#slidecontent-motion-motionid", type : "text" }
+			{ property : "motionid", field : "#slidecontent-motion-motionid", type : "text" },
+			{ property : "electionid", field : "#slidecontent-election-electionid", type : "text" }
 		],
 		fillModal : function (modal, id, item) {
 			$(modal).find(".nav .slidecontent-" + item.type).tab('show');
@@ -99,6 +100,19 @@ $(function () {
 
 	apiClient.on("deleteMotion", function (motionid) {
 		$("#agenda #options #slidecontent-motion-motionid option.motion-" + motionid).remove();
+	});
+
+	apiClient.on("initElection", function (electionid) {
+		$("#agenda #options #slidecontent-election-electionid").append(
+			$("<option>").addClass("election-" + electionid).attr("value", electionid) )
+	});
+
+	apiClient.on("updateElection", function (electionid, election) {
+		$("#agenda #options #slidecontent-election-electionid option.election-" + electionid).text(election.title);
+	});
+
+	apiClient.on("deleteElection", function (motionid) {
+		$("#agenda #options #slidecontent-election-electionid option.election-" + electionid).remove();
 	});
 
 	$("#new-slide").click(function () {

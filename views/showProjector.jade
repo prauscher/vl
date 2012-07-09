@@ -11,6 +11,7 @@ html
 		script(src='/apiClient/timers.js')
 		script(src='/apiClient/motionclasses.js')
 		script(src='/apiClient/motions.js')
+		script(src='/apiClient/elections.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/javascript/viewer/projectors.js')
 
@@ -70,4 +71,8 @@ html
 		- else if (typeof motionid != 'undefined')
 			script(type="text/javascript")
 				configureMotion('#{motionid}');
+				$("#projector-controls").show();
+		- else if (typeof electionid != 'undefined')
+			script(type="text/javascript")
+				configureElection('#{electionid}');
 				$("#projector-controls").show();

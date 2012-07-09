@@ -136,7 +136,17 @@ exports.listen = function (app) {
 		return io.of("/elections").on("connection", function (socket) {
 			socket.on('registerelections', function (data) {
 				backend.elections.getAll(function (electionid, election) {
-					socket.emit('election-add', {electionid: electionid, election: election});
+					socket.emit('election-add', {electionid: electionid});
+				});
+			});
+
+			socket.on('registerelection', function (data) {
+				backend.elections.get(data.electionid, function (election) {
+					if (election == null) {
+						socket.emit('err:election-not-found:' + data.electionid, {});
+					} else {
+						socket.emit('election-change:' + data.electionid, { election : election });
+					}
 				});
 			});
 		});

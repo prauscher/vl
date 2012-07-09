@@ -10,9 +10,11 @@ $(function () {
 		deleteCallback : apiClient.deleteElection
 	});
 
-	apiClient.on("initElection", function (electionid, election) {
+	apiClient.on("initElection", function (electionid) {
 		$("#elections #elections").append($("<tr>").attr("id", "election-" + electionid)
-			.append($("<td>").addClass("title")) );
+			.append($("<td>").addClass("title"))
+			.append($("<td>").addClass("options")
+				.append($("<a>").attr("href", "/elections/" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ));
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {

@@ -146,6 +146,8 @@ html
 							li
 								a(data-toggle="tab",href="#slidecontent-motion").slidecontent-motion Antrag
 							li
+								a(data-toggle="tab",href="#slidecontent-election").slidecontent-election Wahl
+							li
 								a(data-toggle="tab",href="#slidecontent-agenda").slidecontent-agenda Agenda
 						div.tab-content
 							div.tab-pane#slidecontent-text
@@ -154,6 +156,8 @@ html
 								textarea#slidecontent-html-html
 							div.tab-pane#slidecontent-motion
 								select#slidecontent-motion-motionid
+							div.tab-pane#slidecontent-election
+								select#slidecontent-election-electionid
 							div.tab-pane#slidecontent-agenda
 								| Die Folie zeigt die komplette Tagesordnung.
 				div.modal-footer
@@ -299,6 +303,7 @@ html
 			table#elections.table-striped.table-bordered.table-condensed
 				tr
 					th Wahlen
+					th Optionen
 
 			div#election-options.modal
 				div.modal-header

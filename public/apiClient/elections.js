@@ -13,17 +13,20 @@ APIClient.prototype.eachElection = function (callback) {
 APIClient.prototype.registerElections = function () {
 	var self = this;
 	this.listen("/elections", 'election-add', function (data) {
-		self.elections[data.electionid] = data.election;
+		self.elections[data.electionid] = null;
 
 		self.registerElection(data.electionid);
-		self.callCallback("initElection", [ data.electionid, data.election ]);
-		self.callCallback("updateElection", [ data.electionid, data.election ]);
+		self.callCallback("initElection", [ data.electionid ]);
 	});
 	this.emit("/elections", 'registerelections', {});
 }
 
 APIClient.prototype.registerElection = function (electionid) {
 	var self = this;
+	this.listen("/elections", 'err:election-not-found:' + electionid, function (data) {
+		console.log("[APIClient] Election not found: " + electionid);
+		self.callCallback("error:electionNotFound", [ electionid ]);
+	});
 	this.listen("/elections", 'election-change:' + electionid, function (updateData) {
 		self.elections[electionid] = updateData.election;
 
@@ -33,9 +36,11 @@ APIClient.prototype.registerElection = function (electionid) {
 		self.unregisterElection(electionid);
 		self.callCallback("deleteElection", [ electionid ] );
 	});
+	this.emit("/elections", 'registerelection', { electionid : electionid });
 }
 
 APIClient.prototype.unregisterElection = function (electionid) {
+	this.unlisten("/elections", 'err:election-not-found:' + electionid);
 	this.unlisten("/elections", 'election-change:' + electionid);
 	this.unlisten("/elections", 'election-delete:' + electionid);
 }
