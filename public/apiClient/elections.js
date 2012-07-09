@@ -74,3 +74,21 @@ APIClient.prototype.deleteElection = function(electionid, callbackSuccess) {
 		success: callbackSuccess
 	});
 }
+
+APIClient.prototype.electionAddBallot = function (electionid, ballotid, ballot, callbackSuccess) {
+	$.ajax({
+		type: 'PUT',
+		url: '/elections/' + electionid + '/addBallot',
+		data: { ballotid: ballotid, ballot: ballot },
+		success: callbackSuccess
+	});
+}
+
+APIClient.prototype.electionDeleteBallot = function (electionid, ballotid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/elections/' + electionid + '/deleteBallot',
+		data: { ballotid: ballotid },
+		success: callbackSuccess
+	});
+}

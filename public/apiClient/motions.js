@@ -74,3 +74,21 @@ APIClient.prototype.deleteMotion = function (motionid, callbackSuccess) {
 		success: callbackSuccess
 	});
 }
+
+APIClient.prototype.motionAddBallot = function (motionid, ballotid, ballot, callbackSuccess) {
+	$.ajax({
+		type: 'PUT',
+		url: '/motions/' + motionid + '/addBallot',
+		data: { ballotid: ballotid, ballot: ballot },
+		success: callbackSuccess
+	});
+}
+
+APIClient.prototype.motionDeleteBallot = function (motionid, ballotid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/motions/' + motionid + '/deleteBallot',
+		data: { ballotid: ballotid },
+		success: callbackSuccess
+	});
+}

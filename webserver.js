@@ -107,18 +107,22 @@ exports.createServer = function () {
 		app.post('/motionclasses/:motionclassid/delete',	generateCallback(routes.motionclasses.delete) );
 		app.post('/motionclasses/:motionclassid/move',		generateCallback(routes.motionclasses.move) );
 
-		app.put('/motions/:motionid/save',	generateCallback(routes.motions.save) );
-		app.post('/motions/:motionid/delete',	generateCallback(routes.motions.delete) );
-		app.post('/motions/:motionid/move',	generateCallback(routes.motions.move) );
-
-		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
-		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
+		app.put('/motions/:motionid/save',		generateCallback(routes.motions.save) );
+		app.post('/motions/:motionid/delete',		generateCallback(routes.motions.delete) );
+		app.post('/motions/:motionid/move',		generateCallback(routes.motions.move) );
+		app.put('/motions/:motionid/addBallot',		generateCallback(routes.motions.addBallot) );
+		app.post('/motions/:motionid/deleteBallot',	generateCallback(routes.motions.deleteBallot) );
 
 		app.put('/elections/:electionid/save',		generateCallback(routes.elections.save) );
 		app.post('/elections/:electionid/delete',	generateCallback(routes.elections.delete) );
+		app.put('/elections/:electionid/addBallot',	generateCallback(routes.elections.addBallot) );
+		app.post('/elections/:electionid/deleteBallot',	generateCallback(routes.elections.deleteBallot) );
 
 		app.put('/ballots/:ballotid/save',	generateCallback(routes.ballots.save) );
 		app.post('/ballots/:ballotid/delete',	generateCallback(routes.ballots.delete) );
+
+		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
+		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
 
 		global.pollsiteSocket =	io.registerPollsites();
 	}

@@ -67,6 +67,24 @@ exports.move = function (id, newclassid, position, callbackSuccess) {
 	});
 }
 
+exports.addBallot = function (motionid, ballotid, ballot, callbackSuccess) {
+	core.ballots.save(ballotid, ballot, function () {
+		core.motions.addBallot(motionid, ballotid, function () {
+			motionSocket.emit('motion-addballot:' + motionid, { ballotid: ballotid });
+
+			if (callbackSuccess) {
+				callbackSuccess();
+			}
+		});
+	});
+}
+
+exports.deleteBallot = function (motionid, ballotid, callbackSuccess) {
+	core.motions.deleteBallot(motionid, ballotid, function () {
+		backend.ballots.delete(ballotid, callbackSuccess);
+	});
+}
+
 exports.eachBallot = function (motionid, callback) {
 	core.motions.getBallots(motionid, function (ballotids) {
 		ballotids.forEach(function (ballotid, n) {

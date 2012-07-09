@@ -34,6 +34,18 @@ exports.delete = function(motionid, callbackSuccess) {
 	});
 }
 
+exports.addBallot = function (motionid, ballotid, callback) {
+	db.sadd('motions:' + motionid + ':ballots', ballotid, function (err) {
+		callback();
+	});
+}
+
+exports.deleteBallot = function (motionid, ballotid, callback) {
+	db.srem('motions:' + motionid + ':ballots', ballotid, function (err) {
+		callback();
+	});
+}
+
 exports.getBallots = function (motionid, callback) {
 	db.smembers('motions:' + motionid + ':ballots', function (err, ballotids) {
 		callback(ballotids);

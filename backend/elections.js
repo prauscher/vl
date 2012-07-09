@@ -16,6 +16,24 @@ module.exports = new FlatStructure({
 	backend : core.elections
 });
 
+module.exports.addBallot = function (electionid, ballotid, ballot, callbackSuccess) {
+	core.ballots.save(ballotid, ballot, function () {
+		core.elections.addBallot(electionid, ballotid, function () {
+			electionSocket.emit('election-addballot:' + electionid, { ballotid: ballotid });
+
+			if (callbackSuccess) {
+				callbackSuccess();
+			}
+		});
+	});
+}
+
+module.exports.deleteBallot = function (electionid, ballotid, callbackSuccess) {
+	core.elections.deleteBallot(electionid, ballotid, function () {
+		backend.ballots.delete(ballotid, callbackSuccess);
+	});
+}
+
 module.exports.eachBallot = function (electionid, callback) {
 	core.elections.getBallots(electionid, function (ballotids) {
 		ballotids.forEach(function (ballotid, n) {
