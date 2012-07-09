@@ -1,12 +1,6 @@
 $(function () {
 	var showTimerOptions = generateShowOptionsModal({
 		modal : "#timers #timer-options",
-		initItem : function (id, item) {
-			item.running = false;
-			item.value = 0;
-			item.startValue = 0;
-			item.color = generateColor();
-		},
 		fields : [
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "color", field : "#color", type : "color" },
@@ -80,6 +74,11 @@ $(function () {
 	});
 
 	$("#new-timer").click(function () {
-		showTimerOptions(null, {});
+		showTimerOptions(null, {
+			running : false,
+			value : 0,
+			startValue : 0,
+			color : generateColor()
+		});
 	});
 });

@@ -5,11 +5,6 @@ var projectorsCurrentSlide = {};
 $(function () {
 	var showSlideOptions = generateShowOptionsModal({
 		modal : "#agenda #options",
-		initItem : function (id, item) {
-			item.hidden = true;
-			item.isdone = false;
-			item.type = "text";
-		},
 		fields : [
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "text", field : "#slidecontent-text-text", type : "text" },
@@ -107,6 +102,10 @@ $(function () {
 	});
 
 	$("#new-slide").click(function () {
-		showSlideOptions(null, {});
+		showSlideOptions(null, {
+			hidden : true,
+			isdone : false,
+			type : "text"
+		});
 	});
 });

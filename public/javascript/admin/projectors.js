@@ -3,12 +3,6 @@ var currentDefaultProjector = null;
 $(function () {
 	var showProjectorOptions = generateShowOptionsModal({
 		modal : "#projectors #projector-options",
-		initItem : function (id, item) {
-			item.hidden = true;
-			item.scroll = 0;
-			item.zoom = 1;
-			item.color = generateColor();
-		},
 		fields : [
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "color", field : "#color", type : "color" }
@@ -122,6 +116,11 @@ $(function () {
 	});
 
 	$("#new-projector").click(function () {
-		showProjectorOptions(null, {});
+		showProjectorOptions(null, {
+			hidden : true,
+			scroll : 0,
+			zoom : 1,
+			color : generateColor()
+		});
 	});
 });

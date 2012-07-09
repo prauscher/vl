@@ -25,10 +25,6 @@ function generateShowOptionsModal(options) {
 	return function (id, item) {
 		$(options.modal).find(".delete").toggle(options.deleteCallback && id != null);
 
-		if (id == null && options.initItem) {
-			options.initItem(id, item);
-		}
-
 		if (options.idfield) {
 			if (id == null) {
 				$(options.modal).find(options.idfield).val("").prop("disabled", false);
