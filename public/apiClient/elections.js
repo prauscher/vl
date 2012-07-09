@@ -16,7 +16,7 @@ APIClient.prototype.registerElectionBallots = function (electionid) {
 		self.registerBallot(data.ballotid);
 		self.callCallback("initElectionBallot", [ electionid, data.ballotid ]);
 	});
-	this.emit("/elections", 'registerballotballots', { electionid: electionid });
+	this.emit("/elections", 'registerelectionballots', { electionid: electionid });
 }
 
 APIClient.prototype.unregisterElectionBallots = function (electionid) {
