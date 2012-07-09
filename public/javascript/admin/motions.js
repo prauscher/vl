@@ -57,6 +57,7 @@ $(function () {
 			icon: $("<i>").addClass("icon").addClass("icon-file"),
 			title: $("<span>"),
 			options: $("<span>")
+				.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer"))
 				.append($("<a>").attr("href", "/motions/" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
@@ -68,6 +69,9 @@ $(function () {
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
+		motionsTreeTable.get("motion", motionid, "options").children(".show-ballots").unbind("click").click(function() {
+			showBallotListModal({ motionid : motionid });
+		});
 		motionsTreeTable.get("motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
 			showMotionOptions(motionid, motion);
 		});

@@ -12,16 +12,20 @@ $(function () {
 
 	apiClient.on("initElection", function (electionid) {
 		$("#elections #elections").append($("<tr>").attr("id", "election-" + electionid)
-			.append($("<td>").addClass("title"))
+			.append($("<td>").addClass("title").css("cursor", "pointer"))
 			.append($("<td>").addClass("options")
+				.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer"))
 				.append($("<a>").attr("href", "/elections/" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ));
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {
 		$("#elections #election-" + electionid + " .title").text(election.title);
 
-		$("#elections #election-" + electionid + " .title").unbind("click").css("cursor", "pointer").click(function () {
+		$("#elections #election-" + electionid + " .title").unbind("click").click(function () {
 			showElectionOptions(electionid, election);
+		});
+		$("#elections #election-" + electionid + " .show-ballots").unbind("click").click(function () {
+			showBallotListModal({ electionid : electionid });
 		});
 	});
 

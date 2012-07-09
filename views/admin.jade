@@ -32,6 +32,7 @@ html
 		script(src='/javascript/admin/motions.js')
 		script(src='/javascript/admin/pollsites.js')
 		script(src='/javascript/admin/elections.js')
+		script(src='/javascript/admin/ballots.js')
 		title Versammlungsleiter
 	body
 		div.navbar.navbar-fixed-top
@@ -64,6 +65,16 @@ html
 							li.divider
 
 		div.visible-desktop(style="width:100%;height:90px;")
+
+		div#ballot-list.modal
+			div.modal-header
+				button.close(data-dismiss="modal") ×
+				h3 Wahlgänge
+			div.modal-body
+				
+			div.modal-footer
+				button.btn(data-dismiss="modal") Schließen
+				button.btn.btn-primary Ok
 
 		div#flash-options.modal
 			div.modal-header
