@@ -20,6 +20,7 @@ html
 		script(src='/apiClient/motionclasses.js')
 		script(src='/apiClient/motions.js')
 		script(src='/apiClient/pollsites.js')
+		script(src='/apiClient/elections.js')
 		script(src='/javascript/admin/treeTable.js')
 		script(src='/javascript/admin/selectProjector.js')
 		script(src='/javascript/admin/index.js')
@@ -30,6 +31,7 @@ html
 		script(src='/javascript/admin/timers.js')
 		script(src='/javascript/admin/motions.js')
 		script(src='/javascript/admin/pollsites.js')
+		script(src='/javascript/admin/elections.js')
 		title Versammlungsleiter
 	body
 		div.navbar.navbar-fixed-top
@@ -47,6 +49,8 @@ html
 							a#nav-motions(href="#motions") Anträge
 						li.pollsites
 							a#nav-pollsites(href="#pollsites") Wahllokale
+						li.elections
+							a#nav-elections(href="#elections") Wahlgänge
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-projectors.pull-right.btn.btn-info Identifizieren
 					div#showprojector.btn-group.pull-right
@@ -287,6 +291,37 @@ html
 					button.btn(data-dismiss="modal") Schließen
 					button.btn.btn-primary.save#save-pollsite Speichern
 
+		div#elections.container
+			div#electionoptions.btn-toolbar
+				div.btn-group
+					button#new-election.btn.btn-success Neu
+
+			table#elections.table-striped.table-bordered.table-condensed
+				tr
+					th Wahlgang
+
+			div#election-options.modal
+				div.modal-header
+					button.close(data-dismiss="modal") ×
+					h3 Wahlgang anlegen
+				form.form-horizontal.modal-body
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#title
+					.control-group
+						label.control-label Farbe
+						.controls
+							input(type="hidden")#color
+					.control-group
+						label.control-label Max. Stimmen
+						.controls
+							input(type="text").span1#maxvotes
+				div.modal-footer
+					button.btn.btn-danger.pull-left.delete Löschen
+					button.btn(data-dismiss="modal") Schließen
+					button.btn.btn-primary.save Speichern
+
 		script(type="text/javascript")
 			var apiClient = new APIClient();
 			TimerClient(apiClient);
@@ -296,3 +331,4 @@ html
 			apiClient.registerTimers();
 			apiClient.registerMotionClasses();
 			apiClient.registerPollsites();
+			apiClient.registerElections();

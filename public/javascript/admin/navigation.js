@@ -39,6 +39,9 @@ $(function () {
 	$("#nav-pollsites").click(function() {
 		switchNavigation("pollsites");
 	});
+	$("#nav-elections").click(function() {
+		switchNavigation("elections");
+	});
 
 	if (location.hash == "#timers") {
 		switchNavigation("timers");
@@ -48,6 +51,8 @@ $(function () {
 		switchNavigation("motions");
 	} else if (location.hash == "#pollsites") {
 		switchNavigation("pollsites");
+	} else if (location.hash == "#elections") {
+		switchNavigation("elections");
 	} else {
 		switchNavigation("agenda");
 	}

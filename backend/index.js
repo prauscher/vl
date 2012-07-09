@@ -10,3 +10,4 @@ exports.timers = require('./timers.js');
 exports.motions = require('./motions.js');
 exports.motionclasses = require('./motionclasses.js');
 exports.pollsites = require('./pollsites.js');
+exports.elections = require('./elections.js');

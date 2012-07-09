@@ -132,5 +132,15 @@ exports.listen = function (app) {
 		});
 	}
 
+	io.registerElections = function () {
+		return io.of("/elections").on("connection", function (socket) {
+			socket.on('registerelections', function (data) {
+				backend.elections.getAll(function (electionid, election) {
+					socket.emit('election-add', {electionid: electionid, election: election});
+				});
+			});
+		});
+	}
+
 	return io;
 }

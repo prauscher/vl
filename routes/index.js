@@ -4,3 +4,4 @@ exports.timers = require('./timers.js');
 exports.motionclasses = require('./motionclasses.js');
 exports.motions = require('./motions.js');
 exports.pollsites = require('./pollsites.js');
+exports.elections = require('./elections.js');

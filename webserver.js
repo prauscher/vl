@@ -62,10 +62,13 @@ exports.createServer = function () {
 
 		app.get('/motions/:motionid', routes.motions.showMotion);
 
+		app.get('/elections/:electionid', routes.elections.showElection);
+
 		global.projectorSocket	= io.registerProjector();
 		global.timerSocket	= io.registerTimers();
 		global.agendaSocket	= io.registerAgenda();
 		global.motionSocket	= io.registerMotions();
+		global.electionSocket	= io.registerElections();
 	}
 
 	// callback is temporary out of usage. will fix this later
@@ -107,6 +110,9 @@ exports.createServer = function () {
 
 		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
 		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );
+
+		app.put('/elections/:electionid/save',		generateCallback(routes.elections.save) );
+		app.post('/elections/:electionid/delete',	generateCallback(routes.elections.delete) );
 
 		global.pollsiteSocket =	io.registerPollsites();
 	}
