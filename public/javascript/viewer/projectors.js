@@ -8,8 +8,10 @@ var projectorScroll = 0;
 var projectorZoom = 1;
 
 function resetView() {
-	$("#error").hide();
-	$("#waiting").show();
+	if ($("#error").is(":visible")) {
+		$("#error").hide();
+		$("#waiting").show();
+	}
 }
 
 function configureDefaultProjector(useDefaultProjector) {
