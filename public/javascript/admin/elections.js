@@ -1,6 +1,19 @@
 // vim:noet:sw=8:
 
 $(function () {
+	// Do not provide apiClient.(un)?register... directly, as this will lead to broken this-pointers in apiClient
+	var showElectionBallotList = generateShowBallotList({
+		initEvent : "initElectionBallot",
+		registerBallots : function (id) {
+			apiClient.registerElectionBallots(id);
+		},
+		unregisterBallots :  function (id) {
+			apiClient.unregisterElectionBallots(id);
+		},
+		addBallot : apiClient.electionAddBallot,
+		deleteBallot : apiClient.electionDeleteBallot
+	});
+
 	var showElectionOptions = generateShowOptionsModal({
 		modal : "#elections #election-options",
 		fields : [
@@ -25,7 +38,7 @@ $(function () {
 			showElectionOptions(electionid, election);
 		});
 		$("#elections #election-" + electionid + " .show-ballots").unbind("click").click(function () {
-			showBallotListModal({ electionid : electionid });
+			showElectionBallotList(electionid);
 		});
 	});
 

@@ -1,6 +1,19 @@
 // vim:noet:sw=8:
 
 $(function () {
+	// Do not provide apiClient.(un)?register... directly, as this will lead to broken this-pointers in apiClient
+	var showMotionBallotList = generateShowBallotList({
+		initEvent : "initMotionBallot",
+		registerBallots : function (id) {
+			apiClient.registerMotionBallots(id);
+		},
+		unregisterBallots : function (id) {
+			apiClient.unregisterMotionBallots(id)
+		},
+		addBallot : apiClient.motionAddBallot,
+		deleteBallot : apiClient.motionDeleteBallot
+	});
+
 	var showMotionClassOptions = generateShowOptionsModal({
 		modal : "#motions #motionclass-options",
 		fields: [
@@ -71,7 +84,7 @@ $(function () {
 
 	apiClient.on("updateMotion", function (motionid, motion) {
 		$("ol#motions").treeTable("get", "motion", motionid, "options").children(".show-ballots").unbind("click").click(function() {
-			showBallotListModal({ motionid : motionid });
+			showMotionBallotList(motionid);
 		});
 		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
 			showMotionOptions(motionid, motion);
