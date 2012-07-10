@@ -36,69 +36,80 @@ $(function () {
 });
 
 function configureProjector(projectorid) {
-	if (currentProjectorID == null) {
-		apiClient.unregisterIdentifyProjector();
-		apiClient.unregisterProjector(projectorid);
-		currentProjectorID = null;
-	}
-	configureSlide();
-	if (projectorid) {
-		resetView();
-		apiClient.registerIdentifyProjector();
-		apiClient.registerProjector(projectorid);
+	if (projectorid != currentProjectorID) {
+		if (currentProjectorID == null) {
+			apiClient.unregisterIdentifyProjector();
+			apiClient.unregisterProjector(projectorid);
+			currentProjectorID = null;
+		}
+		configureSlide();
+		if (projectorid) {
+			resetView();
+			$("#timers").empty();
+			apiClient.registerIdentifyProjector();
+			apiClient.registerProjector(projectorid);
+		}
 	}
 }
 
 function configureSlide(slideid) {
-	if (currentSlideID != null) {
-		apiClient.unregisterSlide(currentSlideID);
-		currentSlideID = null;
-	}
-	$('#content .content-agenda').empty();
-	configureMotion();
-	configureElection();
-	configureBallot();
-	if (slideid) {
-		resetView();
-		apiClient.registerSlide(slideid, 1);
-		currentSlideID = slideid;
+	if (slideid != currentSlideID) {
+		if (currentSlideID != null) {
+			apiClient.unregisterSlide(currentSlideID);
+			currentSlideID = null;
+		}
+		configureMotion();
+		configureElection();
+		configureBallot();
+		if (slideid) {
+			resetView();
+			$('#content .content-agenda').empty();
+			apiClient.registerSlide(slideid, 1);
+			currentSlideID = slideid;
+		}
 	}
 }
 
 function configureMotion(motionid) {
-	if (currentMotionID != null) {
-		apiClient.unregisterMotion(currentMotionID);
-		currentMotionID = null;
-	}
-	if (motionid) {
-		resetView();
-		apiClient.registerMotion(motionid);
-		currentMotionID = motionid;
+	if (motionid != currentMotionID) {
+		if (currentMotionID != null) {
+			apiClient.unregisterMotion(currentMotionID);
+			currentMotionID = null;
+		}
+		if (motionid) {
+			resetView();
+			apiClient.registerMotion(motionid);
+			currentMotionID = motionid;
+		}
 	}
 }
 
 function configureElection(electionid) {
-	if (currentElectionID != null) {
-		apiClient.unregisterElection(currentElectionID);
-		currentElectionID = null;
-	}
-	if (electionid) {
-		resetView();
-		apiClient.registerElection(electionid);
-		currentElectionID = electionid;
+	if (electionid != currentElectionID) {
+		if (currentElectionID != null) {
+			apiClient.unregisterElection(currentElectionID);
+			currentElectionID = null;
+		}
+		if (electionid) {
+			resetView();
+			apiClient.registerElection(electionid);
+			currentElectionID = electionid;
+		}
 	}
 }
 
 function configureBallot(ballotid) {
-	if (currentBallotID != null) {
-		apiClient.unregisterBallot(currentBallotID);
-		currentBallotID = null;
-	}
-	$('#content .ballot-options').empty();
-	if (ballotid) {
-		resetView();
-		apiClient.registerBallot(ballotid);
-		currentBallotID = ballotid;
+	if (ballotid != currentBallotID) {
+		if (currentBallotID != null) {
+			apiClient.unregisterBallot(currentBallotID);
+			currentBallotID = null;
+		}
+		if (ballotid) {
+			resetView();
+			$('#content .ballot-options').empty();
+			apiClient.registerBallot(ballotid);
+			currentBallotID = ballotid;
+		}
 	}
 }
 
