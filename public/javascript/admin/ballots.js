@@ -73,7 +73,7 @@ $(function () {
 				apiClient.motionDeleteBallot(currentMotionID, ballotid);
 			}
 			if (currentElectionID != null) {
-				apiClient.motionDeleteBallot(currentElectionID, ballotid);
+				apiClient.electionDeleteBallot(currentElectionID, ballotid);
 			}
 		});
 
