@@ -36,14 +36,17 @@ $(function () {
 		deleteCallback : apiClient.deleteSlide
 	});
 
-	var agendaTreeTable = new TreeTable("#agenda ol#slides");
-	agendaTreeTable.setStyle("slide", "title", {width: "350px", cursor: "pointer"});
-	agendaTreeTable.onMove(function (slideid, parentid, position) {
-		apiClient.moveSlide(slideid, (parentid ? parentid : undefined), position);
+	$("#agenda ol#slides").treeTable({
+		styles: {
+			slide: { title: {width: "350px", cursor: "pointer"} }
+		},
+		move: function (slideid, parentid, position) {
+			apiClient.moveSlide(slideid, (parentid ? parentid : undefined), position);
+		}
 	});
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
-		agendaTreeTable.add("slide", slideid, "slide", parentid, position, {
+		$("#agenda ol#slides").treeTable("add", "slide", slideid, "slide", parentid, position, {
 			"title": $("<span>"),
 			"select-projectors" : $("<span>").selectProjector({
 				prefix : "Anzeigen auf ",
@@ -63,17 +66,17 @@ $(function () {
 		});
 		for (var projectorid in projectorsCurrentSlide) {
 			if (projectorsCurrentSlide[projectorid] == slideid) {
-				agendaTreeTable.get("slide", slideid, "select-projectors").selectProjector("toggleActive", [ projectorid, true ]);
+				$("#agenda ol#slides").treeTable("get", "slide", slideid, "select-projectors").selectProjector("toggleActive", projectorid, true);
 			}
 		}
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
-		agendaTreeTable.get("slide", slideid, "title").text(slide.title || "Unbenannt").toggleClass("untitled", !slide.title).unbind("click").click(function() {
+		$("#agenda ol#slides").treeTable("get", "slide", slideid, "title").text(slide.title || "Unbenannt").toggleClass("untitled", !slide.title).unbind("click").click(function() {
 			showSlideOptions(slideid, slide);
 		});
 
-		var options = agendaTreeTable.get("slide", slideid, "options");
+		var options = $("#agenda ol#slides").treeTable("get", "slide", slideid, "options");
 		options.children(".isundone").unbind("click").toggle(slide.isdone != "true").click(function () {
 			slide.isdone = true;
 			apiClient.saveSlide(slideid, slide);
@@ -94,13 +97,13 @@ $(function () {
 	});
 
 	apiClient.on("deleteSlide", function (slideid) {
-		agendaTreeTable.remove("slide", slideid);
+		$("#agenda ol#slides").treeTable("remove", "slide", slideid);
 	});
 
 	apiClient.on("updateProjector", function (projectorid, projector) {
 		$("#agenda .select-projector-" + projectorid).removeClass("active");
 		projectorsCurrentSlide[projectorid] = projector.currentslideid;
-		agendaTreeTable.get("slide", projector.currentslideid, "select-projectors").children(".select-projector-" + projectorid).addClass("active");
+		$("#agenda ol#slides").treeTable("get", "slide", projector.currentslideid, "select-projectors").children(".select-projector-" + projectorid).addClass("active");
 	});
 
 	apiClient.on("initMotion", function (motionid, classid, position) {

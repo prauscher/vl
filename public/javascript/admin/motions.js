@@ -24,36 +24,37 @@ $(function () {
 		deleteCallback : apiClient.deleteMotion
 	});
 
-	var motionsTreeTable = new TreeTable("ol#motions", { disableNesting : "motion" });
-	motionsTreeTable.setStyle("motionclass", "icon", {width: "20px"});
-	motionsTreeTable.setStyle("motionclass", "title", {width: "350px", cursor: "pointer"});
-	motionsTreeTable.setStyle("motion", "icon", {width: "20px"});
-	motionsTreeTable.setStyle("motion", "title", {width: "350px", cursor: "pointer"});
-	motionsTreeTable.onMove(function (id, parentid, position, type, parenttype) {
-		if (type == "motion") {
-			if (parentid == null || parenttype != "motionclass") {
-				return false;
-			} else {
-				apiClient.moveMotion(id, parentid, position);
-			}
-		} else if (type == "motionclass") {
-			if (parenttype != null && parenttype != "motionclass") {
-				return false;
-			} else {
-				apiClient.moveMotionClass(id, (parentid ? parentid : undefined), position);
+	$("ol#motions").treeTable({
+		styles: {
+			motionclass: { icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} },
+			motion: {icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} }
+		},
+		move: function (id, parentid, position, type, parenttype) {
+			if (type == "motion") {
+				if (parentid == null || parenttype != "motionclass") {
+					return false;
+				} else {
+					apiClient.moveMotion(id, parentid, position);
+				}
+			} else if (type == "motionclass") {
+				if (parenttype != null && parenttype != "motionclass") {
+					return false;
+				} else {
+					apiClient.moveMotionClass(id, (parentid ? parentid : undefined), position);
+				}
 			}
 		}
 	});
 
 	apiClient.on("initMotionClass", function (motionclassid, parentid, position) {
-		motionsTreeTable.add("motionclass", motionclassid, "motionclass", parentid, position, {
+		$("ol#motions").treeTable("add", "motionclass", motionclassid, "motionclass", parentid, position, {
 			icon: $("<i>").addClass("icon").addClass("icon-folder-open"),
 			title: $("<span>")
 		});
 	});
 
 	apiClient.on("initMotion", function (motionid, classid, position) {
-		motionsTreeTable.add("motion", motionid, "motionclass", classid, position, {
+		$("ol#motions").treeTable("add", "motion", motionid, "motionclass", classid, position, {
 			icon: $("<i>").addClass("icon").addClass("icon-file"),
 			title: $("<span>"),
 			options: $("<span>")
@@ -63,26 +64,26 @@ $(function () {
 	});
 
 	apiClient.on("updateMotionClass", function (motionclassid, motionclass) {
-		motionsTreeTable.get("motionclass", motionclassid, "title").text(motionclass.title).click(function () {
+		$("ol#motions").treeTable("get", "motionclass", motionclassid, "title").text(motionclass.title).click(function () {
 			showMotionClassOptions(motionclassid, motionclass);
 		});
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		motionsTreeTable.get("motion", motionid, "options").children(".show-ballots").unbind("click").click(function() {
+		$("ol#motions").treeTable("get", "motion", motionid, "options").children(".show-ballots").unbind("click").click(function() {
 			showBallotListModal({ motionid : motionid });
 		});
-		motionsTreeTable.get("motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
+		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
 			showMotionOptions(motionid, motion);
 		});
 	});
 
 	apiClient.on("deleteMotionClass", function (motionclassid) {
-		motionsTreeTable.remove("motionclass", motionclassid)
+		$("ol#motions").treeTable("remove", "motionclass", motionclassid)
 	});
 
 	apiClient.on("deleteMotion", function (motionid) {
-		motionsTreeTable.remove("motion", motionid);
+		$("ol#motions").treeTable("remove", "motion", motionid);
 	});
 
 	apiClient.on("initMotionClass", function (motionclassid) {
