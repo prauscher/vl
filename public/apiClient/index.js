@@ -21,6 +21,7 @@ APIClient.prototype.getSocket = function (path, callback) {
 
 APIClient.prototype.listen = function (path, event, callback) {
 	this.getSocket(path, function (socket) {
+		socket.removeAllListeners(event);
 		socket.on(event, function (data) {
 			callback(data);
 		});
