@@ -19,7 +19,7 @@ module.exports.addOption = function (ballotid, optionid, option, callbackSuccess
 			ballotSocket.emit('option-add:' + ballotid, { optionid: optionid, position: position });
 
 			if (callbackSuccess) {
-				callbackSuccess;
+				callbackSuccess();
 			}
 		});
 	});
@@ -31,7 +31,7 @@ module.exports.moveOption = function (ballotid, optionid, position, callbackSucc
 		ballotSocket.emit('option-add:' + ballotid, { optionid: optionid, position: position });
 
 		if (callbackSuccess) {
-			callbackSuccess;
+			callbackSuccess();
 		}
 	});
 }
