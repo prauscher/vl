@@ -1,3 +1,4 @@
+var currentProjectorID = null;
 var currentSlideID = null;
 var currentMotionID = null;
 var currentElectionID = null;
@@ -11,7 +12,33 @@ function resetView() {
 	$("#waiting").show();
 }
 
+function configureDefaultProjector(useDefaultProjector) {
+	if (!useDefaultProjector) {
+		apiClient.unregisterDefaultProjector();
+	}
+	configureProjector();
+	if (useDefaultProjector) {
+		resetView();
+		apiClient.registerDefaultProjector();
+	}
+}
+
+$(function () {
+	apiClient.on("setDefaultProjector", function (projectorid) {
+		if (projectorid) {
+			configureProjector(projectorid);
+		} else {
+			showError("Kein Projector als Default gesetzt");
+		}
+	});
+});
+
 function configureProjector(projectorid) {
+	if (currentProjectorID == null) {
+		apiClient.unregisterIdentifyProjector();
+		apiClient.unregisterProjector(projectorid);
+		currentProjectorID = null;
+	}
 	configureSlide();
 	if (projectorid) {
 		resetView();
@@ -340,6 +367,7 @@ $(function () {
 		setViewerData(projectorScroll + 1, projectorZoom);
 	});
 
+	clearView();
 	updateCurrentTime();
 	window.setInterval(updateCurrentTime, 1000);
 });

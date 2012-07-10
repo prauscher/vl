@@ -19,11 +19,19 @@ APIClient.prototype.registerDefaultProjector = function () {
 	this.emit("/projectors", 'registerdefaultprojector', {});
 }
 
+APIClient.prototype.unregisterDefaultProjector = function () {
+	this.unlisten("/projectors", 'projector-set-default');
+}
+
 APIClient.prototype.registerIdentifyProjector = function () {
 	var self = this;
 	this.listen("/projectors", 'projector-identify', function (data) {
 		self.callCallback("identifyProjector", [ data.timeout ] );
 	});
+}
+
+APIClient.prototype.unregisterIdentifyProjector = function () {
+	this.unlisten("/projectors", 'projector-identify');
 }
 
 APIClient.prototype.registerProjectors = function () {

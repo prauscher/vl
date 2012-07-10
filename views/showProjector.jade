@@ -92,3 +92,6 @@ html
 			script(type="text/javascript")
 				configureBallot('#{ballotid}');
 				$("#projector-controls").show();
+		- else
+			script(type="text/javascript")
+				configureDefaultProjector(true);
