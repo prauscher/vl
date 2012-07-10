@@ -1,6 +1,8 @@
 var currentSlideID = null;
 var currentMotionID = null;
 var currentElectionID = null;
+var currentBallotID = null;
+
 var projectorScroll = 0;
 var projectorZoom = 1;
 
@@ -10,11 +12,12 @@ function resetView() {
 }
 
 function configureProjector(projectorid) {
-	resetView();
-	apiClient.registerIdentifyProjector();
-	apiClient.registerProjector(projectorid);
-
 	configureSlide();
+	if (projectorid) {
+		resetView();
+		apiClient.registerIdentifyProjector();
+		apiClient.registerProjector(projectorid);
+	}
 }
 
 function configureSlide(slideid) {
@@ -25,6 +28,7 @@ function configureSlide(slideid) {
 	$('#content .content-agenda').empty();
 	configureMotion();
 	configureElection();
+	configureBallot();
 	if (slideid) {
 		resetView();
 		apiClient.registerSlide(slideid, 1);
@@ -56,12 +60,26 @@ function configureElection(electionid) {
 	}
 }
 
+function configureBallot(ballotid) {
+	if (currentBallotID != null) {
+		apiClient.unregisterBallot(currentBallotID);
+		currentBallotID = null;
+	}
+	$('#content .ballot-options').empty();
+	if (ballotid) {
+		resetView();
+		apiClient.registerBallot(ballotid);
+		currentBallotID = ballotid;
+	}
+}
+
 function clearView() {
 	$('#content .content-text').hide();
 	$('#content .content-html').hide();
 	$('#content .content-agenda').hide();
 	$('#content .content-motion').hide();
 	$('#content .content-election').hide();
+	$('#content .content-ballot').hide();
 }
 
 function showView(type, options) {
@@ -90,6 +108,13 @@ function showView(type, options) {
 	}
 	if (type == "election") {
 		$('#title').text(options.election.title);
+		$('#content .content-election').show();
+	}
+	if (type == "ballot") {
+		$('.ballot-maxvotes').text(options.ballot.maxvotes);
+		$('.ballot-status *').hide();
+		$('.ballot-status .status-' + options.ballot.status).show();
+		$('#content .content-ballot').show();
 	}
 }
 
@@ -152,15 +177,21 @@ $(function () {
 		showError("Die Wahl wurde nicht gefunden");
 	});
 
-	apiClient.on("initSlide", function (slideid, parentid, position) {
-		if (parentid == currentSlideID) {
-			var item = $("<li>").attr("id", "agenda-" + slideid);
-			if (position == 0) {
-				$("#content .content-agenda").prepend(item);
-			} else {
-				$("#content .content-agenda>li:eq(" + (position - 1) + ")").after(item);
-			}
+	apiClient.on('updateBallot', function (ballotid, ballot) {
+		$("#waiting").fadeOut(300);
+	});
+	apiClient.on('error:ballotNotFound', function (ballotid) {
+		showError("Der Wahlgang wurde nicht gefunden");
+	});
+
+	apiClient.on("updateProjector", function (projectorid, projector) {
+		if (projector.currentslideid) {
+			configureSlide(projector.currentslideid);
+		} else {
+			showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
 		}
+		setViewerData(projector.scroll, projector.zoom);
+		$("#identify").css("background-color", projector.color).text(projector.title);
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
@@ -180,8 +211,22 @@ $(function () {
 			if (slide.type == 'election') {
 				configureElection(slide.electionid);
 			}
+			if (slide.type == 'ballot') {
+				configureBallot(slide.ballotid);
+			}
 		} else {
 			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
+		}
+	});
+
+	apiClient.on("initSlide", function (slideid, parentid, position) {
+		if (parentid == currentSlideID) {
+			var item = $("<li>").attr("id", "agenda-" + slideid);
+			if (position == 0) {
+				$("#content .content-agenda").prepend(item);
+			} else {
+				$("#content .content-agenda>li:eq(" + (position - 1) + ")").after(item);
+			}
 		}
 	});
 
@@ -194,16 +239,6 @@ $(function () {
 		window.setTimeout(function () {
 			$("#identify").fadeOut(300);
 		}, timeout * 1000);
-	});
-
-	apiClient.on("updateProjector", function (projectorid, projector) {
-		if (projector.currentslideid) {
-			configureSlide(projector.currentslideid);
-		} else {
-			showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
-		}
-		setViewerData(projector.scroll, projector.zoom);
-		$("#identify").css("background-color", projector.color).text(projector.title);
 	});
 
 	apiClient.on("deleteProjector", function (projectorid) {
@@ -263,6 +298,30 @@ $(function () {
 
 	apiClient.on("updateElection", function (electionid, election) {
 		showView("election", { electionid: electionid, election: election });
+	});
+
+	apiClient.on("updateBallot", function (ballotid, ballot) {
+		showView("ballot", { ballotid: ballotid, ballot: ballot });
+	});
+
+	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
+		var item = $("<li>").addClass("option-" + optionid)
+			.append($("<span>").addClass("title"));
+
+		if (position == 0) {
+			$(".ballot-options").prepend(item);
+		} else {
+			$(".ballot-options li:eq(" + (position-1) + ")").after(item);
+		}
+	});
+
+	apiClient.on("updateOption", function (optionid, option) {
+		$(".ballot-options .option-" + optionid).toggle(option.hidden != "true")
+		$(".ballot-options .option-" + optionid + " .title").text(option.title);
+	});
+
+	apiClient.on("deleteOption", function (optionid) {
+		$(".ballot-options .option-" + optionid).remove();
 	});
 
 	$("#projector-reset").click(function() {

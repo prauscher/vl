@@ -7,10 +7,20 @@ function initBallot (ballotid, deleteCall) {
 				.append($("<div>").addClass("controls")
 					.append($("<input>").attr("type", "text").addClass("span1").addClass("countedvotes").prop("disabled", true))
 					.append(" / ")
-					.append($("<input>").attr("type", "text").addClass("span1").addClass("maxvotes")) ) ) )
-		.append($("<button>").addClass("btn btn-success btn-mini").addClass("addOption").text("Option hinzufügen").click(function () {
-			apiClient.ballotAddOption(ballotid, generateID(), { title : "", hidden : true });
-		}))
+					.append($("<input>").attr("type", "text").addClass("span1").addClass("maxvotes")) ) )
+			.append($("<div>").addClass("control-group")
+				.append($("<label>").addClass("control-label").text("Status"))
+				.append($("<div>").addClass("controls")
+					.append($("<select>").addClass("status")
+						.append($("<option>").attr("value", "preparing").text("In Vorbereitung"))
+						.append($("<option>").attr("value", "voting").text("Im Wahlgang"))
+						.append($("<option>").attr("value", "counting").text("Auszählen"))
+						.append($("<option>").attr("value", "done").text("Ausgewertet")) ) ) ) )
+		.append($("<div>").addClass("btn-toolbar")
+			.append($("<button>").addClass("btn btn-success btn-mini").addClass("addOption").text("Option hinzufügen").click(function () {
+				apiClient.ballotAddOption(ballotid, generateID(), { title : "", hidden : true });
+			}))
+		)
 		.append($("<ol>").addClass("options").sortable({
 			handle : ".move",
 			update : function (ev,ui) {
@@ -48,7 +58,8 @@ function generateShowBallotList (options) {
 			// Ballot must not be empty, else the system will think it does not exist
 			options.addBallot(id, generateID(), {
 				countedvotes : 0,
-				maxvotes : 0
+				maxvotes : 0,
+				status : "preparing"
 			});
 		});
 
@@ -100,6 +111,11 @@ $(function () {
 		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedvotes").val(ballot.countedvotes);
 		$("#ballot-list #ballot-list .ballot-" + ballotid + " .maxvotes").val(ballot.maxvotes).unbind("click").change(function () {
 			ballot.maxvotes = $(this).val();
+			apiClient.saveBallot(ballotid, ballot);
+		});
+
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .status").val(ballot.status).unbind("click").change(function () {
+			ballot.status = $(this).val();
 			apiClient.saveBallot(ballotid, ballot);
 		});
 	});

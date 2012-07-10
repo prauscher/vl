@@ -10,7 +10,8 @@ $(function () {
 			{ property : "text", field : "#slidecontent-text-text", type : "text" },
 			{ property : "html", field : "#slidecontent-html-html", type : "text" },
 			{ property : "motionid", field : "#slidecontent-motion-motionid", type : "text" },
-			{ property : "electionid", field : "#slidecontent-election-electionid", type : "text" }
+			{ property : "electionid", field : "#slidecontent-election-electionid", type : "text" },
+			{ property : "ballotid", field : "#slidecontent-ballot-ballotid", type : "text" }
 		],
 		fillModal : function (modal, id, item) {
 			$(modal).find(".nav .slidecontent-" + item.type).tab('show');
@@ -30,6 +31,9 @@ $(function () {
 			}
 			if (item.type != "election") {
 				delete item.electionid;
+			}
+			if (item.type != "ballot") {
+				delete item.ballotid;
 			}
 		},
 		saveCallback : apiClient.saveSlide,

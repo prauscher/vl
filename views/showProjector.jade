@@ -12,6 +12,8 @@ html
 		script(src='/apiClient/motionclasses.js')
 		script(src='/apiClient/motions.js')
 		script(src='/apiClient/elections.js')
+		script(src='/apiClient/ballots.js')
+		script(src='/apiClient/options.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/javascript/viewer/projectors.js')
 
@@ -49,8 +51,18 @@ html
 				div.content-motion
 					| Antragsteller
 					.motion-submitter
+				div.content-ballot
+					| Stimmen
+					.ballot-maxvotes
+				div.content-ballot.ballot-status
+					| Status
+					.status-preparing In Vorbereitung
+					.status-voting Im Wahlvorgang
+					.status-counting Auszählen
+					.status-done Ausgewertet
 			div.content-motion.motion-text
 			div.content-motion.motion-argumentation
+			ol.ballot-options.content-ballot
 
 		script(type="text/javascript")
 			var currentSlideID = null;
@@ -75,4 +87,8 @@ html
 		- else if (typeof electionid != 'undefined')
 			script(type="text/javascript")
 				configureElection('#{electionid}');
+				$("#projector-controls").show();
+		- else if (typeof ballotid != 'undefined')
+			script(type="text/javascript")
+				configureBallot('#{ballotid}');
 				$("#projector-controls").show();

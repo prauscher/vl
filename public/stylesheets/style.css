@@ -48,6 +48,10 @@ body
 	{margin-right:11em; border:0.1em dotted darkgray; padding:0.2em;}
 .content-motion.motion-argumentation
 	{margin-right:11em; margin-top:0.3em;}
+.ballot-maxvotes
+	{text-align:right;}
+.ballot-status *
+	{text-align:right;}
 
 .flash-danger
 	{background-color:#b94a48;}
