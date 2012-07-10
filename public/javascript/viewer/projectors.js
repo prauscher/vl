@@ -2,7 +2,7 @@ var currentProjectorID = null;
 
 function configureProjector(projectorid) {
 	if (projectorid != currentProjectorID) {
-		if (currentProjectorID == null) {
+		if (currentProjectorID != null) {
 			apiClient.unregisterIdentifyProjector();
 			apiClient.unregisterProjector(projectorid);
 			currentProjectorID = null;
