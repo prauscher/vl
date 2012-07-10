@@ -9,7 +9,7 @@ function initBallot (ballotid, deleteCall) {
 					.append(" / ")
 					.append($("<input>").attr("type", "text").addClass("span1").addClass("maxvotes")) ) ) )
 		.append($("<button>").addClass("btn btn-success btn-mini").addClass("addOption").text("Option hinzufügen").click(function () {
-			apiClient.ballotAddOption(ballotid, generateID(), { title : prompt(), hidden : true });
+			apiClient.ballotAddOption(ballotid, generateID(), { title : "", hidden : true });
 		}))
 		.append($("<ol>").addClass("options").sortable({
 			handle : ".move",
