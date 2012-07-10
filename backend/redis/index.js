@@ -30,3 +30,4 @@ exports.motionclasses = require('./motionclasses.js');
 exports.pollsites = require('./pollsites.js');
 exports.elections = require('./elections.js');
 exports.ballots = require('./ballots.js');
+exports.options = require('./options.js');

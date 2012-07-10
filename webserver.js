@@ -119,7 +119,11 @@ exports.createServer = function () {
 		app.post('/elections/:electionid/deleteBallot',	generateCallback(routes.elections.deleteBallot) );
 
 		app.put('/ballots/:ballotid/save',	generateCallback(routes.ballots.save) );
-		app.post('/ballots/:ballotid/delete',	generateCallback(routes.ballots.delete) );
+		app.put('/ballots/:ballotid/addOption',		generateCallback(routes.ballots.addOption) );
+		app.post('/ballots/:ballotid/moveOption',	generateCallback(routes.ballots.moveOption) );
+		app.post('/ballots/:ballotid/deleteOption',	generateCallback(routes.ballots.deleteOption) );
+
+		app.put('/options/:optionid/save',	generateCallback(routes.options.save) );
 
 		app.put('/pollsites/:pollsiteid/save',		generateCallback(routes.pollsites.save) );
 		app.post('/pollsites/:pollsiteid/delete',	generateCallback(routes.pollsites.delete) );

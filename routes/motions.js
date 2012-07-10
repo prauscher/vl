@@ -9,7 +9,6 @@ exports.move = backendRouter.generateMove(backend.motions, "motionid", "classid"
 exports.delete = backendRouter.generateDelete(backend.motions, "motionid");
 
 exports.addBallot = function (req, res) {
-	console.log("ADD");
 	backend.motions.addBallot(req.params.motionid, req.body.ballotid, req.body.ballot, function() {
 		res.send(200);
 	});

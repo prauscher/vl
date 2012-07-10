@@ -6,3 +6,4 @@ exports.motions = require('./motions.js');
 exports.pollsites = require('./pollsites.js');
 exports.elections = require('./elections.js');
 exports.ballots = require('./ballots.js');
+exports.options = require('./options.js');
