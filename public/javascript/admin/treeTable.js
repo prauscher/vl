@@ -27,7 +27,7 @@ $.widget("ui.treeTable", {
 				}
 				var position = ui.item.parent().children("." + self.prefix + type).index(ui.item);
 
-				self.options.move(id, parentid, position, type, parenttype);			
+				return self.options.move(id, parentid, position, type, parenttype);
 			}
 		});
 	},
