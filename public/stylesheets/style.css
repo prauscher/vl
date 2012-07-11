@@ -72,3 +72,6 @@ body
 	{background-position:-288px -120px;}
 #projector-scroll-down
 	{background-position:-313px -119px;}
+
+ol.line-numbers li { color: teal; font: 90% monospace }
+ol.line-numbers li span { color: black; font: 111% sans-serif }

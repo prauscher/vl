@@ -82,6 +82,15 @@ function clearView() {
 	$('#content .content-ballot').hide();
 }
 
+function numberLines(text) {
+	var lines = text.split("\n");
+	var tag = $("<ol>").addClass("line-numbers");
+	$.each(lines, function(idx, line) {
+	        tag.append($("<li>").append($("<span>").text(line)));
+	});
+	return tag;
+}
+
 function showView(type, options) {
 	clearView();
 
@@ -99,7 +108,7 @@ function showView(type, options) {
 	if (type == "motion") {
 		$('#title').text(options.motion.title);
 		$(".motionid").text(options.motionid);
-		$(".motion-text").text(options.motion.text);
+		$(".motion-text").append(numberLines(options.motion.text));
 		$(".motion-argumentation").text(options.motion.argumentation);
 		$(".motion-submitter").text(options.motion.submitter);
 		$(".motion-status *").hide();
