@@ -1,17 +1,7 @@
-var currentSlideID = null;
-var currentMotionID = null;
-var currentElectionID = null;
-var currentBallotID = null;
-
-var projectorScroll = 0;
-var projectorZoom = 1;
-
-function resetView() {
-	$("#error").hide();
-	$("#waiting").show();
-}
+var currentProjectorID = null;
 
 function configureProjector(projectorid) {
+<<<<<<< HEAD
 	configureSlide();
 	if (projectorid) {
 		resetView();
@@ -146,51 +136,25 @@ function updateCurrentTime() {
 	var minutes = now.getMinutes();
 	if (minutes < 10) {
 		minutes = "0" + minutes;
+	if (projectorid != currentProjectorID) {
+		if (currentProjectorID != null) {
+			apiClient.unregisterIdentifyProjector();
+			apiClient.unregisterProjector(projectorid);
+			currentProjectorID = null;
+		}
+		configureSlide();
+		if (projectorid) {
+			resetView();
+			$("#timers").empty();
+			apiClient.registerIdentifyProjector();
+			apiClient.registerProjector(projectorid);
+		}
 	}
-	$("#currentTime").text("⌚ " + hours + ":" + minutes);
-}
-
-function showError(message, notes) {
-	$("#error .message").text(message);
-	$("#error .notes").text(notes);
-	$("#error").show();
-	$("#waiting").hide();
 }
 
 $(function () {
-	apiClient.on('updateSlide', function (slideid, slide) {
-		$("#waiting").fadeOut(300);
-	});
-	apiClient.on('error:slideNotFound', function (slideid) {
-		showError("Die Folie wurde nicht gefunden");
-	});
-
-	apiClient.on('updateProjector', function (projectorid, projector) {
-		$("#waiting").fadeOut(300);
-	});
 	apiClient.on('error:projectorNotFound', function (projectorid) {
 		showError("Der Projector wurde nicht gefunden");
-	});
-
-	apiClient.on('updateMotion', function (motionid, motion) {
-		$("#waiting").fadeOut(300);
-	});
-	apiClient.on('error:motionNotFound', function (motionid) {
-		showError("Der Antrag wurde nicht gefunden");
-	});
-
-	apiClient.on('updateElection', function (electionid, election) {
-		$("#waiting").fadeOut(300);
-	});
-	apiClient.on('error:electionNotFound', function (electionid) {
-		showError("Die Wahl wurde nicht gefunden");
-	});
-
-	apiClient.on('updateBallot', function (ballotid, ballot) {
-		$("#waiting").fadeOut(300);
-	});
-	apiClient.on('error:ballotNotFound', function (ballotid) {
-		showError("Der Wahlgang wurde nicht gefunden");
 	});
 
 	apiClient.on("updateProjector", function (projectorid, projector) {
@@ -203,44 +167,8 @@ $(function () {
 		$("#identify").css("background-color", projector.color).text(projector.title);
 	});
 
-	apiClient.on("updateSlide", function (slideid, slide) {
-		if (slideid == currentSlideID) {
-			if (slide.type == 'text') {
-				showView("text", { title: slide.title, text: slide.text });
-			}
-			if (slide.type == 'html') {
-				showView("html", { title: slide.title, html: slide.html });
-			}
-			if (slide.type == 'agenda') {
-				showView("agenda", { title: slide.title });
-			}
-			if (slide.type == 'motion') {
-				configureMotion(slide.motionid);
-			}
-			if (slide.type == 'election') {
-				configureElection(slide.electionid);
-			}
-			if (slide.type == 'ballot') {
-				configureBallot(slide.ballotid);
-			}
-		} else {
-			$("#content .content-agenda #agenda-" + slideid).text(slide.title).toggleClass("done", slide.isdone == "true").toggle(slide.hidden != "true");
-		}
-	});
-
-	apiClient.on("initSlide", function (slideid, parentid, position) {
-		if (parentid == currentSlideID) {
-			var item = $("<li>").attr("id", "agenda-" + slideid);
-			if (position == 0) {
-				$("#content .content-agenda").prepend(item);
-			} else {
-				$("#content .content-agenda>li:eq(" + (position - 1) + ")").after(item);
-			}
-		}
-	});
-
-	apiClient.on("deleteSlide", function (slideid) {
-		$("#content .content-agenda #agenda-" + slideid).remove();
+	apiClient.on("deleteProjector", function (projectorid) {
+		showError("Der Projector wurde gelöscht");
 	});
 
 	apiClient.on("identifyProjector", function (timeout) {
@@ -248,10 +176,6 @@ $(function () {
 		window.setTimeout(function () {
 			$("#identify").fadeOut(300);
 		}, timeout * 1000);
-	});
-
-	apiClient.on("deleteProjector", function (projectorid) {
-		showError("Der Projector wurde gelöscht");
 	});
 
 	apiClient.on("flashProjector", function (projectorid, flash) {
@@ -285,8 +209,7 @@ $(function () {
 	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
 		this.registerTimer(timerid);
 		if ($("#timers #timer-" + timerid).length < 1) {
-			var timerContainer = $("<div>").attr("id", "timer-" + timerid);
-			timerContainer.addClass("timer");
+			var timerContainer = $("<div>").attr("id", "timer-" + timerid).addClass("timer");
 
 			// Insert hidden to allow effects
 			timerContainer.hide();
@@ -300,55 +223,4 @@ $(function () {
 		this.unregisterTimer(timerid);
 		$("#timers #timer-" + timerid).hide();
 	});
-
-	apiClient.on("updateMotion", function (motionid, motion) {
-		showView("motion", { motionid: motionid, motion: motion });
-	});
-
-	apiClient.on("updateElection", function (electionid, election) {
-		showView("election", { electionid: electionid, election: election });
-	});
-
-	apiClient.on("updateBallot", function (ballotid, ballot) {
-		showView("ballot", { ballotid: ballotid, ballot: ballot });
-	});
-
-	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
-		var item = $("<li>").addClass("option-" + optionid)
-			.append($("<span>").addClass("title"));
-
-		if (position == 0) {
-			$(".ballot-options").prepend(item);
-		} else {
-			$(".ballot-options li:eq(" + (position-1) + ")").after(item);
-		}
-	});
-
-	apiClient.on("updateOption", function (optionid, option) {
-		$(".ballot-options .option-" + optionid).toggle(option.hidden != "true")
-		$(".ballot-options .option-" + optionid + " .title").text(option.title);
-	});
-
-	apiClient.on("deleteOption", function (optionid) {
-		$(".ballot-options .option-" + optionid).remove();
-	});
-
-	$("#projector-reset").click(function() {
-		setViewerData(0, 1);
-	});
-	$("#projector-zoom-in").click(function () {
-		setViewerData(projectorScroll, projectorZoom * 1.1);
-	});
-	$("#projector-zoom-out").click(function () {
-		setViewerData(projectorScroll, projectorZoom / 1.1);
-	});
-	$("#projector-scroll-up").click(function () {
-		setViewerData(projectorScroll - 1, projectorZoom);
-	});
-	$("#projector-scroll-down").click(function () {
-		setViewerData(projectorScroll + 1, projectorZoom);
-	});
-
-	updateCurrentTime();
-	window.setInterval(updateCurrentTime, 1000);
 });
