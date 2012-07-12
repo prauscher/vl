@@ -74,4 +74,6 @@ body
 	{background-position:-313px -119px;}
 
 .line-numbers .number
-	{display:inline-block; color: teal; font: 90% monospace; width:1.5em; text-align:right; margin-right:0.5em;}
+	{display:block; color: teal; font: 90% monospace; width:1.5em; text-align:right; margin-right:0.5em; float:left;}
+.line-numbers .line
+	{display:block; margin-left:1.5em;}
