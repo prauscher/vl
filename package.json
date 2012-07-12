@@ -1,12 +1,13 @@
 {
-   "name": "versammlungsleiter",
-   "version": "0.0.1",
-   "private": true,
-   "dependencies": {
-      "redis": "",
-      "jade": "",
-      "express": "<3.0",
-      "ws": "",
-      "socket.io": ""
-   }
+	"name": "versammlungsleiter",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"redis": "",
+		"jade": "",
+		"express": "<3.0",
+		"ws": "",
+		"socket.io": "",
+		"node-minify": ""
+	}
 }

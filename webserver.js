@@ -4,6 +4,7 @@
 
 var config = require('./config.js'),
     express = require('express'),
+    compressor = require('node-minify'),
     socket = require('./socket.js');
 
 exports.createServer = function () {
@@ -23,7 +24,7 @@ exports.createServer = function () {
 		app.use(express.cookieParser());
 		app.use(express.session({ secret: "UsMohsaEkB14iwuterECSv29HEbJ407h" }));
 		app.use(app.router);
-		app.use(express.static(__dirname + '/public'));
+		app.use(express.static(__dirname + '/public', { maxAge: 24*60*60 }));
 	});
 
 	app.configure('development', function(){
@@ -117,6 +118,89 @@ exports.createServer = function () {
 	// Showtime!
 
 	app.start = function() {
+		new compressor.minify({
+			type: 'no-compress',
+			fileIn: [
+				"public/libs/jquery-miniColors/jquery.miniColors.css",
+				"public/libs/bootstrap/css/bootstrap.min.css",
+				"public/libs/bootstrap/css/bootstrap-responsive.min.css",
+				"public/stylesheets/admin.css"
+			],
+			fileOut: "public/min/admin.css"
+		});
+
+		new compressor.minify({
+			type: 'uglifyjs',
+			fileIn: [
+				"public/libs/jquery-1.7.2.min.js",
+				"public/libs/jquery-ui-1.8.21.custom.min.js",
+				"public/libs/jquery.mjs.nestedSortable.js",
+				"public/libs/jquery-miniColors/jquery.miniColors.min.js",
+				"public/libs/jquery.cookie.js",
+				"public/libs/bootstrap/js/bootstrap.min.js",
+				"public/javascript/timerClient.js",
+				"public/apiClient/index.js",
+				"public/apiClient/projectors.js",
+				"public/apiClient/agenda.js",
+				"public/apiClient/timers.js",
+				"public/apiClient/motionclasses.js",
+				"public/apiClient/motions.js",
+				"public/apiClient/pollsites.js",
+				"public/apiClient/elections.js",
+				"public/apiClient/ballots.js",
+				"public/apiClient/options.js",
+				"public/javascript/admin/treeTable.js",
+				"public/javascript/admin/selectProjector.js",
+				"public/javascript/admin/index.js",
+				"public/javascript/admin/navigation.js",
+				"public/javascript/admin/projectors.js",
+				"public/javascript/admin/flashmessages.js",
+				"public/javascript/admin/agenda.js",
+				"public/javascript/admin/timers.js",
+				"public/javascript/admin/motions.js",
+				"public/javascript/admin/pollsites.js",
+				"public/javascript/admin/elections.js",
+				"public/javascript/admin/ballots.js"
+			],
+			fileOut: "public/min/admin.js"
+		});
+
+		new compressor.minify({
+			type: 'no-compress',
+			fileIn: [
+				"public/stylesheets/showProjector.css"
+			],
+			fileOut: "public/min/showProjector.css"
+		});
+
+		new compressor.minify({
+			type: 'uglifyjs',
+			fileIn: [
+				"public/libs/jquery-1.7.2.min.js",
+				"public/apiClient/index.js",
+				"public/apiClient/projectors.js",
+				"public/apiClient/agenda.js",
+				"public/apiClient/timers.js",
+				"public/apiClient/motionclasses.js",
+				"public/apiClient/motions.js",
+				"public/apiClient/elections.js",
+				"public/apiClient/ballots.js",
+				"public/apiClient/options.js",
+				"public/javascript/timerClient.js",
+				"public/javascript/viewer/index.js",
+				"public/javascript/viewer/navigation.js",
+				"public/javascript/viewer/viewerdata.js",
+				"public/javascript/viewer/currenttime.js",
+				"public/javascript/viewer/defaultprojector.js",
+				"public/javascript/viewer/projectors.js",
+				"public/javascript/viewer/agenda.js",
+				"public/javascript/viewer/motions.js",
+				"public/javascript/viewer/elections.js",
+				"public/javascript/viewer/ballots.js"
+			],
+			fileOut: "public/min/showProjector.js"
+		});
+
 		app.listen(config.port, config.host, function() {
 			if (process.getuid() == 0) {
 				process.setgid(config.setgid);

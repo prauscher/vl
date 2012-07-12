@@ -61,7 +61,7 @@ body
 	{background-color:#468847;}
 
 #projector-controls>*
-	{width:14px; height:14px; background-image:url(/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
+	{width:14px; height:14px; background-image:url(/libs/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
 #projector-reset
 	{background-position:-216px -24px;}
 #projector-zoom-in
