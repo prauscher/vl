@@ -49,16 +49,6 @@ exports.createServer = function () {
 			res.render('showProjector', {});
 		});
 
-		app.get('/projectors/:projectorid', routes.projectors.showProjector);
-
-		app.get('/slides/:slideid', routes.agenda.showSlide);
-
-		app.get('/motions/:motionid', routes.motions.showMotion);
-
-		app.get('/elections/:electionid', routes.elections.showElection);
-
-		app.get('/ballots/:ballotid', routes.ballots.showBallot);
-
 		global.projectorSocket	= io.registerProjector();
 		global.timerSocket	= io.registerTimers();
 		global.agendaSocket	= io.registerAgenda();

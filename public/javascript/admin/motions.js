@@ -72,7 +72,7 @@ $(function () {
 			title: $("<span>"),
 			options: $("<span>")
 				.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer"))
-				.append($("<a>").attr("href", "/motions/" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
+				.append($("<a>").attr("href", "/projector#motion-" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
 

@@ -62,7 +62,7 @@ $(function () {
 				.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
 				.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
 				.append($("<i>").addClass("icon-chevron-down").addClass("scroll-down").attr("title", "Hinabscrollen"))
-				.append($("<a>").attr("href","/projectors/" + projectorid).append($("<i>").addClass("icon-play-circle").attr("title", "Projector öffnen"))) ) );
+				.append($("<a>").attr("href","/projector#projector-" + projectorid).append($("<i>").addClass("icon-play-circle").attr("title", "Projector öffnen"))) ) );
 	});
 
 	apiClient.on("updateProjector", function(projectorid, projector) {

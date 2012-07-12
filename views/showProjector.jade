@@ -16,6 +16,7 @@ html
 		script(src='/apiClient/options.js')
 		script(src='/javascript/timerClient.js')
 		script(src='/javascript/viewer/index.js')
+		script(src='/javascript/viewer/navigation.js')
 		script(src='/javascript/viewer/viewerdata.js')
 		script(src='/javascript/viewer/currenttime.js')
 		script(src='/javascript/viewer/defaultprojector.js')
@@ -79,28 +80,3 @@ html
 		script(type="text/javascript")
 			var apiClient = new APIClient();
 			TimerClient(apiClient);
-
-		- if (typeof projectorid != 'undefined')
-			script(type="text/javascript")
-				configureProjector('#{projectorid}');
-				$("#projector-controls").hide();
-		- else if (typeof slideid != 'undefined')
-			script(type="text/javascript")
-				configureSlide('#{slideid}');
-				$("#projector-controls").show();
-		- else if (typeof motionid != 'undefined')
-			script(type="text/javascript")
-				configureMotion('#{motionid}');
-				$("#projector-controls").show();
-		- else if (typeof electionid != 'undefined')
-			script(type="text/javascript")
-				configureElection('#{electionid}');
-				$("#projector-controls").show();
-		- else if (typeof ballotid != 'undefined')
-			script(type="text/javascript")
-				configureBallot('#{ballotid}');
-				$("#projector-controls").show();
-		- else
-			script(type="text/javascript")
-				configureDefaultProjector(true);
-				$("#projector-controls").hide();

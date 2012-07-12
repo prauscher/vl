@@ -1,9 +1,5 @@
 var backendRouter = require('./backend.js');
 
-exports.showBallot = function (req, res) {
-	res.render('showProjector', { ballotid : req.params.ballotid });
-}
-
 exports.save = backendRouter.generateSave(backend.ballots, "ballotid", "ballot");
 
 exports.addOption = function (req, res) {
