@@ -1,7 +1,6 @@
 var currentProjectorID = null;
 
 function configureProjector(projectorid) {
-<<<<<<< HEAD
 	configureSlide();
 	if (projectorid) {
 		resetView();
