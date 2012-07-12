@@ -22,5 +22,4 @@ $(function () {
 	apiClient.on("updateMotion", function (motionid, motion) {
 		showView("motion", { motionid: motionid, motion: motion });
 	});
-
 });

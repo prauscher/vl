@@ -1,8 +1,10 @@
 function numberLines(text) {
 	var lines = text.split("\n");
-	var tag = $("<ol>").addClass("line-numbers");
+	var tag = $("<div>").addClass("line-numbers");
 	$.each(lines, function(idx, line) {
-		tag.append($("<li>").append($("<span>").text(line)));
+		tag.append($("<div>")
+			.append($("<span>").addClass("number").text(idx+1))
+			.append($("<span>").addClass("line").text(line)) );
 	});
 	return tag;
 }
