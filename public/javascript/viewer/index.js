@@ -43,7 +43,7 @@ function showView(type, options) {
 	if (type == "motion") {
 		$('#title').text(options.motion.title);
 		$(".motionid").text(options.motionid);
-		$(".motion-text").append(numberLines(options.motion.text));
+		$(".motion-text").empty().append(numberLines(options.motion.text));
 		$(".motion-argumentation").text(options.motion.argumentation);
 		$(".motion-submitter").text(options.motion.submitter);
 		$(".motion-status *").hide();
