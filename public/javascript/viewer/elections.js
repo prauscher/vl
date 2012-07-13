@@ -16,10 +16,14 @@ function configureElection(electionid) {
 
 $(function () {
 	apiClient.on('error:electionNotFound', function (electionid) {
-		showError("Die Wahl wurde nicht gefunden");
+		if (electionid == currentElectionID) {
+			showError("Die Wahl wurde nicht gefunden");
+		}
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {
-		showView("election", { electionid: electionid, election: election });
+		if (electionid == currentElectionID) {
+			showView("election", { electionid: electionid, election: election });
+		}
 	});
 });

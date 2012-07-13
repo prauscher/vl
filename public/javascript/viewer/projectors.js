@@ -13,27 +13,34 @@ function configureProjector(projectorid) {
 			$("#timers").empty();
 			apiClient.registerIdentifyProjector();
 			apiClient.registerProjector(projectorid);
+			currentProjectorID = projectorid;
 		}
 	}
 }
 
 $(function () {
 	apiClient.on('error:projectorNotFound', function (projectorid) {
-		showError("Der Projector wurde nicht gefunden");
+		if (projectorid == currentProjectorID) {
+			showError("Der Projector wurde nicht gefunden");
+		}
 	});
 
 	apiClient.on("updateProjector", function (projectorid, projector) {
-		if (projector.currentslideid) {
-			configureSlide(projector.currentslideid);
-		} else {
-			showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
+		if (projectorid == currentProjectorID) {
+			if (projector.currentslideid) {
+				configureSlide(projector.currentslideid);
+			} else {
+				showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
+			}
+			setViewerData(projector.scroll, projector.zoom);
+			$("#identify").css("background-color", projector.color).text(projector.title);
 		}
-		setViewerData(projector.scroll, projector.zoom);
-		$("#identify").css("background-color", projector.color).text(projector.title);
 	});
 
 	apiClient.on("deleteProjector", function (projectorid) {
-		showError("Der Projector wurde gelöscht");
+		if (projectorid == currentProjectorID) {
+			showError("Der Projector wurde gelöscht");
+		}
 	});
 
 	apiClient.on("identifyProjector", function (timeout) {
@@ -44,19 +51,21 @@ $(function () {
 	});
 
 	apiClient.on("flashProjector", function (projectorid, flash) {
-		var flashContainer = $("<div>")
-			.addClass("flash-" + flash.type)
-			.text(flash.text);
+		if (projectorid == currentProjectorID) {
+			var flashContainer = $("<div>")
+				.addClass("flash-" + flash.type)
+				.text(flash.text);
 
-		window.setTimeout(function () {
-			flashContainer.slideUp(300);
-		}, flash.timeout * 1000);
+			window.setTimeout(function () {
+				flashContainer.slideUp(300);
+			}, flash.timeout * 1000);
 
-		// Insert hidden to allow effects
-		flashContainer.hide();
-		$("#flashs").append(flashContainer);
+			// Insert hidden to allow effects
+			flashContainer.hide();
+			$("#flashs").append(flashContainer);
 
-		flashContainer.show(300);
+			flashContainer.show(300);
+		}
 	});
 
 	apiClient.on("updateTimer", function (timerid, timer) {
@@ -72,20 +81,24 @@ $(function () {
 	});
 
 	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
-		this.registerTimer(timerid);
-		if ($("#timers #timer-" + timerid).length < 1) {
-			var timerContainer = $("<div>").attr("id", "timer-" + timerid).addClass("timer");
+		if (projectorid == currentProjectorID) {
+			this.registerTimer(timerid);
+			if ($("#timers #timer-" + timerid).length < 1) {
+				var timerContainer = $("<div>").attr("id", "timer-" + timerid).addClass("timer");
 
-			// Insert hidden to allow effects
-			timerContainer.hide();
-			$("#timers").append(timerContainer);
+				// Insert hidden to allow effects
+				timerContainer.hide();
+				$("#timers").append(timerContainer);
+			}
+			this.callCallback("updateTimer", [ timerid, timer ] );
+			$("#timers #timer-" + timerid).show();
 		}
-		this.callCallback("updateTimer", [ timerid, timer ] );
-		$("#timers #timer-" + timerid).show();
 	});
 
 	apiClient.on("hideTimerProjector", function (projectorid, timerid, timer) {
-		this.unregisterTimer(timerid);
-		$("#timers #timer-" + timerid).hide();
+		if (projectorid == currentProjectorID) {
+			this.unregisterTimer(timerid);
+			$("#timers #timer-" + timerid).hide();
+		}
 	});
 });

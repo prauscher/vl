@@ -20,7 +20,9 @@ function configureSlide(slideid) {
 
 $(function () {
 	apiClient.on('error:slideNotFound', function (slideid) {
-		showError("Die Folie wurde nicht gefunden");
+		if (slideid == currentSlideID) {
+			showError("Die Folie wurde nicht gefunden");
+		}
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {

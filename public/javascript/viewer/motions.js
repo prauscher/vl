@@ -16,10 +16,14 @@ function configureMotion(motionid) {
 
 $(function () {
 	apiClient.on('error:motionNotFound', function (motionid) {
-		showError("Der Antrag wurde nicht gefunden");
+		if (motionid == currentMotionID) {
+			showError("Der Antrag wurde nicht gefunden");
+		}
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		showView("motion", { motionid: motionid, motion: motion });
+		if (motionid == currentMotionID) {
+			showView("motion", { motionid: motionid, motion: motion });
+		}
 	});
 });

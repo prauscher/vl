@@ -17,21 +17,27 @@ function configureBallot(ballotid) {
 
 $(function () {
 	apiClient.on('error:ballotNotFound', function (ballotid) {
-		showError("Der Wahlgang wurde nicht gefunden");
+		if (ballotid == currentBallotID) {
+			showError("Der Wahlgang wurde nicht gefunden");
+		}
 	});
 
 	apiClient.on("updateBallot", function (ballotid, ballot) {
-		showView("ballot", { ballotid: ballotid, ballot: ballot });
+		if (ballotid == currentBallotID) {
+			showView("ballot", { ballotid: ballotid, ballot: ballot });
+		}
 	});
 
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
-		var item = $("<li>").addClass("option-" + optionid)
-			.append($("<span>").addClass("title"));
+		if (ballotid == currentBallotID) {
+			var item = $("<li>").addClass("option-" + optionid)
+				.append($("<span>").addClass("title"));
 
-		if (position == 0) {
-			$(".ballot-options").prepend(item);
-		} else {
-			$(".ballot-options li:eq(" + (position-1) + ")").after(item);
+			if (position == 0) {
+				$(".ballot-options").prepend(item);
+			} else {
+				$(".ballot-options li:eq(" + (position-1) + ")").after(item);
+			}
 		}
 	});
 
