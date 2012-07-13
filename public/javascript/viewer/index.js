@@ -1,10 +1,12 @@
 function numberLines(text) {
+	// Append a whitespace. When .line is empty, it will show two linenumbers in one line
 	var lines = text.split("\n");
 	var tag = $("<div>").addClass("line-numbers");
 	$.each(lines, function(idx, line) {
 		tag.append($("<div>")
 			.append($("<span>").addClass("number").text(idx+1))
-			.append($("<span>").addClass("line").text(line)) );
+			.append($("<span>").addClass("line").text(line))
+			.append($("<span>").html("&nbsp;")) );
 	});
 	return tag;
 }
