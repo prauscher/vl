@@ -24,7 +24,7 @@ exports.createServer = function () {
 		app.use(express.cookieParser());
 		app.use(express.session({ secret: "UsMohsaEkB14iwuterECSv29HEbJ407h" }));
 		app.use(app.router);
-		app.use(express.static(__dirname + '/public', { maxAge: 24*60*60 }));
+		app.use(express.static(__dirname + '/public', { maxAge: 24*60*60*1000 }));
 	});
 
 	app.configure('development', function(){
