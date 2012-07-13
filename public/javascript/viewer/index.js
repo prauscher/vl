@@ -73,4 +73,5 @@ function showError(message, notes) {
 
 $(function () {
 	clearView();
+	$("#identify").hide();
 });
