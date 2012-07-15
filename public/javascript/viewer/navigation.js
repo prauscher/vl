@@ -1,5 +1,6 @@
-$(function () {
-	var parameters = location.hash.substr(1).split("-");
+function goToNavigation(hash) {
+	var parameters = hash.substr(1).split("-");
+	configureDefaultProjector(false);
 	switch (parameters.shift()) {
 	case "ballot":
 		configureBallot(parameters.join("-"));
@@ -26,4 +27,12 @@ $(function () {
 		$("#projector-controls").hide();
 		break;
 	}
+}
+
+$(function () {
+	window.onhashchange = function() {
+		goToNavigation(location.hash);
+	}
+
+	goToNavigation(location.hash);
 });
