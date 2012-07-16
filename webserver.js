@@ -130,9 +130,8 @@ exports.createServer = function () {
 		});
 
 		new compressor.minify({
-			type: 'uglifyjs',
+			type: 'no-compress',
 			fileIn: [
-				"public/libs/bootstrap/js/bootstrap.min.js",
 				"public/libs/jquery-1.7.2.min.js",
 				"public/libs/jquery-ui-1.8.21.custom.min.js",
 				"public/libs/jquery.mjs.nestedSortable.js",
@@ -140,6 +139,7 @@ exports.createServer = function () {
 				"public/libs/jquery.cookie.js",
 				"public/javascript/admin/treeTable.js",
 				"public/javascript/admin/selectProjector.js",
+				"public/libs/bootstrap/js/bootstrap.min.js",
 				"public/javascript/timerClient.js",
 				"public/apiClient/index.js",
 				"public/apiClient/projectors.js",

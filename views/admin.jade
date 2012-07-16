@@ -37,13 +37,37 @@ html
 
 		div.visible-desktop(style="width:100%;height:90px;")
 
-		div#ballot-list.modal
+		div#ballot.modal
 			div.modal-header
-				button.btn.btn-success.pull-right#new-ballot Wahlgang anlegen
-				h3 Wahlgänge
-			div.modal-body#ballot-list
+				button.close(data-dismiss="modal") ×
+				h3 Wahlgang anlegen
+			div.modal-body
+				form.form-horizontal.settings
+					.control-group
+						label.control-label Name
+						.controls
+							input(type="text")#title
+					.control-group
+						label.control-label Stimmen
+						.controls
+							input(type="text",disabled="disabled").span1#countedvotes
+							| / 
+							input(type="text").span1#maxvotes
+					.control-group
+						label.control-label Status
+						.controls
+							select#status
+								option(value="preparing") In Vorbereitung
+								option(value="voting") Im Wahlgang
+								option(value="counting") Auszählen
+								option(value="done") Ausgewertet
+				div.btn-toolbar
+					button.btn.btn-success.btn-mini.addOption Option hinzufügen
+				ol.options
 			div.modal-footer
+				button.btn.btn-danger.pull-left.delete Löschen
 				button.btn(data-dismiss="modal") Schließen
+				button.btn.btn-primary.save Speichern
 
 		div#flash-options.modal
 			div.modal-header

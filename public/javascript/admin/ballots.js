@@ -1,77 +1,88 @@
-function initBallot (ballotid, deleteCall) {
-	var item = $("<div>").addClass("well").addClass("ballot-" + ballotid)
-		.append($("<span>").addClass("close").text("×").addClass("delete").click(deleteCall))
-		.append($("<form>").addClass("form-horizontal")
-			.append($("<div>").addClass("control-group")
-				.append($("<label>").addClass("control-label").text("Name"))
-				.append($("<div>").addClass("controls")
-					.append($("<input>").attr("type", "text").addClass("title")) ) )
-			.append($("<div>").addClass("control-group")
-				.append($("<label>").addClass("control-label").text("Stimmen"))
-				.append($("<div>").addClass("controls")
-					.append($("<input>").attr("type", "text").addClass("span1").addClass("countedvotes").prop("disabled", true))
-					.append(" / ")
-					.append($("<input>").attr("type", "text").addClass("span1").addClass("maxvotes")) ) )
-			.append($("<div>").addClass("control-group")
-				.append($("<label>").addClass("control-label").text("Status"))
-				.append($("<div>").addClass("controls")
-					.append($("<select>").addClass("status")
-						.append($("<option>").attr("value", "preparing").text("In Vorbereitung"))
-						.append($("<option>").attr("value", "voting").text("Im Wahlgang"))
-						.append($("<option>").attr("value", "counting").text("Auszählen"))
-						.append($("<option>").attr("value", "done").text("Ausgewertet")) ) ) ) )
-		.append($("<div>").addClass("btn-toolbar")
-			.append($("<button>").addClass("btn btn-success btn-mini").addClass("addOption").text("Option hinzufügen").click(function () {
-				apiClient.ballotAddOption(ballotid, generateID(), { title : "", hidden : true });
-			}))
-		)
-		.append($("<ol>").addClass("options").sortable({
-			handle : ".move",
-			update : function (ev,ui) {
-				var optionid = ui.item.children(".id").text();
-				var position = ui.item.parent().children().index(ui.item);
+// vim:noet:sw=8:
 
-				apiClient.ballotMoveOption(ballotid, optionid, position);
-				return false;
-			}
-		}));
-	$("#ballot-list #ballot-list").append(item);
-}
+function ShowBallotList(options) {
+	var ballotLists = {};
 
-function generateShowBallotList (options) {
-	var currentID = null;
+	var showBallotOptions = generateShowOptionsModal({
+		modal : "#ballot",
+		fields : [
+			{ property : "title", field : "#title", type : "text" },
+			{ property : "maxvotes", field : "#maxvotes", type : "text" },
+			{ property : "status", field : "#status", type : "text" }
+		],
+		fillModal : function (modal, id, item) {
+			$(modal).addClass("ballot-" + id);
+			$(modal).find(".settings .countedvotes").val(item.countedvotes);
+			$(modal).find(".addOption").unbind("click").click(function () {
+				apiClient.ballotAddOption(id, generateID(), {
+					title : "",
+					hidden : true
+				});
+			});
+			$(modal).find(".options").empty().sortable({
+				handle : ".move",
+				update : function (ev,ui) {
+					var optionid = ui.item.children(".id").text();
+					var position = ui.item.parent().children().index(ui.item);
+
+					apiClient.ballotMoveOption(ballotid, optionid, position);
+					return false;
+				}
+			});
+		},
+		fillItem : function (modal, id, item) {
+			$(modal).removeClass("ballot-" + id);
+		},
+		saveCallback : apiClient.saveBallot,
+		deleteCallback : function (ballotid) {
+			options.deleteBallot(id, ballotid);
+		}
+	});
 
 	apiClient.on(options.initEvent, function (id, ballotid) {
-		if (id == currentID) {
-			initBallot(ballotid, function () {
-				options.deleteBallot(id, ballotid);
+		if (ballotLists[id]) {
+			var ballotItem = $("<li>").addClass("ballot-" + ballotid)
+				.append("<a>");
+			ballotLists[id].append(ballotItem);
+
+			apiClient.on("updateBallot", function (_ballotid, ballot) {
+				if (ballotid == _ballotid) {
+					ballotLists[id].children(".ballot-" + ballotid).unbind("click").click(function () {
+						showBallotOptions(ballotid, ballot);
+					});
+					ballotLists[id].children(".ballot-" + ballotid).children("a").text(ballot.title);
+				}
+			});
+
+			apiClient.on("deleteBallot", function (_ballotid) {
+				if (ballotid == _ballotid) {
+					ballotItem.remove();
+				}
 			});
 		}
 	});
 
-	return function (id) {
-		$("#ballot-list #ballot-list").empty();
-
-		$("#ballot-list").on("hide", function () {
-			options.unregisterBallots(id);
-			currentID = null;
-		});
+	this.generateButton = function (id) {
+		ballotLists[id] = $("<ul>").addClass("dropdown-menu")
+			.append($("<li>").append($("<a>").text("Hinzufügen").click(function () {
+				// Ballot must not be empty, else the system will think it does not exist
+				options.addBallot(id, generateID(), {
+					title : generateColor(),
+					countedvotes : 0,
+					maxvotes : 0,
+					status : "preparing"
+				});
+			}))
+			.append($("<li>").addClass("divider")) );
 		options.registerBallots(id);
-		currentID = id;
-		$("#ballot-list #new-ballot").unbind("click").click(function () {
-			// Ballot must not be empty, else the system will think it does not exist
-			options.addBallot(id, generateID(), {
-				countedvotes : 0,
-				maxvotes : 0,
-				status : "preparing"
-			});
-		});
 
-		$("#ballot-list").modal();
+		return $("<span>").addClass("dropdown")
+			.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer").attr("data-toggle", "dropdown"))
+			.append(ballotLists[id]);
 	}
 }
 
-$(function () {
+$(function() {
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
 		var item = $("<li>").addClass("option-" + optionid)
 			.append($("<i>").addClass("icon-move").addClass("move"))
@@ -84,50 +95,29 @@ $(function () {
 			}));
 
 		if (position == 0) {
-			$("#ballot-list #ballot-list .ballot-" + ballotid + " .options").prepend(item);
+			$("#ballot.ballot-" + ballotid + " .options").prepend(item);
 		} else {
-			$("#ballot-list #ballot-list .ballot-" + ballotid + " .options li:eq(" + (position-1) + ")").after(item);
+			$("#ballot.ballot-" + ballotid + " .options li:eq(" + (position-1) + ")").after(item);
 		}
 	});
 
 	apiClient.on("updateOption", function (optionid, option) {
-		$("#ballot-list #ballot-list .option-" + optionid + " .title").val(option.title).change(function () {
+		$("#ballot .option-" + optionid + " .title").val(option.title).change(function () {
 			option.title = $(this).val();
 			apiClient.saveOption(optionid, option);
 		});
 
-		$("#ballot-list #ballot-list .option-" + optionid + " .isvisible").unbind("click").toggle(option.hidden != "true").click(function () {
+		$("#ballot .option-" + optionid + " .isvisible").unbind("click").toggle(option.hidden != "true").click(function () {
 			option.hidden = true;
 			apiClient.saveOption(optionid, option);
 		});
-		$("#ballot-list #ballot-list .option-" + optionid + " .ishidden").unbind("click").toggle(option.hidden == "true").click(function () {
+		$("#ballot .option-" + optionid + " .ishidden").unbind("click").toggle(option.hidden == "true").click(function () {
 			option.hidden = false;
 			apiClient.saveOption(optionid, option);
 		});
 	});
 
 	apiClient.on("deleteOption", function (optionid) {
-		$("#ballot-list #ballot-list .option-" + optionid).remove();
-	});
-
-	apiClient.on("updateBallot", function (ballotid, ballot) {
-		$("#ballot-list #ballot-list .ballot-" + ballotid + " .title").val(ballot.title).unbind("click").change(function () {
-			ballot.title = $(this).val();
-			apiClient.saveBallot(ballotid, ballot);
-		});
-		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedvotes").val(ballot.countedvotes);
-		$("#ballot-list #ballot-list .ballot-" + ballotid + " .maxvotes").val(ballot.maxvotes).unbind("click").change(function () {
-			ballot.maxvotes = $(this).val();
-			apiClient.saveBallot(ballotid, ballot);
-		});
-
-		$("#ballot-list #ballot-list .ballot-" + ballotid + " .status").val(ballot.status).unbind("click").change(function () {
-			ballot.status = $(this).val();
-			apiClient.saveBallot(ballotid, ballot);
-		});
-	});
-
-	apiClient.on("deleteBallot", function (ballotid) {
-		$("#ballot-list #ballot-list .ballot-" + ballotid).remove();
+		$("#ballot .option-" + optionid).remove();
 	});
 });

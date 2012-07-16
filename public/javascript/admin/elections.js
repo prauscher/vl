@@ -2,12 +2,12 @@
 
 $(function () {
 	// Do not provide apiClient.(un)?register... directly, as this will lead to broken this-pointers in apiClient
-	var showElectionBallotList = generateShowBallotList({
+	var ballotList = new ShowBallotList({
 		initEvent : "initElectionBallot",
 		registerBallots : function (id) {
 			apiClient.registerElectionBallots(id);
 		},
-		unregisterBallots :  function (id) {
+		unregisterBallots : function (id) {
 			apiClient.unregisterElectionBallots(id);
 		},
 		addBallot : apiClient.electionAddBallot,
@@ -27,7 +27,7 @@ $(function () {
 		$("#elections #elections").append($("<tr>").attr("id", "election-" + electionid)
 			.append($("<td>").addClass("title").css("cursor", "pointer"))
 			.append($("<td>").addClass("options")
-				.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer"))
+				.append(ballotList.generateButton(electionid))
 				.append($("<a>").attr("href", "/projector#election-" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ));
 	});
 
@@ -36,9 +36,6 @@ $(function () {
 
 		$("#elections #election-" + electionid + " .title").unbind("click").click(function () {
 			showElectionOptions(electionid, election);
-		});
-		$("#elections #election-" + electionid + " .show-ballots").unbind("click").click(function () {
-			showElectionBallotList(electionid);
 		});
 	});
 

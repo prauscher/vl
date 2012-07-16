@@ -2,7 +2,7 @@
 
 $(function () {
 	// Do not provide apiClient.(un)?register... directly, as this will lead to broken this-pointers in apiClient
-	var showMotionBallotList = generateShowBallotList({
+	var ballotList = new ShowBallotList({
 		initEvent : "initMotionBallot",
 		registerBallots : function (id) {
 			apiClient.registerMotionBallots(id);
@@ -71,7 +71,7 @@ $(function () {
 			icon: $("<i>").addClass("icon").addClass("icon-file"),
 			title: $("<span>"),
 			options: $("<span>")
-				.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer"))
+				.append(ballotList.generateButton(motionid))
 				.append($("<a>").attr("href", "/projector#motion-" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
@@ -83,9 +83,6 @@ $(function () {
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		$("ol#motions").treeTable("get", "motion", motionid, "options").children(".show-ballots").unbind("click").click(function() {
-			showMotionBallotList(motionid);
-		});
 		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
 			showMotionOptions(motionid, motion);
 		});
