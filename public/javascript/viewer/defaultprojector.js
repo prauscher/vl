@@ -4,6 +4,7 @@ function configureDefaultProjector(useDefaultProjector) {
 	}
 	configureProjector();
 	if (useDefaultProjector) {
+		alert("muh");
 		resetView();
 		apiClient.registerDefaultProjector();
 	}
