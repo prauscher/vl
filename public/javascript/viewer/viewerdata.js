@@ -2,7 +2,14 @@ var projectorScroll = 0;
 var projectorZoom = 1;
 
 function setViewerData(scroll, zoom) {
+	if (!scroll) {
+		scroll = 0;
+	}
 	projectorScroll = scroll;
+
+	if (!zoom) {
+		zoom = 1;
+	}
 	projectorZoom = zoom;
 
 	$("#content").stop().animate({
@@ -13,7 +20,7 @@ function setViewerData(scroll, zoom) {
 
 $(function () {
 	$("#projector-reset").click(function() {
-		setViewerData(0, 1);
+		setViewerData();
 	});
 	$("#projector-zoom-in").click(function () {
 		setViewerData(projectorScroll, projectorZoom * 1.1);

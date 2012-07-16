@@ -1,5 +1,7 @@
 function goToNavigation() {
 	configureDefaultProjector(false);
+	setViewerData();
+
 	var parameters = location.hash.substr(1).split("-");
 	switch (parameters.shift()) {
 	case "ballot":
