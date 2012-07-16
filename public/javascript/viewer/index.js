@@ -59,6 +59,7 @@ function showView(type, options) {
 		$('#content .content-election').show();
 	}
 	if (type == "ballot") {
+		$('#title').text(options.ballot.title);
 		$('.ballot-maxvotes').text(options.ballot.maxvotes);
 		$('.ballot-status *').hide();
 		$('.ballot-status .status-' + options.ballot.status).show();
