@@ -38,13 +38,18 @@ $(function () {
 				showView("agenda", { title: slide.title });
 				break;
 			case 'motion':
-				configureMotion(slide.motionid);
+				if (slide.motionBallotid != "") {
+					configureBallot(slide.motionBallotid);
+				} else {
+					configureMotion(slide.motionid);
+				}
 				break;
 			case 'election':
-				configureElection(slide.electionid);
-				break;
-			case 'ballot':
-				configureBallot(slide.ballotid);
+				if (slide.electionBallotid != "") {
+					configureBallot(slide.electionBallotid);
+				} else {
+					configureElection(slide.electionid);
+				}
 				break;
 			}
 		}

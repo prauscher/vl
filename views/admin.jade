@@ -152,8 +152,6 @@ html
 							li
 								a(data-toggle="tab",href="#slidecontent-election").slidecontent-election Wahl
 							li
-								a(data-toggle="tab",href="#slidecontent-ballot").slidecontent-ballot Wahlgang
-							li
 								a(data-toggle="tab",href="#slidecontent-agenda").slidecontent-agenda Agenda
 						div.tab-content
 							div.tab-pane#slidecontent-text
@@ -162,12 +160,12 @@ html
 								textarea#slidecontent-html-html
 							div.tab-pane#slidecontent-motion
 								select#slidecontent-motion-motionid
+								select#slidecontent-motion-ballotid
 							div.tab-pane#slidecontent-election
 								select#slidecontent-election-electionid
-							div.tab-pane#slidecontent-ballot
-								input(type="text")#slidecontent-ballot-ballotid
+								select#slidecontent-election-ballotid
 							div.tab-pane#slidecontent-agenda
-								| Die Folie zeigt die komplette Tagesordnung.
+								| Die Folie listet die untergeordneten Punkte auf.
 				div.modal-footer
 					button.btn.btn-danger.pull-left.delete#delete-slide Löschen
 					button.btn(data-dismiss="modal") Schließen

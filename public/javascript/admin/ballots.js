@@ -8,7 +8,7 @@ function ShowBallotList(options) {
 		fields : [
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "maxvotes", field : "#maxvotes", type : "text" },
-			{ property : "status", field : "#status", type : "text" }
+			{ property : "status", field : "#status", type : "select" }
 		],
 		fillModal : function (modal, id, item) {
 			$(modal).addClass("ballot-" + id);

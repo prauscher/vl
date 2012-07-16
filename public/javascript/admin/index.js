@@ -45,6 +45,8 @@ function generateShowOptionsModal(options) {
 					object.val(formatTime(item[field.property]));
 				} else if (field.type == "color") {
 					object.val(item[field.property]).miniColors();
+				} else if (field.type == "select") {
+					object.val(item[field.property]).attr("data-initValue", item[field.property]);
 				}
 			}
 		}

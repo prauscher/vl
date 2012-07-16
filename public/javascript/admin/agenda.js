@@ -9,14 +9,34 @@ $(function () {
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "text", field : "#slidecontent-text-text", type : "text" },
 			{ property : "html", field : "#slidecontent-html-html", type : "text" },
-			{ property : "motionid", field : "#slidecontent-motion-motionid", type : "text" },
-			{ property : "electionid", field : "#slidecontent-election-electionid", type : "text" },
-			{ property : "ballotid", field : "#slidecontent-ballot-ballotid", type : "text" }
+			{ property : "motionid", field : "#slidecontent-motion-motionid", type : "select" },
+			{ property : "motionBallotid", field : "#slidecontent-motion-ballotid", type : "select" },
+			{ property : "electionid", field : "#slidecontent-election-electionid", type : "select" },
+			{ property : "electionBallotid", field : "#slidecontent-election-ballotid", type : "select" }
 		],
 		fillModal : function (modal, id, item) {
 			$(modal).find(".nav .slidecontent-" + item.type).tab('show');
 			$(modal).find(".nav a").unbind("show").on("show", function (e) {
 				item.type = e.target.className.split("-").pop();
+			});
+
+			function dropdownBallot(parentDropdown, ballotDropdown, register) {
+				$(modal).find(parentDropdown)
+					.unbind("change").change(function () {
+						$(modal).find(ballotDropdown)
+							.removeClass()
+							.addClass("selected-" + $(this).val())
+							.empty()
+							.append($("<option>").attr("value", "").text("(kein)"));
+						register($(this).val());
+					})
+					.change();
+			}
+			dropdownBallot("#slidecontent-motion-motionid", "#slidecontent-motion-ballotid", function (id) {
+				apiClient.registerMotionBallots(id);
+			});
+			dropdownBallot("#slidecontent-election-electionid", "#slidecontent-election-ballotid", function (id) {
+				apiClient.registerElectionBallots(id);
 			});
 		},
 		fillItem : function (modal, id, item) {
@@ -28,16 +48,30 @@ $(function () {
 			}
 			if (item.type != "motion") {
 				delete item.motionid;
+				delete item.motionBallotid;
 			}
 			if (item.type != "election") {
 				delete item.electionid;
-			}
-			if (item.type != "ballot") {
-				delete item.ballotid;
+				delete item.electionBallotid;
 			}
 		},
 		saveCallback : apiClient.saveSlide,
 		deleteCallback : apiClient.deleteSlide
+	});
+
+	function generateAddBallotDropdown(ballotDropdown) {
+		return function (id, ballotid) {
+			$("#agenda #options").find(ballotDropdown).filter(".selected-" + id)
+				.append($("<option>").attr("value",ballotid).addClass("ballot-" + ballotid))
+				.val($("#agenda #options").find(ballotDropdown).filter(".selected-" + id).attr("data-initValue"));
+		}
+	}
+
+	apiClient.on("initMotionBallot", generateAddBallotDropdown("#slidecontent-motion-ballotid"));
+	apiClient.on("initElectionBallot", generateAddBallotDropdown("#slidecontent-election-ballotid"));
+
+	apiClient.on("updateBallot", function (ballotid, ballot) {
+		$("#agenda #options").find(".ballot-" + ballotid).text(ballot.title);
 	});
 
 	$("#agenda ol#slides").treeTable({

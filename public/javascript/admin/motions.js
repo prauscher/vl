@@ -29,7 +29,7 @@ $(function () {
 		fields : [
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "submitter", field : "#submitter", type : "text" },
-			{ property : "status", field : "#status", type : "text" },
+			{ property : "status", field : "#status", type : "select" },
 			{ property : "text", field : "#text", type : "text" },
 			{ property : "argumentation", field : "argumentation", type : "text" }
 		],
