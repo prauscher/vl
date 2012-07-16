@@ -29,8 +29,10 @@ function ShowBallotList(options) {
 					return false;
 				}
 			});
+
+			apiClient.registerBallot(id);
 		},
-		fillItem : function (modal, id, item) {
+		closeModal : function (modal, id, item) {
 			$(modal).removeClass("ballot-" + id);
 		},
 		saveCallback : apiClient.saveBallot,

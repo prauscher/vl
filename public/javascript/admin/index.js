@@ -81,7 +81,14 @@ function generateShowOptionsModal(options) {
 			});
 		});
 
-		$(options.modal).modal();
+		$(options.modal)
+			.on("show", function () {
+				options.openModal && options.openModal(options.modal, id, item);
+			})
+			.on("hide", function () {
+				options.closeModal && options.closeModal(options.modal, id, item);
+			})
+			.modal();
 	}
 }
 
