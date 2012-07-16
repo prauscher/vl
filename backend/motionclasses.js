@@ -12,7 +12,7 @@ module.exports = new HierarchicalStructure({
 	},
 	broadcastMove : function (id, parentid, item, position) {
 		motionSocket.emit('motionclass-delete:' + id, {});
-		motionSocket.emit(getMotionClassAddPublish(parentid), { motionclassid: id, motionclass: item, position: position});
+		motionSocket.emit(getMotionClassAddPublish(parentid), { motionclassid: id, position: position});
 	},
 	broadcastDelete : function (id) {
 		motionSocket.emit('motionclass-delete:' + id, {});

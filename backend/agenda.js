@@ -12,7 +12,7 @@ module.exports = new HierarchicalStructure({
 	},
 	broadcastMove : function (id, parentid, item, position) {
 		agendaSocket.emit('slide-delete:' + id, {});
-		agendaSocket.emit(getAgendaAddPublish(parentid), {slideid : id, slide: item, position: position});
+		agendaSocket.emit(getAgendaAddPublish(parentid), {slideid : id, position: position});
 	},
 	broadcastDelete : function (id) {
 		agendaSocket.emit('slide-delete:' + id, {});
