@@ -1,12 +1,17 @@
+var currentUseDefaultProjector = false;
+
 function configureDefaultProjector(useDefaultProjector) {
-	if (!useDefaultProjector) {
-		apiClient.unregisterDefaultProjector();
-	}
-	configureProjector();
-	if (useDefaultProjector) {
-		alert("muh");
-		resetView();
-		apiClient.registerDefaultProjector();
+	if (useDefaultProjector != currentUseDefaultProjector) {
+		if (!useDefaultProjector) {
+			apiClient.unregisterDefaultProjector();
+			currentUseDefaultProjector = false;
+		}
+		configureProjector();
+		if (useDefaultProjector) {
+			resetView();
+			apiClient.registerDefaultProjector();
+			currentUseDefaultProjector = true;
+		}
 	}
 }
 
