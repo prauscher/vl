@@ -1,4 +1,5 @@
 function goToNavigation() {
+	// Re-initialize the Interface to defaults
 	configureDefaultProjector(false);
 	setViewerData();
 
