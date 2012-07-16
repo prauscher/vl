@@ -54,7 +54,9 @@ $(function () {
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
-			$("#content .content-agenda").sortedList("add", position, $("<li>").attr("id", "agenda-" + slideid));
+			if ($("#content .content-agenda").children("#agenda-" + slideid).length == 0) {
+				$("#content .content-agenda").sortedList("add", position, $("<li>").attr("id", "agenda-" + slideid));
+			}
 		}
 	});
 
