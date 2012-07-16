@@ -40,14 +40,14 @@ $(function () {
 				showView("agenda", { title: slide.title });
 				break;
 			case 'motion':
-				if (slide.motionBallotid != "") {
+				if (slide.motionBallotid && slide.motionBallotid != "") {
 					configureBallot(slide.motionBallotid);
 				} else {
 					configureMotion(slide.motionid);
 				}
 				break;
 			case 'election':
-				if (slide.electionBallotid != "") {
+				if (slide.electionBallotid && slide.electionBallotid != "") {
 					configureBallot(slide.electionBallotid);
 				} else {
 					configureElection(slide.electionid);
