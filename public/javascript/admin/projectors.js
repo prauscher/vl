@@ -28,29 +28,7 @@ $(function () {
 				defaultActive : true,
 				except : [ projectorid ],
 				clickProjector : function (sourceProjectorid) {
-					apiClient.getProjector(sourceProjectorid, function (sourceProjector) {
-						apiClient.getProjector(projectorid, function (targetProjector) {
-							targetProjector.zoom = sourceProjector.zoom;
-							targetProjector.scroll = sourceProjector.scroll;
-							targetProjector.currentslideid = sourceProjector.currentslideid;
-							apiClient.saveProjector(projectorid, targetProjector);
-
-							apiClient.eachProjectorTimer(projectorid, function (timerid, timer) {
-								apiClient.projectorHasTimer(sourceProjectorid, timerid, function (hasTimer) {
-									if (! hasTimer) {
-										apiClient.hideTimerProjector(projectorid, timerid);
-									}
-								});
-							});
-							apiClient.eachProjectorTimer(sourceProjectorid, function (timerid, timer) {
-								apiClient.projectorHasTimer(projectorid, timerid, function (hasTimer) {
-									if (! hasTimer) {
-										apiClient.showTimerProjector(projectorid, timerid);
-									}
-								});
-							});
-						});
-					});
+					apiClient.handoverProjector(sourceProjectorid, projectorid);
 				}
 			}))
 			.append($("<td>").addClass("options")

@@ -115,6 +115,34 @@ APIClient.prototype.saveProjector = function(projectorid, projector, callbackSuc
 	});
 }
 
+APIClient.prototype.handoverProjector = function (sourceProjectorid, targetProjectorid, callbackSuccess) {
+	apiClient.getProjector(sourceProjectorid, function (sourceProjector) {
+		apiClient.getProjector(targetProjectorid, function (targetProjector) {
+			targetProjector.zoom = sourceProjector.zoom;
+			targetProjector.scroll = sourceProjector.scroll;
+			targetProjector.currentslideid = sourceProjector.currentslideid;
+			apiClient.saveProjector(targetProjectorid, targetProjector);
+
+			apiClient.eachProjectorTimer(targetProjectorid, function (timerid, timer) {
+				apiClient.projectorHasTimer(sourceProjectorid, timerid, function (hasTimer) {
+					if (! hasTimer) {
+						apiClient.hideTimerProjector(targetProjectorid, timerid);
+					}
+				});
+			});
+			apiClient.eachProjectorTimer(sourceProjectorid, function (timerid, timer) {
+				apiClient.projectorHasTimer(targetProjectorid, timerid, function (hasTimer) {
+					if (! hasTimer) {
+						apiClient.showTimerProjector(targetProjectorid, timerid);
+					}
+				});
+			});
+
+			callbackSuccess && callbackSuccess();
+		});
+	});
+}
+
 APIClient.prototype.deleteProjector = function (projectorid, callbackSuccess) {
 	$.ajax({
 		type: 'POST',
