@@ -54,12 +54,7 @@ $(function () {
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
-			var item = $("<li>").attr("id", "agenda-" + slideid);
-			if (position == 0) {
-				$("#content .content-agenda").prepend(item);
-			} else {
-				$("#content .content-agenda>li:eq(" + (position - 1) + ")").after(item);
-			}
+			$("#content .content-agenda").sortedList("add", position, $("<li>").attr("id", "agenda-" + slideid));
 		}
 	});
 
@@ -73,4 +68,6 @@ $(function () {
 	apiClient.on("deleteSlide", function (slideid) {
 		$("#content .content-agenda #agenda-" + slideid).remove();
 	});
+
+	$("#content .content-agenda").sortedList();
 });

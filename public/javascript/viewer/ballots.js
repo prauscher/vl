@@ -30,14 +30,7 @@ $(function () {
 
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
 		if (ballotid == currentBallotID) {
-			var item = $("<li>").addClass("option-" + optionid)
-				.append($("<span>").addClass("title"));
-
-			if (position == 0) {
-				$(".ballot-options").prepend(item);
-			} else {
-				$(".ballot-options li:eq(" + (position-1) + ")").after(item);
-			}
+			$(".ballot-options").sortedList("add", position, $("<li>").addClass("option-" + optionid).append($("<span>").addClass("title")));
 		}
 	});
 
@@ -49,4 +42,6 @@ $(function () {
 	apiClient.on("deleteOption", function (optionid) {
 		$(".ballot-options .option-" + optionid).remove();
 	});
+
+	$(".ballot-options").sortedList();
 });

@@ -86,7 +86,7 @@ function ShowBallotList(options) {
 
 $(function() {
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
-		var item = $("<li>").addClass("option-" + optionid)
+		$("#ballot.ballot-" + ballotid + " .options").sortedList("add", position, $("<li>").addClass("option-" + optionid)
 			.append($("<i>").addClass("icon-move").addClass("move"))
 			.append($("<span>").addClass("id").hide().text(optionid))
 			.append($("<input>").attr("type", "text").addClass("title"))
@@ -94,13 +94,7 @@ $(function() {
 			.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In der Ansicht anzeigen"))
 			.append($("<i>").addClass("delete").addClass("icon-trash").attr("title","Löschen").click(function () {
 				apiClient.ballotDeleteOption(ballotid, optionid);
-			}));
-
-		if (position == 0) {
-			$("#ballot.ballot-" + ballotid + " .options").prepend(item);
-		} else {
-			$("#ballot.ballot-" + ballotid + " .options li:eq(" + (position-1) + ")").after(item);
-		}
+			})) );
 	});
 
 	apiClient.on("updateOption", function (optionid, option) {
@@ -122,4 +116,6 @@ $(function() {
 	apiClient.on("deleteOption", function (optionid) {
 		$("#ballot .option-" + optionid).remove();
 	});
+
+	$("#ballot .options").sortedList();
 });
