@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var currentElectionID = null;
 
 function configureElection(electionid) {

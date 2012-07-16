@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 APIClient.prototype.slides = {};
 APIClient.prototype.slideChildren = {};
 

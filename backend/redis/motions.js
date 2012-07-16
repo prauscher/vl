@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 exports.exists = function (motionid, callback) {
 	db.exists('motions:' + motionid, function (err, exists) {
 		callback(exists);

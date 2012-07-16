@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 exports.projectors = require('./projectors.js');
 exports.agenda = require('./agenda.js');
 exports.timers = require('./timers.js');

@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function APIClient() {
 	this.callbacks = {};
 	this.sockets = {};

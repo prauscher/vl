@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function goToNavigation() {
 	// Re-initialize the Interface to defaults
 	configureDefaultProjector(false);

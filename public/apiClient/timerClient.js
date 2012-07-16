@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function TimerClient(apiClient) {
 	this.timerCurrent = {};
 	this.timerLastRun = {};

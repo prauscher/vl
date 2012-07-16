@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var currentUseDefaultProjector = false;
 
 function configureDefaultProjector(useDefaultProjector) {

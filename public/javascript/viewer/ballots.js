@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var currentBallotID = null;
 
 function configureBallot(ballotid) {

@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 module.exports = function (options) {
 	this.dbprefix = options.dbprefix;
 	this.hooks = options.hooks || {};

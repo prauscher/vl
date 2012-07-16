@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 APIClient.prototype.motions = {};
 
 APIClient.prototype.eachMotion = function (callback) {

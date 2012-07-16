@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function getSlideChildrenKey(id) {
 	if (typeof id == 'undefined' || ! id) {
 		return "slides";

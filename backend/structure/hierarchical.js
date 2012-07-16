@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 module.exports = function (options) {
 	this.backend = options.backend;
 	this.broadcastAdd = options.broadcastAdd;

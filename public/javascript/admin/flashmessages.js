@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 $(function () {
 	$("#new-flash").click(function () {
 		$("#flash-options #select-projectors").selectProjector({

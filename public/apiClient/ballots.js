@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 APIClient.prototype.ballots = {};
 
 APIClient.prototype.getBallot = function (ballotid, callback) {

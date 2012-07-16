@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 APIClient.prototype.elections = {};
 
 APIClient.prototype.getElection = function (electionid, callback) {

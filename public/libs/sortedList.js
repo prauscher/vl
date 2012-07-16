@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 $.widget("custom.sortedList", {
 	options: {
 		item : "*"

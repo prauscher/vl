@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var redis = require('redis'),
     socketio = require('socket.io'),
     config = require('../../config.js');

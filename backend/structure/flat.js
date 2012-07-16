@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 module.exports = function (options) {
 	this.sanitize = options.sanitize;
 	this.broadcastAdd = options.broadcastAdd;

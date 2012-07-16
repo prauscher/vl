@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function numberLines(text) {
 	// Append a whitespace. When .line is empty, it will show two linenumbers in one line
 	var lines = text.split("\n");

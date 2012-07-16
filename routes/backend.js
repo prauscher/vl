@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 exports.generateSave = function (backend, idfield, itemfield) {
 	return function (req, res) {
 		var item = req.body[itemfield];

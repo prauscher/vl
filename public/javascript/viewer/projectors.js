@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var currentProjectorID = null;
 
 function configureProjector(projectorid) {

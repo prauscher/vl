@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var socketio = require('socket.io');
 
 exports.listen = function (app) {

@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function getMotionClassKey(motionclassid) {
 	if (typeof motionclassid == 'undefined' || ! motionclassid) {
 		return "motionclasses";

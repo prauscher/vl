@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var fs = require('fs');
 
 if (process.argv.length < 3) {

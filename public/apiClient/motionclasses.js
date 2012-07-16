@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 APIClient.prototype.appCategorys = {};
 APIClient.prototype.appCategoryChildren = {};
 APIClient.prototype.appCategoryMotions = {};

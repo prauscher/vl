@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function updateCurrentTime() {
 	var now = new Date();
 	var hours = now.getHours();

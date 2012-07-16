@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 function sanitize(item) {
 	return item;
 }

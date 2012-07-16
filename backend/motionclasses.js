@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var HierarchicalStructure = require('./structure/hierarchical.js');
 
 module.exports = new HierarchicalStructure({

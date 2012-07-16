@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 $(function () {
 	var showTimerOptions = generateShowOptionsModal({
 		modal : "#timers #timer-options",

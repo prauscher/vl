@@ -1,3 +1,5 @@
+// vim:noet:sw=8:
+
 var projectorScroll = 0;
 var projectorZoom = 1;
 
