@@ -3,6 +3,10 @@ function initBallot (ballotid, deleteCall) {
 		.append($("<span>").addClass("close").text("×").addClass("delete").click(deleteCall))
 		.append($("<form>").addClass("form-horizontal")
 			.append($("<div>").addClass("control-group")
+				.append($("<label>").addClass("control-label").text("Name"))
+				.append($("<div>").addClass("controls")
+					.append($("<input>").attr("type", "text").addClass("title")) ) )
+			.append($("<div>").addClass("control-group")
 				.append($("<label>").addClass("control-label").text("Stimmen"))
 				.append($("<div>").addClass("controls")
 					.append($("<input>").attr("type", "text").addClass("span1").addClass("countedvotes").prop("disabled", true))
@@ -107,7 +111,10 @@ $(function () {
 	});
 
 	apiClient.on("updateBallot", function (ballotid, ballot) {
-		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedprogress").css("width", Math.floor(100 * ballot.countedvotes / ballot.maxvotes) + "%");
+		$("#ballot-list #ballot-list .ballot-" + ballotid + " .title").val(ballot.title).unbind("click").change(function () {
+			ballot.title = $(this).val();
+			apiClient.saveBallot(ballotid, ballot);
+		});
 		$("#ballot-list #ballot-list .ballot-" + ballotid + " .countedvotes").val(ballot.countedvotes);
 		$("#ballot-list #ballot-list .ballot-" + ballotid + " .maxvotes").val(ballot.maxvotes).unbind("click").change(function () {
 			ballot.maxvotes = $(this).val();
