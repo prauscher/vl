@@ -69,6 +69,8 @@ function generateShowOptionsModal(options) {
 						item[field.property] = parseTime(object.val());
 					} else if (field.type == "color") {
 						item[field.property] = object.val();
+					} else if (field.type == "select") {
+						item[field.property] = object.val();
 					}
 				}
 			}
