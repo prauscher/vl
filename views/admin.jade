@@ -138,7 +138,7 @@ html
 					h3 Tagesordnungspunkt bearbeiten
 				form.form-horizontal.modal-body
 					.control-group
-						.control-label Name
+						label.control-label Name
 						.controls
 							input(type="text")#title
 					div#slidecontent
@@ -159,11 +159,23 @@ html
 							div.tab-pane#slidecontent-html
 								textarea#slidecontent-html-html
 							div.tab-pane#slidecontent-motion
-								select#slidecontent-motion-motionid
-								select#slidecontent-motion-ballotid
+								.control-group
+									label.control-label Antrag
+									.controls
+										select#slidecontent-motion-motionid
+								.control-group
+									label.control-label ggf. Wahlgang
+									.controls
+										select#slidecontent-motion-ballotid
 							div.tab-pane#slidecontent-election
-								select#slidecontent-election-electionid
-								select#slidecontent-election-ballotid
+								.control-group
+									label.control-label Wahl
+									.controls
+										select#slidecontent-election-electionid
+								.control-group
+									label.control-label ggf. Wahlgang
+									.controls
+										select#slidecontent-election-ballotid
 							div.tab-pane#slidecontent-agenda
 								| Die Folie listet die untergeordneten Punkte auf.
 				div.modal-footer

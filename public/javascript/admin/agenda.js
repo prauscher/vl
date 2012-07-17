@@ -27,6 +27,7 @@ $(function () {
 							.removeClass()
 							.addClass("selected-" + $(this).val())
 							.empty()
+							.prop("disabled", $(this).val() == null)
 							.append($("<option>").attr("value", "").text("(kein)"));
 						register($(this).val());
 					})
