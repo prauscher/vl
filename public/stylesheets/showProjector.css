@@ -66,15 +66,15 @@ body
 
 #projector-controls>*, #options-button
 	{width:14px; height:14px; background-image:url(/libs/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
-#projector-reset
+.icon-repeat
 	{background-position:-216px -24px;}
-#projector-zoom-in
+.icon-zoom-in
 	{background-position:-336px 0px;}
-#projector-zoom-out
+.icon-zoom-out
 	{background-position:-360px 0px;}
-#projector-scroll-up
+.icon-chevron-up
 	{background-position:-288px -120px;}
-#projector-scroll-down
+.icon-chevron-down
 	{background-position:-313px -119px;}
 #options-button
 	{background-position:-432px 0px;}

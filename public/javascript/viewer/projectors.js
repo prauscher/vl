@@ -34,7 +34,7 @@ $(function () {
 			} else {
 				showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
 			}
-			setViewerData(projector.scroll, projector.zoom);
+			setViewerData(projector.zoom, projector.scroll);
 			$("#identify").css("background-color", projector.color).text(projector.title);
 		}
 	});
