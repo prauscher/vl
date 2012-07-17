@@ -3,45 +3,50 @@
 function ShowBallotList(options) {
 	var ballotLists = {};
 
-	var showBallotOptions = generateShowOptionsModal({
-		modal : "#ballot",
-		fields : [
-			{ property : "title", field : "#title", type : "text" },
-			{ property : "maxvotes", field : "#maxvotes", type : "text" },
-			{ property : "status", field : "#status", type : "select" }
-		],
-		fillModal : function (modal, id, item) {
-			$(modal).addClass("ballot-" + id);
-			$(modal).find(".settings .countedvotes").val(item.countedvotes);
-			$(modal).find(".addOption").unbind("click").click(function () {
-				apiClient.ballotAddOption(id, generateID(), {
-					title : "",
-					hidden : true
+	function generateShowBallotOptions(id) {
+		return generateShowOptionsModal({
+			modal : "#ballot",
+			fields : [
+				{ property : "title", field : "#title", type : "text" },
+				{ property : "maxvotes", field : "#maxvotes", type : "text" },
+				{ property : "status", field : "#status", type : "select" }
+			],
+			fillModal : function (modal, id, item) {
+				$(modal).addClass("ballot-" + id);
+				$(modal).find(".settings .countedvotes").val(item.countedvotes);
+				$(modal).find(".addOption").unbind("click").click(function () {
+					apiClient.ballotAddOption(id, generateID(), {
+						title : "",
+						hidden : true
+					});
 				});
-			});
-			$(modal).find(".options").empty().sortable({
-				handle : ".move",
-				update : function (ev,ui) {
-					var optionid = ui.item.children(".id").text();
-					var position = ui.item.parent().children().index(ui.item);
+				$(modal).find(".options").empty().sortable({
+					handle : ".move",
+					update : function (ev,ui) {
+						var optionid = ui.item.children(".id").text();
+						var position = ui.item.parent().children().index(ui.item);
 
-					apiClient.ballotMoveOption(ballotid, optionid, position);
-					return false;
-				}
-			});
+						apiClient.ballotMoveOption(ballotid, optionid, position);
+						return false;
+					}
+				});
 
-			apiClient.registerBallot(id);
-		},
-		closeModal : function (modal, id, item) {
-			$(modal).removeClass("ballot-" + id);
-		},
-		saveCallback : apiClient.saveBallot,
-		deleteCallback : function (ballotid) {
-			options.deleteBallot(id, ballotid);
-		}
-	});
+				apiClient.registerBallot(id);
+			},
+			closeModal : function (modal, id, item) {
+				$(modal).removeClass("ballot-" + id);
+			},
+			addCallback : function (ballotid, ballot) {
+			},
+			saveCallback : apiClient.saveBallot,
+			deleteCallback : function (ballotid, callback) {
+				options.deleteBallot(id, ballotid, callback);
+			}
+		});
+	}
 
 	apiClient.on(options.initEvent, function (id, ballotid) {
+		var showBallotOptions = generateShowBallotOptions(id);
 		if (ballotLists[id]) {
 			var ballotItem = $("<li>").addClass("ballot-" + ballotid)
 				.append("<a>");
@@ -65,15 +70,17 @@ function ShowBallotList(options) {
 	});
 
 	this.generateButton = function (id) {
+		var showBallotOptions = generateShowBallotOptions(id);
 		ballotLists[id] = $("<ul>").addClass("dropdown-menu")
 			.append($("<li>").append($("<a>").text("Hinzufügen").click(function () {
-				// Ballot must not be empty, else the system will think it does not exist
-				options.addBallot(id, generateID(), {
-					title : generateColor(),
+				var ballotid = generateID();
+				var ballot = {
 					countedvotes : 0,
 					maxvotes : 0,
 					status : "preparing"
-				});
+				};
+				options.addBallot(id, ballotid, ballot);
+				showBallotOptions(ballotid, ballot);
 			}))
 			.append($("<li>").addClass("divider")) );
 		options.registerBallots(id);
