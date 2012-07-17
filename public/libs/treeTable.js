@@ -10,11 +10,12 @@ $.widget("ui.treeTable", {
 
 	_create: function() {
 		var self = this;
+		// generateID may return trailing numbers, which are forbidden in classNames
 		this.prefix = "a" + generateID() + "-";
 
 		this.element.nestedSortable({
 			handle : '.' + this.prefix + 'move',
-			items : "li",
+			items : "li." + this.prefix,
 			toleranceElement : "> div",
 			update: function (ev, ui) {
 				var id = ui.item.children("." + self.prefix + "id").text();
@@ -61,7 +62,7 @@ $.widget("ui.treeTable", {
 			current = current.parent().parent();
 		}
 
-		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix + type)
+		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type)
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
 			.append($("<span>").addClass(this.prefix + "move").css("float","left").css("width", moveWidth + "px")
