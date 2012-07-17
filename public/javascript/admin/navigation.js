@@ -46,7 +46,7 @@ $(function () {
 	goToNavigation();
 
 	apiClient.on("initProjector", function (projectorid, projector) {
-		$("#showprojector ul").append($("<li>").attr("id", "showprojector-" + projectorid).toggleClass("active", (currentlyPickedProjector == projectorid))
+		$("#showprojector ul").sortedList("add", projectorid, $("<li>").toggleClass("active", (currentlyPickedProjector == projectorid))
 			.append($("<a>")
 				.append($("<img>")
 					.attr("src", "/images/empty.gif")
@@ -58,18 +58,23 @@ $(function () {
 	});
 
 	apiClient.on("updateProjector", function(projectorid, projector) {
-		$("#showprojector #showprojector-" + projectorid).unbind("click").click(function () {
-			pickProjector(projectorid);
-		});
-		$("#showprojector-" + projectorid + " .select-projector")
+		$("#showprojector ul").sortedList("get", projectorid)
+			.unbind("click")
+			.click(function () {
+				pickProjector(projectorid);
+			})
+		$("#showprojector ul").sortedList("get", projectorid).find(".select-projector")
 			.css("background-color", projector.color)
 			.attr("title", "Projektor " + projector.title + " anzeigen");
-		$("#showprojector #showprojector-" + projectorid + " .title").text(projector.title);
+		$("#showprojector ul").sortedList("get", projectorid).find(".title")
+			.text(projector.title);
 	});
 
 	apiClient.on("deleteProjector", function(projectorid) {
-		$("#showprojector-" + projectorid).remove();
+		$("#showprojector ul").sortedList("remove", projectorid);
 	});
+
+	$("#showprojector ul").sortedList();
 
 	$("#showprojectors").click(function () {
 		pickProjector(null);

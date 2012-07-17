@@ -32,17 +32,17 @@ $(function () {
 
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
 		if (ballotid == currentBallotID) {
-			$(".ballot-options").sortedList("add", position, $("<li>").addClass("option-" + optionid).append($("<span>").addClass("title")));
+			$(".ballot-options").sortedList("add", "option-" + optionid, position, $("<li>").append($("<span>").addClass("title")));
 		}
 	});
 
 	apiClient.on("updateOption", function (optionid, option) {
-		$(".ballot-options .option-" + optionid).toggle(option.hidden != "true")
-		$(".ballot-options .option-" + optionid + " .title").text(option.title);
+		$(".ballot-options").sortedList("get", "option-" + optionid).toggle(option.hidden != "true")
+		$(".ballot-options").sortedList("get", "option-" + optionid).find(".title").text(option.title);
 	});
 
 	apiClient.on("deleteOption", function (optionid) {
-		$(".ballot-options .option-" + optionid).remove();
+		$(".ballot-options").sortedList("remove", "option-" + optionid);
 	});
 
 	$(".ballot-options").sortedList();

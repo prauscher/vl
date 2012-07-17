@@ -97,21 +97,23 @@ $(function () {
 	});
 
 	apiClient.on("initMotionClass", function (motionclassid) {
-		$(".new-motion-classes").append(
-			$("<li>").addClass("motionClass-" + motionclassid)
-				.append("<a>") );
+		$(".new-motion-classes").sortedList("add", motionclassid, $("<li>").append("<a>") );
 	});
 
 	apiClient.on("updateMotionClass", function (motionclassid, motionclass) {
-		$(".motionClass-" + motionclassid + " a").text(motionclass.title);
-		$(".motionClass-" + motionclassid).unbind("click").click(function () {
-			showMotionOptions(null, { classid: motionclassid });
-		});
+		$(".new-motion-classes").sortedList("get", motionclassid)
+			.unbind("click")
+			.click(function () {
+				showMotionOptions(null, { classid: motionclassid });
+			})
+			.find("a").text(motionclass.title);
 	});
 
 	apiClient.on("deleteMotionClass", function (motionclassid) {
-		$(".motionClass-" + motionclassid).remove();
+		$(".new-motion-classes").sortedList("remove", motionclassid);
 	});
+
+	$(".new-motion-classes").sortedList();
 
 	$("#new-motionclass").click(function () {
 		showMotionClassOptions(null, {});

@@ -18,32 +18,47 @@ $(function () {
 	});
 
 	apiClient.on("updateTimer", function (timerid, timer) {
-		$("#timers #timer-" + timerid + " .color").css('background-color', timer.color);
-		$("#timers #timer-" + timerid + " .title").text(timer.title || "Unbenannt").toggleClass("untitled", !timer.title);
-		$("#timers #timer-" + timerid + " .current").text(formatTime(timer.current));
-		$("#timers #timer-" + timerid + " .value").text(formatTime(timer.value));
+		$("#timers tbody").sortedList("get", timerid).find(".color")
+			.css('background-color', timer.color);
+		$("#timers tbody").sortedList("get", timerid).find(".title")
+			.text(timer.title || "Unbenannt")
+			.toggleClass("untitled", !timer.title)
+			.css("cursor", "pointer")
+			.unbind("click")
+			.click(function () {
+				showTimerOptions(timerid, timer);
+			});
+		$("#timers tbody").sortedList("get", timerid).find(".current")
+			.text(formatTime(timer.current));
+		$("#timers tbody").sortedList("get", timerid).find(".value")
+			.text(formatTime(timer.value));
 
-		$("#timers #timer-" + timerid + " .start").toggle(timer.running != 'true').unbind("click").click(function () {
-			apiClient.startTimer(timerid, timer);
-		});
-		$("#timers #timer-" + timerid + " .pause").toggle(timer.running == 'true').unbind("click").click(function () {
-			apiClient.pauseTimer(timerid, timer);
-		});
-		$("#timers #timer-" + timerid + " .stop").unbind("click").click(function () {
-			apiClient.stopTimer(timerid, timer);
-		});
-
-		$("#timers #timer-" + timerid + " .title").unbind("click").css("cursor", "pointer").click(function () {
-			showTimerOptions(timerid, timer);
-		});
+		$("#timers tbody").sortedList("get", timerid).find(".start")
+			.toggle(timer.running != 'true')
+			.unbind("click")
+			.click(function () {
+				apiClient.startTimer(timerid, timer);
+			});
+		$("#timers tbody").sortedList("get", timerid).find(".pause")
+			.toggle(timer.running == 'true')
+			.unbind("click")
+			.click(function () {
+				apiClient.pauseTimer(timerid, timer);
+			});
+		$("#timers tbody").sortedList("get", timerid).find(".stop")
+			.unbind("click")
+			.click(function () {
+				apiClient.stopTimer(timerid, timer);
+			});
 	});
 
 	apiClient.on("countdownTimer", function (timerid, currentValue) {
-		$("#timers #timer-" + timerid + " .current").text(formatTime(currentValue));
+		$("#timers tbody").sortedList("get", timerid).find(".current")
+			.text(formatTime(currentValue));
 	});
 
 	apiClient.on("initTimer", function (timerid, timer) {
-		$("#timers #timers").append($("<tr>").attr("id", "timer-" + timerid)
+		$("#timers tbody").sortedList("add", timerid, $("<tr>")
 			.append($("<td>").append($("<img>").addClass('color').attr("src", "/images/empty.gif")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").append($("<span>").addClass("current")).append(" / ").append($("<span>").addClass("value")))
@@ -64,16 +79,20 @@ $(function () {
 	});
 
 	apiClient.on("deleteTimer", function (timerid) {
-		$("#timer-" + timerid).remove();
+		$("#timers tbody").sortedList("remove", timerid);
 	});
 
 	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
-		$("#timer-" + timerid + " .select-projectors").selectProjector("toggleActive", [ projectorid, true ]);
+		$("#timers tbody").sortedList("get", timerid).find(".select-projectors")
+			.selectProjector("toggleActive", [ projectorid, true ]);
 	});
 
 	apiClient.on("hideTimerProjector", function (projectorid, timerid, timer) {
-		$("#timer-" + timerid + " .select-projectors").selectProjector("toggleActive", [ projectorid, false ]);
+		$("#timers tbody").sortedList("get", timerid).find(".select-projectors")
+			.selectProjector("toggleActive", [ projectorid, false ]);
 	});
+
+	$("#timers tbody").sortedList();
 
 	$("#new-timer").click(function () {
 		showTimerOptions(null, {

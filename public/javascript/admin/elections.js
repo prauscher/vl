@@ -24,24 +24,27 @@ $(function () {
 	});
 
 	apiClient.on("initElection", function (electionid) {
-		$("#elections #elections").append($("<tr>").attr("id", "election-" + electionid)
+		$("#elections tbody").sortedList("add", electionid, $("<tr>").attr("id", "election-" + electionid)
 			.append($("<td>").addClass("title").css("cursor", "pointer"))
 			.append($("<td>").addClass("options")
 				.append(ballotList.generateButton(electionid))
-				.append($("<a>").attr("href", "/projector#election-" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ));
+				.append($("<a>").attr("href", "/projector#election-" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ) );
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {
-		$("#elections #election-" + electionid + " .title").text(election.title);
-
-		$("#elections #election-" + electionid + " .title").unbind("click").click(function () {
-			showElectionOptions(electionid, election);
-		});
+		$("#elections tbody").sortedList("get", electionid).find(".title")
+			.text(election.title)
+			.unbind("click")
+			.click(function () {
+				showElectionOptions(electionid, election);
+			});
 	});
 
 	apiClient.on("deleteElection", function (electionid) {
-		$("#election-" + electionid).remove();
+		$("#elections tbody").sortedList("remove", electionid);
 	});
+
+	$("#elections tbody").sortedList();
 
 	$("#new-election").click(function () {
 		showElectionOptions(null, {

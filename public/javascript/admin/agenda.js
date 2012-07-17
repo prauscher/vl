@@ -61,9 +61,11 @@ $(function () {
 
 	function generateAddBallotDropdown(ballotDropdown) {
 		return function (id, ballotid) {
-			$("#agenda #options").find(ballotDropdown).filter(".selected-" + id)
-				.append($("<option>").attr("value",ballotid).addClass("ballot-" + ballotid))
-				.val($("#agenda #options").find(ballotDropdown).filter(".selected-" + id).attr("data-initValue"));
+			if ($("#agenda #options").find(ballotDropdown).filter(".selected-" + id).find(".ballot-" + ballotid).length == 0) {
+				$("#agenda #options").find(ballotDropdown).filter(".selected-" + id)
+					.append($("<option>").attr("value",ballotid).addClass("ballot-" + ballotid))
+					.val($("#agenda #options").find(ballotDropdown).filter(".selected-" + id).attr("data-initValue"));
+			}
 		}
 	}
 
@@ -145,30 +147,34 @@ $(function () {
 	});
 
 	apiClient.on("initMotion", function (motionid, classid, position) {
-		$("#agenda #options #slidecontent-motion-motionid").append(
-			$("<option>").addClass("motion-" + motionid).attr("value", motionid) )
+		$("#agenda #options #slidecontent-motion-motionid").sortedList("add", motionid,
+			$("<option>").attr("value", motionid) )
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		$("#agenda #options #slidecontent-motion-motionid option.motion-" + motionid).text(motionid + ": " + motion.title);
+		$("#agenda #options #slidecontent-motion-motionid").sortedList("get", motionid).text(motionid + ": " + motion.title);
 	});
 
 	apiClient.on("deleteMotion", function (motionid) {
-		$("#agenda #options #slidecontent-motion-motionid option.motion-" + motionid).remove();
+		$("#agenda #options #slidecontent-motion-motionid").sortedList("remove", motionid);
 	});
 
+	$("#agenda #options #slidecontent-motion-motionid").sortedList();
+
 	apiClient.on("initElection", function (electionid) {
-		$("#agenda #options #slidecontent-election-electionid").append(
-			$("<option>").addClass("election-" + electionid).attr("value", electionid) )
+		$("#agenda #options #slidecontent-election-electionid").sortedList("add", electionid,
+			$("<option>").attr("value", electionid) )
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {
-		$("#agenda #options #slidecontent-election-electionid option.election-" + electionid).text(election.title);
+		$("#agenda #options #slidecontent-election-electionid").sortedList("get", electionid).text(election.title);
 	});
 
 	apiClient.on("deleteElection", function (motionid) {
-		$("#agenda #options #slidecontent-election-electionid option.election-" + electionid).remove();
+		$("#agenda #options #slidecontent-election-electionid").sortedList("remove", electionid);
 	});
+
+	$("#agenda #options #slidecontent-election-electionid").sortedList();
 
 	$("#new-slide").click(function () {
 		showSlideOptions(null, {

@@ -48,22 +48,20 @@ function ShowBallotList(options) {
 	apiClient.on(options.initEvent, function (id, ballotid) {
 		var showBallotOptions = generateShowBallotOptions(id);
 		if (ballotLists[id]) {
-			var ballotItem = $("<li>").addClass("ballot-" + ballotid)
-				.append("<a>");
-			ballotLists[id].append(ballotItem);
+			ballotLists[id].sortedList("add", ballotid, $("<li>").append($("<a>")));
 
 			apiClient.on("updateBallot", function (_ballotid, ballot) {
 				if (ballotid == _ballotid) {
-					ballotLists[id].children(".ballot-" + ballotid).unbind("click").click(function () {
+					ballotLists[id].sortedList("get", ballotid).unbind("click").click(function () {
 						showBallotOptions(ballotid, ballot);
 					});
-					ballotLists[id].children(".ballot-" + ballotid).children("a").text(ballot.title);
+					ballotLists[id].sortedList("get", ballotid).children("a").text(ballot.title);
 				}
 			});
 
 			apiClient.on("deleteBallot", function (_ballotid) {
 				if (ballotid == _ballotid) {
-					ballotItem.remove();
+					ballotLists[id].sortedList("remove", ballotid);
 				}
 			});
 		}
@@ -71,7 +69,7 @@ function ShowBallotList(options) {
 
 	this.generateButton = function (id) {
 		var showBallotOptions = generateShowBallotOptions(id);
-		ballotLists[id] = $("<ul>").addClass("dropdown-menu")
+		ballotLists[id] = $("<ul>").addClass("dropdown-menu").sortedList()
 			.append($("<li>").append($("<a>").text("Hinzufügen").click(function () {
 				var ballotid = generateID();
 				var ballot = {
@@ -93,7 +91,7 @@ function ShowBallotList(options) {
 
 $(function() {
 	apiClient.on("initBallotOption", function (ballotid, optionid, position) {
-		$("#ballot.ballot-" + ballotid + " .options").sortedList("add", position, $("<li>").addClass("option-" + optionid)
+		$("#ballot.ballot-" + ballotid + " .options").sortedList("add", "option-" + optionid, position, $("<li>")
 			.append($("<i>").addClass("icon-move").addClass("move"))
 			.append($("<span>").addClass("id").hide().text(optionid))
 			.append($("<input>").attr("type", "text").addClass("title"))
@@ -105,23 +103,23 @@ $(function() {
 	});
 
 	apiClient.on("updateOption", function (optionid, option) {
-		$("#ballot .option-" + optionid + " .title").val(option.title).change(function () {
+		$("#ballot .options").sortedList("get", "option-" + optionid).find(".title").val(option.title).change(function () {
 			option.title = $(this).val();
 			apiClient.saveOption(optionid, option);
 		});
 
-		$("#ballot .option-" + optionid + " .isvisible").unbind("click").toggle(option.hidden != "true").click(function () {
+		$("#ballot .options").sortedList("get", "option-" + optionid).find(".isvisible").unbind("click").toggle(option.hidden != "true").click(function () {
 			option.hidden = true;
 			apiClient.saveOption(optionid, option);
 		});
-		$("#ballot .option-" + optionid + " .ishidden").unbind("click").toggle(option.hidden == "true").click(function () {
+		$("#ballot .options").sortedList("get", "option-" + optionid).find(".ishidden").unbind("click").toggle(option.hidden == "true").click(function () {
 			option.hidden = false;
 			apiClient.saveOption(optionid, option);
 		});
 	});
 
 	apiClient.on("deleteOption", function (optionid) {
-		$("#ballot .option-" + optionid).remove();
+		$("#ballot .options").sortedList("remove", "option-" + optionid);
 	});
 
 	$("#ballot .options").sortedList();

@@ -61,21 +61,19 @@ $(function () {
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
-			if ($("#content .content-agenda").children("#agenda-" + slideid).length == 0) {
-				$("#content .content-agenda").sortedList("add", position, $("<li>").attr("id", "agenda-" + slideid));
-			}
+			$("#content .content-agenda").sortedList("add", "agenda-" + slideid, position, $("<li>"));
 		}
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
-		$("#content .content-agenda #agenda-" + slideid)
+		$("#content .content-agenda").sortedList("get", "agenda-" + slideid)
 			.text(slide.title)
 			.toggleClass("done", slide.isdone == "true")
 			.toggle(slide.hidden != "true");
 	});
 
 	apiClient.on("deleteSlide", function (slideid) {
-		$("#content .content-agenda #agenda-" + slideid).remove();
+		$("#content .content-agenda").sortedList("remove", "agenda-" + slideid);
 	});
 
 	$("#content .content-agenda").sortedList();

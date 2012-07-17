@@ -13,21 +13,25 @@ $(function () {
 	});
 
 	apiClient.on("updatePollsite", function (pollsiteid, pollsite) {
-		$("#pollsites #pollsite-" + pollsiteid + " .pollsiteid").text(pollsiteid);
-
-		$("#pollsites #pollsite-" + pollsiteid + " .pollsiteid").unbind("click").css("cursor", "pointer").click(function () {
-			showPollsiteOptions(pollsiteid, pollsite);
-		});
+		$("#pollsites tbody").sortedList("get", pollsiteid).find(".pollsiteid")
+			.text(pollsiteid)
+			.css("cursor", "pointer")
+			.unbind("click")
+			.click(function () {
+				showPollsiteOptions(pollsiteid, pollsite);
+			});
 	});
 
 	apiClient.on("initPollsite", function (pollsiteid, pollsite) {
-		$("#pollsites #pollsites").append($("<tr>").attr("id", "pollsite-" + pollsiteid)
+		$("#pollsites tbody").sortedList("add", pollsiteid, $("<tr>")
 			.append($("<td>").addClass("pollsiteid")) );
 	});
 
 	apiClient.on("deletePollsite", function (pollsiteid) {
-		$("#pollsite-" + pollsiteid).remove();
+		$("#pollsites tbody").sortedList("remove", pollsiteid);
 	});
+
+	$("#pollsites tbody").sortedList();
 
 	$("#new-pollsite").click(function () {
 		showPollsiteOptions(null, {});

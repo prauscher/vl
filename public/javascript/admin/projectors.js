@@ -14,15 +14,19 @@ $(function () {
 	});
 
 	apiClient.on("setDefaultProjector", function (projectorid) {
+		if (currentDefaultProjector != null) {
+			$("#projectors tbody").sortedList("get", currentDefaultProjector).find(".set-default")
+				.removeClass("icon-star").addClass("icon-star-empty");
+		}
 		currentDefaultProjector = projectorid;
-		$("#projectors .set-default").removeClass("icon-star").addClass("icon-star-empty");
-		$("#projectors #projector-" + projectorid + " .set-default").removeClass("icon-star-empty").addClass("icon-star");
+		$("#projectors tbody").sortedList("get", projectorid).find(".set-default")
+			.removeClass("icon-star-empty").addClass("icon-star");
 	});
 
 	apiClient.on("initProjector", function (projectorid, projector) {
 		var starIcon = (projectorid == currentDefaultProjector) ? "icon-star" : "icon-star-empty";
 
-		$("#projectors #projectors").append($("<tr>").attr("id", "projector-" + projectorid)
+		$("#projectors tbody").sortedList("add", projectorid, $("<tr>")
 			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
 			.append($("<td>").addClass("title"))
 			.append($("<td>").addClass("handover-buttons").selectProjector({
@@ -46,54 +50,72 @@ $(function () {
 	});
 
 	apiClient.on("updateProjector", function(projectorid, projector) {
-		$("#projectors #projector-" + projectorid + " .color").css("background-color", projector.color);
-		$("#projectors #projector-" + projectorid + " .title").text(projector.title || "Unbenannt").toggleClass("untitled", !projector.title).unbind("click").click(function () {
-			showProjectorOptions(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .isvisible").toggle(projector.hidden != "true").unbind("click").click(function () {
-			projector.hidden = true;
-			apiClient.saveProjector(projectorid, projector);
-		});
-		$("#projectors #projector-" + projectorid + " .ishidden").toggle(projector.hidden == "true").unbind("click").click(function () {
-			projector.hidden = false;
-			apiClient.saveProjector(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .reset").unbind("click").click(function () {
-			projector.zoom = 1;
-			projector.scroll = 0;
-			apiClient.saveProjector(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .set-default").unbind("click").click(function () {
-			apiClient.setDefaultProjector(projectorid);
-		});
-
-		$("#projectors #projector-" + projectorid + " .zoom-in").unbind("click").click(function () {
-			projector.zoom *= 1.1;
-			apiClient.saveProjector(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .zoom-out").unbind("click").click(function () {
-			projector.zoom /= 1.1;
-			apiClient.saveProjector(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .scroll-up").unbind("click").click(function () {
-			projector.scroll--;
-			apiClient.saveProjector(projectorid, projector);
-		});
-
-		$("#projectors #projector-" + projectorid + " .scroll-down").unbind("click").click(function () {
-			projector.scroll++;
-			apiClient.saveProjector(projectorid, projector);
-		});
+		$("#projectors tbody").sortedList("get", projectorid).find(".color")
+			.css("background-color", projector.color);
+		$("#projectors tbody").sortedList("get", projectorid).find(".title")
+			.text(projector.title || "Unbenannt")
+			.toggleClass("untitled", !projector.title)
+			.unbind("click")
+			.click(function () {
+				showProjectorOptions(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".set-default")
+			.unbind("click")
+			.click(function () {
+				apiClient.setDefaultProjector(projectorid);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".isvisible")
+			.toggle(projector.hidden != "true")
+			.unbind("click")
+			.click(function () {
+				projector.hidden = true;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".ishidden")
+			.toggle(projector.hidden == "true")
+			.unbind("click")
+			.click(function () {
+				projector.hidden = false;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".reset")
+			.unbind("click")
+			.click(function () {
+				projector.zoom = 1;
+				projector.scroll = 0;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".zoom-in")
+			.unbind("click")
+			.click(function () {
+				projector.zoom *= 1.1;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".zoom-out")
+			.unbind("click")
+			.click(function () {
+				projector.zoom /= 1.1;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".scroll-up")
+			.unbind("click")
+			.click(function () {
+				projector.scroll--;
+				apiClient.saveProjector(projectorid, projector);
+			});
+		$("#projectors tbody").sortedList("get", projectorid).find(".scroll-down")
+			.unbind("click")
+			.click(function () {
+				projector.scroll++;
+				apiClient.saveProjector(projectorid, projector);
+			});
 	});
 
 	apiClient.on("deleteProjector", function(projectorid) {
-		$("#projectors #projector-" + projectorid).remove();
+		$("#projectors tbody").sortedList("remove", projectorid);
 	});
+
+	$("#projectors tbody").sortedList();
 
 	$("#new-projector").click(function () {
 		showProjectorOptions(null, {
