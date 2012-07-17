@@ -48,14 +48,17 @@ function ShowBallotList(options) {
 	apiClient.on(options.initEvent, function (id, ballotid) {
 		var showBallotOptions = generateShowBallotOptions(id);
 		if (ballotLists[id]) {
-			ballotLists[id].sortedList("add", ballotid, $("<li>").append($("<a>")));
+			ballotLists[id].sortedList("add", ballotid, $("<li>").append($("<a>")) );
 
 			apiClient.on("updateBallot", function (_ballotid, ballot) {
 				if (ballotid == _ballotid) {
-					ballotLists[id].sortedList("get", ballotid).unbind("click").click(function () {
-						showBallotOptions(ballotid, ballot);
-					});
-					ballotLists[id].sortedList("get", ballotid).children("a").text(ballot.title);
+					ballotLists[id].sortedList("get", ballotid)
+						.unbind("click")
+						.click(function () {
+							showBallotOptions(ballotid, ballot);
+						});
+					ballotLists[id].sortedList("get", ballotid).children("a")
+						.text(ballot.title)
 				}
 			});
 
