@@ -80,10 +80,10 @@ $(function () {
 	$("#agenda ol#slides").treeTable({
 		styles: {
 			slide: { title: {width: "350px", cursor: "pointer"} }
-		},
-		move: function (slideid, parentid, position) {
-			apiClient.moveSlide(slideid, (parentid ? parentid : undefined), position);
 		}
+	});
+	$("#agenda ol#slides").treeTable("onMove", "slide", ["slide", null], function (slideid, parentid, position) {
+		apiClient.moveSlide(slideid, (parentid ? parentid : undefined), position);
 	});
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {

@@ -41,22 +41,13 @@ $(function () {
 		styles: {
 			motionclass: { icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} },
 			motion: {icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} }
-		},
-		move: function (id, parentid, position, type, parenttype) {
-			if (type == "motion") {
-				if (parentid == null || parenttype != "motionclass") {
-					return false;
-				} else {
-					apiClient.moveMotion(id, parentid, position);
-				}
-			} else if (type == "motionclass") {
-				if (parenttype != null && parenttype != "motionclass") {
-					return false;
-				} else {
-					apiClient.moveMotionClass(id, (parentid ? parentid : undefined), position);
-				}
-			}
 		}
+	});
+	$("ol#motions").treeTable("onMove", "motion", "motionclass", function (motionid, classid, position) {
+		apiClient.moveMotion(motionid, classid, position);
+	});
+	$("ol#motions").treeTable("onMove", "motionclass", ["motionclass", null], function (classid, parentid, position) {
+		apiClient.moveMotionClass(classid, (parentid ? parentid : undefined), position);
 	});
 
 	apiClient.on("initMotionClass", function (motionclassid, parentid, position) {

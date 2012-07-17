@@ -5,7 +5,7 @@ $.widget("ui.treeTable", {
 		moveWidth: 70,
 		listMargin: 15,
 		styles: {},
-		move: function (id, parentid, position, type, parenttype) {}
+		move: {}
 	},
 
 	_create: function() {
@@ -28,9 +28,25 @@ $.widget("ui.treeTable", {
 				}
 				var position = ui.item.parent().children("." + self.prefix + type).index(ui.item);
 
-				return self.options.move(id, parentid, position, type, parenttype);
+				if (!self.options.move[type] || !self.options.move[type][parenttype]) {
+					return false;
+				}
+				return self.options.move[type][parenttype](id, parentid, position);
 			}
 		});
+	},
+
+	onMove : function (type, parenttype, callback) {
+		if (parenttype instanceof Array) {
+			for (var i in parenttype) {
+				this.onMove(type, parenttype[i], callback);
+			}
+		}
+
+		if (!this.options.move[type]) {
+			this.options.move[type] = new Array();
+		}
+		this.options.move[type][parenttype] = callback;
 	},
 
 	add : function (type, id, parenttype, parentid, position, data) {
