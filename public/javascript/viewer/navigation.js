@@ -5,26 +5,30 @@ function goToNavigation() {
 	configureDefaultProjector(false);
 	setViewerData();
 
-	var parameters = location.hash.substr(1).split("-");
+	var parameters = location.hash.substr(1).split(":");
 	switch (parameters.shift()) {
-	case "ballot":
-		configureBallot(parameters.join("-"));
-		$("#projector-controls").show();
-		break;
 	case "election":
-		configureElection(parameters.join("-"));
+		if (parameters.length > 1) {
+			configureBallot(paremeters[1]);
+		} else {
+			configureElection(parameters[0]);
+		}
 		$("#projector-controls").show();
 		break;
 	case "motion":
-		configureMotion(parameters.join("-"));
+		if (parameters.length > 1) {
+			configureBallot(parameters[1]);
+		} else {
+			configureMotion(parameters[0]);
+		}
 		$("#projector-controls").show();
 		break;
 	case "slide":
-		configureSlide(parameters.join("-"));
+		configureSlide(parameters[0]);
 		$("#projector-controls").show();
 		break;
 	case "projector":
-		configureProjector(parameters.join("-"));
+		configureProjector(parameters[0]);
 		break;
 	default:
 		configureDefaultProjector(true);

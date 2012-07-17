@@ -63,7 +63,7 @@ $(function () {
 			title: $("<span>"),
 			options: $("<span>")
 				.append(ballotList.generateButton(motionid))
-				.append($("<a>").attr("href", "/projector#motion-" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
+				.append($("<a>").attr("href", "/projector#motion:" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
 

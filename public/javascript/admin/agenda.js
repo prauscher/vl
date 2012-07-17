@@ -103,7 +103,7 @@ $(function () {
 				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Als erledigt markieren"))
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In Agendaansicht verstecken"))
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In Agendaansicht anzeigen"))
-				.append($("<a>").attr("href", "/projector#slide-" + slideid).append($("<i>").addClass("icon-play-circle").attr("title", "Folie öffnen")))
+				.append($("<a>").attr("href", "/projector#slide:" + slideid).append($("<i>").addClass("icon-play-circle").attr("title", "Folie öffnen")))
 		});
 		for (var projectorid in projectorsCurrentSlide) {
 			if (projectorsCurrentSlide[projectorid] == slideid) {
