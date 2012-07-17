@@ -170,7 +170,7 @@ $(function () {
 		$("#agenda #options #slidecontent-election-electionid").sortedList("get", electionid).text(election.title);
 	});
 
-	apiClient.on("deleteElection", function (motionid) {
+	apiClient.on("deleteElection", function (electionid) {
 		$("#agenda #options #slidecontent-election-electionid").sortedList("remove", electionid);
 	});
 
