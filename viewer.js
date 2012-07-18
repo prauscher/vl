@@ -1,8 +1,13 @@
 // vim:noet:sw=8:
 
-var webserver = require('./webserver.js');
+var Webserver = require('./webserver.js');
 
-var app = webserver.createServer();
-app.setStart('/projector');
-app.addViewer();
-app.start();
+var app = new Webserver({
+	start: '/admin',
+	isAllowed: function (perm, req) {
+		return ["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0;
+	},
+	forbidden: function (req, res) {
+		res.send(403);
+	}
+});

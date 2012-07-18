@@ -8,16 +8,24 @@ function APIClient() {
 }
 
 APIClient.prototype.getSocket = function (path, callback) {
+	var self = this;
+
 	if (this.sockets[path]) {
 		callback(this.sockets[path]);
 	} else {
 		console.log("[APIClient] connecting to " + path);
-		var socket = this.socket.of(path)
-			.on("connect", function () {
-				console.log("[APIClient] connected to " + path);
-				callback(this);
-			});
-		this.sockets[path] = socket;
+		$.ajax({
+			type: 'POST',
+			url: '/authSocket' + path,
+			success: function () {
+				var socket = self.socket.of(path)
+					.on("connect", function () {
+						console.log("[APIClient] connected to " + path);
+						callback(this);
+					});
+				self.sockets[path] = socket;
+			}
+		});
 	}
 }
 
