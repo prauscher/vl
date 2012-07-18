@@ -9,6 +9,10 @@ var app = new Webserver({
 		if (["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0) {
 			return true;
 		}
+		// Vote-Interfaces have their own authentification
+		if (perm.substring(0,5) == "vote:") {
+			return true;
+		}
 		if (req.session.password == config.password) {
 			return true;
 		}

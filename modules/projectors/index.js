@@ -1,10 +1,9 @@
 // vim:noet:sw=8:
 
-var backendRouter = require('./backend.js');
+var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
 	options.put('/projectors/:projectorid/save', "projectors:save", backendRouter.generateSave(backend.projectors, "projectorid", "projector") );
-
 	options.post('/projectors/:projectorid/delete', "projectors:delete", backendRouter.generateDelete(backend.projectors, "projectorid") );
 
 	options.post('/projectors/:projectorid/showTimer', "projectors:timers", function (req, res) {
@@ -40,4 +39,6 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
+
+	global.projectorSocket = options.addSocket("/projectors", "projectors", require("./socket.js"));
 }

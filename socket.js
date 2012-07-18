@@ -11,11 +11,3 @@ exports.listen = function (app) {
 
 	return io;
 }
-
-exports.projectors = require('./sockets/projectors.js');
-exports.timers = require('./sockets/timers.js');
-exports.agenda = require('./sockets/agenda.js');
-exports.motions = require('./sockets/motions.js');
-exports.elections = require('./sockets/elections.js');
-exports.ballots = require('./sockets/ballots.js');
-exports.pollsites = require('./sockets/pollsites.js');

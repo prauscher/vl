@@ -35,54 +35,58 @@ module.exports = function (options) {
 
 	// Routes
 
-	function generateRouteCallback(permission, route) {
-		return function (req, res) {
-			if (options.isAllowed(permission, req)) {
-				route(req, res);
-			} else {
-				options.forbidden(req, res);
+	this.securityManager = {
+		checks : [],
+
+		generateCheck : function (permission, route) {
+			var self = this;
+			return function (req, res) {
+				for (var i in self.checks) {
+					if (! self.checks[i].isAllowed(permission, req)) {
+						return self.checks[i].forbidden(req, res);
+					}
+				}
+				return route(req, res);
 			}
+		},
+
+		addCheck : function (options) {
+			this.checks.push(options);
 		}
-	}
+	};
 
 	this.get('/', function(req,res) {
 		res.redirect(options.start);
 	});
 
-	require('./routes')({
+	require('./modules')({
 		get : function (path, permission, route) {
-			self.get(path, generateRouteCallback(permission, route));
+			self.get(path, self.securityManager.generateCheck(permission, route));
 		},
 		post : function (path, permission, route) {
-			self.post(path, generateRouteCallback(permission, route));
+			self.post(path, self.securityManager.generateCheck(permission, route));
 		},
 		put : function (path, permission, route) {
-			self.put(path, generateRouteCallback(permission, route));
+			self.put(path, self.securityManager.generateCheck(permission, route));
+		},
+		addSecurityCheck : function (options) {
+			self.securityManager.addCheck(options);
+		},
+		addSocket : function (path, permission, addCallbacks) {
+			var authorized = false;
+
+			self.post('/authSocket' + path,	self.securityManager.generateCheck(permission, function (req, res) {
+				authorized = true;
+				res.send(200);
+			}) );
+
+			return io.of(path)
+				.authorization(function (handshake, callback) {
+					callback(null, authorized);
+				})
+				.on("connection", addCallbacks);
 		}
 	});
-
-	function addSocket(path, permission, addCallbacks) {
-		var authorized = false;
-
-		self.post('/authSocket' + path,	generateRouteCallback(permission, function (req, res) {
-			authorized = true;
-			res.send(200);
-		}) );
-
-		return io.of(path)
-			.authorization(function (handshake, callback) {
-				callback(null, authorized);
-			})
-			.on("connection", addCallbacks);
-	}
-
-	global.projectorSocket	= addSocket("/projectors",	"projectors",	socket.projectors);
-	global.timerSocket	= addSocket("/timers",		"timers",	socket.timers);
-	global.agendaSocket	= addSocket("/agenda",		"agenda",	socket.agenda);
-	global.motionSocket	= addSocket("/motions",		"motions",	socket.motions);
-	global.electionSocket	= addSocket("/elections",	"elections",	socket.elections);
-	global.ballotSocket	= addSocket("/ballots",		"ballots",	socket.ballots);
-	global.pollsiteSocket	= addSocket("/pollsites",	"pollsites",	socket.pollsites);
 }
 
 module.exports.prototype.get = function () {

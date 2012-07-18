@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var backendRouter = require('./backend.js');
+var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
 	// Set started-value to current Date, eventually setting value
@@ -42,4 +42,6 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
+
+	global.timerSocket = options.addSocket("/timers", "timers", require("./socket.js"));
 }

@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var backendRouter = require('./backend.js');
+var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
 	options.put('/elections/:electionid/save', "elections:save", backendRouter.generateSave(backend.elections, "electionid", "election") );
@@ -17,4 +17,6 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
+
+	global.electionSocket = options.addSocket("/elections", "elections", require("./socket.js"));
 }

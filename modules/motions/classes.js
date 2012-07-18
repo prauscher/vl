@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var backendRouter = require('./backend.js');
+var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
 	options.put('/motionclasses/:motionclassid/save', "motionclasses:save", backendRouter.generateSave(backend.motionclasses, "motionclassid", "motionclass") );
