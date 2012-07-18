@@ -173,16 +173,16 @@ module.exports.prototype.listen = function (config) {
 			"public/apiClient/ballots.js",
 			"public/apiClient/options.js",
 			"public/apiClient/timerClient.js",
-			"public/javascript/viewer/index.js",
-			"public/javascript/viewer/navigation.js",
-			"public/javascript/viewer/viewerdata.js",
-			"public/javascript/viewer/currenttime.js",
-			"public/javascript/viewer/defaultprojector.js",
-			"public/javascript/viewer/projectors.js",
-			"public/javascript/viewer/agenda.js",
-			"public/javascript/viewer/motions.js",
-			"public/javascript/viewer/elections.js",
-			"public/javascript/viewer/ballots.js"
+			"public/javascript/showProjector/index.js",
+			"public/javascript/showProjector/navigation.js",
+			"public/javascript/showProjector/viewerdata.js",
+			"public/javascript/showProjector/currenttime.js",
+			"public/javascript/showProjector/defaultprojector.js",
+			"public/javascript/showProjector/projectors.js",
+			"public/javascript/showProjector/agenda.js",
+			"public/javascript/showProjector/motions.js",
+			"public/javascript/showProjector/elections.js",
+			"public/javascript/showProjector/ballots.js"
 		],
 		fileOut: "public/min/showProjector.js"
 	});
