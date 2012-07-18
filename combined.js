@@ -4,7 +4,10 @@ var config = require('./config.js'),
     Webserver = require('./webserver.js');
 
 var app = new Webserver({
-	start: '/projector',
+	start: '/projector'
+});
+
+app.securityManager.addCheck({
 	isAllowed: function (perm, req) {
 		if (["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0) {
 			return true;
