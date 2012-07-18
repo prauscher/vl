@@ -1,36 +1,36 @@
 // vim:noet:sw=8:
 
-var config = require('./config.js'),
-    express = require('express'),
+var express = require('express'),
     compressor = require('node-minify'),
     socket = require('./socket.js');
 
 module.exports = function (options) {
-	var app = express.createServer();
+	var self = this;
+	this.app = express.createServer();
 
 	global.backend = require('./backend');
-	global.io = socket.listen(app);
+	global.io = socket.listen(this.app);
 
 	// Configuration
 
-	app.configure(function() {
-		app.set('views', __dirname + '/views');
-		app.set('view engine', 'jade');
-		app.set('view options', { layout : false });
-		app.use(express.bodyParser());
-		app.use(express.methodOverride());
-		app.use(express.cookieParser());
-		app.use(express.session({ secret: "UsMohsaEkB14iwuterECSv29HEbJ407h" }));
-		app.use(app.router);
-		app.use(express.static(__dirname + '/public', { maxAge: 24*60*60*1000 }));
+	this.app.configure(function() {
+		this.set('views', __dirname + '/views');
+		this.set('view engine', 'jade');
+		this.set('view options', { layout : false });
+		this.use(express.bodyParser());
+		this.use(express.methodOverride());
+		this.use(express.cookieParser());
+		this.use(express.session({ secret: "UsMohsaEkB14iwuterECSv29HEbJ407h" }));
+		this.use(this.router);
+		this.use(express.static(__dirname + '/public', { maxAge: 24*60*60*1000 }));
 	});
 
-	app.configure('development', function(){
-		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	this.app.configure('development', function(){
+		this.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	});
 
-	app.configure('production', function(){
-		app.use(express.errorHandler());
+	this.app.configure('production', function(){
+		this.use(express.errorHandler());
 	});
 
 	// Routes
@@ -45,68 +45,26 @@ module.exports = function (options) {
 		}
 	}
 
-	var routes = require('./routes');
-
-	app.get('/', function(req,res) {
+	this.get('/', function(req,res) {
 		res.redirect(options.start);
 	});
 
-	app.get('/projector', generateRouteCallback("showProjector", function(req, res) {
-		res.render('showProjector', {});
-	}));
-
-	app.get('/admin', generateRouteCallback("admin", function (req, res) {
-		res.render('admin');
-	}));
-
-	app.post('/identify-projectors',			generateRouteCallback("projectors:identify",	routes.projectors.identify) );
-
-	app.put('/agenda/:slideid/save',			generateRouteCallback("agenda:save",		routes.agenda.save) );
-	app.post('/agenda/:slideid/delete',			generateRouteCallback("agenda:delete",		routes.agenda.delete) );
-	app.post('/agenda/:slideid/move',			generateRouteCallback("agenda:move",		routes.agenda.move) );
-
-	app.put('/projectors',					generateRouteCallback("projectors:setdefault",	routes.projectors.setDefault) );
-	app.put('/projectors/:projectorid/save',		generateRouteCallback("projectors:save",	routes.projectors.save) );
-	app.post('/projectors/:projectorid/delete',		generateRouteCallback("projectors:delete",	routes.projectors.delete) );
-	app.post('/projectors/:projectorid/showtimer',		generateRouteCallback("projectors:timers",	routes.projectors.showTimer) );
-	app.post('/projectors/:projectorid/hidetimer',		generateRouteCallback("projectors:timers",	routes.projectors.hideTimer) );
-	app.post('/projectors/:projectorid/flash',		generateRouteCallback("projectors:flash",	routes.projectors.flash) );
-
-	app.put('/timers/:timerid/save',			generateRouteCallback("timers:save",		routes.timers.save) );
-	app.post('/timers/:timerid/delete',			generateRouteCallback("timers:delete",		routes.timers.delete) );
-	app.post('/timers/:timerid/start',			generateRouteCallback("timers:run",		routes.timers.start) );
-	app.post('/timers/:timerid/pause',			generateRouteCallback("timers:run",		routes.timers.pause) );
-	app.post('/timers/:timerid/stop',			generateRouteCallback("timers:run",		routes.timers.stop) );
-
-	app.put('/motionclasses/:motionclassid/save',		generateRouteCallback("motionclasses:save",	routes.motionclasses.save) );
-	app.post('/motionclasses/:motionclassid/delete',	generateRouteCallback("motionclasses:delete",	routes.motionclasses.delete) );
-	app.post('/motionclasses/:motionclassid/move',		generateRouteCallback("motionclasses:move",	routes.motionclasses.move) );
-
-	app.put('/motions/:motionid/save',			generateRouteCallback("motions:save",		routes.motions.save) );
-	app.post('/motions/:motionid/delete',			generateRouteCallback("motions:delete",		routes.motions.delete) );
-	app.post('/motions/:motionid/move',			generateRouteCallback("motions:move",		routes.motions.move) );
-	app.put('/motions/:motionid/addBallot',			generateRouteCallback("motions:ballots",	routes.motions.addBallot) );
-	app.post('/motions/:motionid/deleteBallot',		generateRouteCallback("motions:ballots",	routes.motions.deleteBallot) );
-
-	app.put('/elections/:electionid/save',			generateRouteCallback("elections:save",		routes.elections.save) );
-	app.post('/elections/:electionid/delete',		generateRouteCallback("elections:delete",	routes.elections.delete) );
-	app.put('/elections/:electionid/addBallot',		generateRouteCallback("elections:ballots",	routes.elections.addBallot) );
-	app.post('/elections/:electionid/deleteBallot',		generateRouteCallback("elections:ballots",	routes.elections.deleteBallot) );
-
-	app.put('/ballots/:ballotid/save',			generateRouteCallback("ballots:save",		routes.ballots.save) );
-	app.put('/ballots/:ballotid/addOption',			generateRouteCallback("ballots:options",	routes.ballots.addOption) );
-	app.post('/ballots/:ballotid/moveOption',		generateRouteCallback("ballots:options",	routes.ballots.moveOption) );
-	app.post('/ballots/:ballotid/deleteOption',		generateRouteCallback("ballots:options",	routes.ballots.deleteOption) );
-
-	app.put('/options/:optionid/save',			generateRouteCallback("ballots:options",	routes.options.save) );
-
-	app.put('/pollsites/:pollsiteid/save',			generateRouteCallback("pollsite:save",		routes.pollsites.save) );
-	app.post('/pollsites/:pollsiteid/delete',		generateRouteCallback("pollsite:delete",	routes.pollsites.delete) );
+	require('./routes')({
+		get : function (path, permission, route) {
+			self.get(path, generateRouteCallback(permission, route));
+		},
+		post : function (path, permission, route) {
+			self.post(path, generateRouteCallback(permission, route));
+		},
+		put : function (path, permission, route) {
+			self.put(path, generateRouteCallback(permission, route));
+		}
+	});
 
 	function addSocket(path, permission, addCallbacks) {
 		var authorized = false;
 
-		app.post('/authSocket' + path,	generateRouteCallback(permission, function (req, res) {
+		self.post('/authSocket' + path,	generateRouteCallback(permission, function (req, res) {
 			authorized = true;
 			res.send(200);
 		}) );
@@ -125,9 +83,21 @@ module.exports = function (options) {
 	global.electionSocket	= addSocket("/elections",	"elections",	socket.elections);
 	global.ballotSocket	= addSocket("/ballots",		"ballots",	socket.ballots);
 	global.pollsiteSocket	= addSocket("/pollsites",	"pollsites",	socket.pollsites);
+}
 
-	// Showtime!
+module.exports.prototype.get = function () {
+	this.app.get.apply(this.app, arguments);
+}
 
+module.exports.prototype.post = function () {
+	this.app.post.apply(this.app, arguments);
+}
+
+module.exports.prototype.put = function () {
+	this.app.put.apply(this.app, arguments);
+}
+
+module.exports.prototype.listen = function (config) {
 	new compressor.minify({
 		type: 'no-compress',
 		fileIn: [
@@ -217,11 +187,11 @@ module.exports = function (options) {
 		fileOut: "public/min/showProjector.js"
 	});
 
-	app.listen(config.port, config.host, function() {
+	this.app.listen(config.port, config.host, function() {
 		if (process.getuid() == 0) {
 			process.setgid(config.setgid);
 			process.setuid(config.setuid);
 		}
 	});
-	console.log("Express server listening on http://%s:%d/ in mode %s", config.host || "localhost", config.port, app.settings.env);
+	console.log("Express server listening on http://%s:%d/ in mode %s", config.host || "localhost", config.port, this.app.settings.env);
 }

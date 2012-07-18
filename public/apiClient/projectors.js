@@ -165,7 +165,7 @@ APIClient.prototype.flashProjector = function (projectorid, flash, callbackSucce
 APIClient.prototype.showTimerProjector = function (projectorid, timerid, callbackSuccess) {
 	$.ajax({
 		type: 'POST',
-		url: '/projectors/' + projectorid + '/showtimer',
+		url: '/projectors/' + projectorid + '/showTimer',
 		data: { timerid: timerid },
 		success: callbackSuccess
 	});
@@ -174,7 +174,7 @@ APIClient.prototype.showTimerProjector = function (projectorid, timerid, callbac
 APIClient.prototype.hideTimerProjector = function (projectorid, timerid, callbackSuccess) {
 	$.ajax({
 		type: 'POST',
-		url: '/projectors/' + projectorid + '/hidetimer',
+		url: '/projectors/' + projectorid + '/hideTimer',
 		data: { timerid: timerid },
 		success: callbackSuccess
 	});

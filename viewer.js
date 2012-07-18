@@ -3,7 +3,7 @@
 var Webserver = require('./webserver.js');
 
 var app = new Webserver({
-	start: '/admin',
+	start: '/projector',
 	isAllowed: function (perm, req) {
 		return ["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0;
 	},
