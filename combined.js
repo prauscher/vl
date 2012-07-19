@@ -7,28 +7,30 @@ var app = new Webserver({
 	start: '/projector'
 });
 
+var clients = {};
 app.securityManager.addCheck({
-	isAllowed: function (perm, req) {
+	isAllowed: function (sessionID, perm, callback) {
 		if (["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0) {
-			return true;
-		}
+			callback(true);
 		// Vote-Interfaces have their own authentification
-		if (perm.substring(0,5) == "vote:") {
-			return true;
+		} else if (perm.substring(0,5) == "vote:") {
+			callback(true);
+		} else if (clients[sessionID] && clients[sessionID].loggedIn) {
+			callback(true);
+		} else {
+			callback(false);
 		}
-		if (req.session.password == config.password) {
-			return true;
-		}
-		return false;
 	},
 	forbidden: function (req, res) {
 		res.render("login");
 	}
 });
-
 app.post("/login", function (req, res) {
-	req.session.password = req.body.password;
-	res.send({ success: req.session.password == config.password });
+	clients[req.sessionID] = {};
+	if (req.body.password == config.password) {
+		clients[req.sessionID].loggedIn = true;
+	}
+	res.send({ success: clients[req.sessionID].loggedIn });
 });
 
 app.listen(config);

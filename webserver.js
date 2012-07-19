@@ -20,7 +20,7 @@ module.exports = function (options) {
 		this.use(express.bodyParser());
 		this.use(express.methodOverride());
 		this.use(express.cookieParser());
-		this.use(express.session({ secret: "UsMohsaEkB14iwuterECSv29HEbJ407h" }));
+		this.use(express.session({ secret: 'dsfwe113r2r32f43', key: 'express.sid' }));
 		this.use(this.router);
 		this.use(express.static(__dirname + '/public', { maxAge: 24*60*60*1000 }));
 	});
@@ -38,15 +38,34 @@ module.exports = function (options) {
 	this.securityManager = {
 		checks : [],
 
+		performChecks : function (sessionID, permission, callback) {
+			var self = this;
+			function performChecks(i) {
+				if (self.checks[i]) {
+					self.checks[i].isAllowed(sessionID, permission, function (isAllowed) {
+						if (isAllowed) {
+							performChecks(i+1);
+						} else {
+							callback(false, self.checks[i]);
+						}
+					});
+				} else {
+					callback(true);
+				}
+			}
+			performChecks(0);
+		},
+
 		generateCheck : function (permission, route) {
 			var self = this;
 			return function (req, res) {
-				for (var i in self.checks) {
-					if (! self.checks[i].isAllowed(permission, req)) {
-						return self.checks[i].forbidden(req, res);
+				self.performChecks(req.sessionID, permission, function (isAllowed, breaker) {
+					if (isAllowed) {
+						route(req, res);
+					} else {
+						breaker.forbidden(req, res);
 					}
-				}
-				return route(req, res);
+				});
 			}
 		},
 
@@ -73,16 +92,13 @@ module.exports = function (options) {
 			self.securityManager.addCheck(options);
 		},
 		addSocket : function (path, permission, addCallbacks) {
-			var authorized = false;
-
-			self.post('/authSocket' + path,	self.securityManager.generateCheck(permission, function (req, res) {
-				authorized = true;
-				res.send(200);
-			}) );
-
 			return io.of(path)
 				.authorization(function (handshake, callback) {
-					callback(null, authorized);
+					// VooDoo by http://www.danielbaulig.de/socket-ioexpress/
+					var sessionID = require('cookie').parse(handshake.headers.cookie)['express.sid'];
+					self.securityManager.performChecks(sessionID, permission, function (authorized) {
+						callback(null, authorized);
+					});
 				})
 				.on("connection", addCallbacks);
 		}

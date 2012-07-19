@@ -8,8 +8,8 @@ var app = new Webserver({
 });
 
 app.securityManager.addCheck({
-	isAllowed: function (perm, req) {
-		return ["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0;
+	isAllowed: function (sessionID, perm, callback) {
+		callback(["showProjector", "projectors", "timers", "agenda", "motions", "elections", "ballots"].indexOf(perm) >= 0);
 	},
 	forbidden: function (req, res) {
 		res.send(403);

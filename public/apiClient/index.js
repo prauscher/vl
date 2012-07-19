@@ -14,18 +14,11 @@ APIClient.prototype.getSocket = function (path, callback) {
 		callback(this.sockets[path]);
 	} else {
 		console.log("[APIClient] connecting to " + path);
-		$.ajax({
-			type: 'POST',
-			url: '/authSocket' + path,
-			success: function () {
-				var socket = self.socket.of(path)
-					.on("connect", function () {
-						console.log("[APIClient] connected to " + path);
-						callback(this);
-					});
-				self.sockets[path] = socket;
-			}
-		});
+		this.sockets[path] = this.socket.of(path)
+			.on("connect", function () {
+				console.log("[APIClient] connected to " + path);
+				callback(this);
+			});
 	}
 }
 
