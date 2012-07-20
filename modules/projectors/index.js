@@ -3,42 +3,44 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	options.put('/projectors/:projectorid/save', "projectors:save", backendRouter.generateSave(backend.projectors, "projectorid", "projector") );
-	options.post('/projectors/:projectorid/delete', "projectors:delete", backendRouter.generateDelete(backend.projectors, "projectorid") );
+	this.backend = require("./backend.js");
+
+	options.put('/projectors/:projectorid/save', "projectors:save", backendRouter.generateSave(this.backend, "projectorid", "projector") );
+	options.post('/projectors/:projectorid/delete', "projectors:delete", backendRouter.generateDelete(this.backend, "projectorid") );
 
 	options.post('/projectors/:projectorid/showTimer', "projectors:timers", function (req, res) {
-		backend.timers.get(req.body.timerid, function (timer) {
-			backend.projectors.showTimer(req.params.projectorid, req.body.timerid, timer, function() {
+		modules.timers.backend.get(req.body.timerid, function (timer) {
+			self.backend.projectors.showTimer(req.params.projectorid, req.body.timerid, timer, function() {
 				res.send(200);
 			});
 		});
 	});
 
 	options.post('/projectors/:projectorid/hideTimer', "projectors:timers", function (req, res) {
-		backend.timers.get(req.body.timerid, function (timer) {
-			backend.projectors.hideTimer(req.params.projectorid, req.body.timerid, timer, function() {
+		modules.timers.backend.get(req.body.timerid, function (timer) {
+			self.backend.hideTimer(req.params.projectorid, req.body.timerid, timer, function() {
 				res.send(200);
 			});
 		});
 	});
 
 	options.put('/projectors', "projectors:setDefault", function(req, res) {
-		backend.projectors.setDefault(req.body.projectorid, function (err) {
+		self.backend.setDefault(req.body.projectorid, function (err) {
 			res.send(200);
 		});
 	});
 
 	options.post('/identify-projectors', "projectors:identify", function (req, res) {
-		backend.projectors.identify(req.body.timeout, function () {
+		self.backend.identify(req.body.timeout, function () {
 			res.send(200);
 		});
 	});
 
 	options.post('/projectors/:projectorid/flash', "projectors:flash", function (req, res) {
-		backend.projectors.flash(req.params.projectorid, req.body.flash, function () {
+		self.backend.flash(req.params.projectorid, req.body.flash, function () {
 			res.send(200);
 		});
 	});
 
-	global.projectorSocket = options.addSocket("/projectors", "projectors", require("./socket.js"));
+	global.projectorSocket = options.addSocket("/projectors", "projectors", require("./socket.js").apply(this));
 }

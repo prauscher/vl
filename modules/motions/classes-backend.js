@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var HierarchicalStructure = require('./structure/hierarchical.js');
+var HierarchicalStructure = require('../backendStructureHierarchical.js');
 
 module.exports = new HierarchicalStructure({
 	sanitize : function(item) {

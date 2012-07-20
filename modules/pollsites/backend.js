@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var FlatStructure = require('./structure/flat.js');
+var FlatStructure = require("../backendStructureFlat.js");
 
 module.exports = new FlatStructure({
 	sanitize : function (item) {

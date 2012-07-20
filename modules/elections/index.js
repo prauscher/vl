@@ -3,20 +3,23 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	options.put('/elections/:electionid/save', "elections:save", backendRouter.generateSave(backend.elections, "electionid", "election") );
-	options.post('/elections/:electionid/delete', "elections:delete", backendRouter.generateDelete(backend.elections, "electionid") );
+	var self = this;
+	this.backend = require("./backend.js");
+
+	options.put('/elections/:electionid/save', "elections:save", backendRouter.generateSave(this.backend, "electionid", "election") );
+	options.post('/elections/:electionid/delete', "elections:delete", backendRouter.generateDelete(this.backend, "electionid") );
 
 	options.put('/elections/:electionid/addBallot', "elections:ballots", function (req, res) {
-		backend.elections.addBallot(req.params.electionid, req.body.ballotid, req.body.ballot, function() {
+		self.backend.addBallot(req.params.electionid, req.body.ballotid, req.body.ballot, function() {
 			res.send(200);
 		});
 	});
 
 	options.post('/elections/:electionid/deleteBallot', "elections:ballots", function (req, res) {
-		backend.elections.deleteBallot(req.params.electionid, req.body.ballotid, function () {
+		self.backend.deleteBallot(req.params.electionid, req.body.ballotid, function () {
 			res.send(200);
 		});
 	});
 
-	global.electionSocket = options.addSocket("/elections", "elections", require("./socket.js"));
+	global.electionSocket = options.addSocket("/elections", "elections", require("./socket.js").apply(this));
 }

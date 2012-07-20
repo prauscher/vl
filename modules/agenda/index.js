@@ -3,9 +3,11 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	options.put('/agenda/:slideid/save', "agenda:save", backendRouter.generateSave(backend.agenda, "slideid", "slide") );
-	options.post('/agenda/:slideid/move', "agenda:move", backendRouter.generateMove(backend.agenda, "slideid", "parentid", "position") );
-	options.post('/agenda/:slideid/delete', "agenda:delete", backendRouter.generateDelete(backend.agenda, "slideid") );
+	this.backend = require('./backend.js');
 
-	global.agendaSocket = options.addSocket("/agenda", "agenda", require("./socket.js"));
+	options.put('/agenda/:slideid/save', "agenda:save", backendRouter.generateSave(this.backend, "slideid", "slide") );
+	options.post('/agenda/:slideid/move', "agenda:move", backendRouter.generateMove(this.backend, "slideid", "parentid", "position") );
+	options.post('/agenda/:slideid/delete', "agenda:delete", backendRouter.generateDelete(this.backend, "slideid") );
+
+	global.agendaSocket = options.addSocket("/agenda", "agenda", require("./socket.js").apply(this));
 }

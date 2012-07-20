@@ -1,25 +1,29 @@
 // vim:noet:sw=8:
 
-var backendRouter = require('../backendRouter.js');
+var backendRouter = require('../backendRouter.js'),
+    ClassesModule = require('./classes.js');
 
 module.exports = function (options) {
-	options.put('/motions/:motionid/save', "motions:save", backendRouter.generateSave(backend.motions, "motionid", "motion") );
-	options.post('/motions/:motionid/move', "motions:move", backendRouter.generateMove(backend.motions, "motionid", "classid", "position") );
-	options.post('/motions/:motionid/delete', "motions:delete", backendRouter.generateDelete(backend.motions, "motionid") );
+	var self = this;
+	this.backend = require("./backend.js");
+
+	options.put('/motions/:motionid/save', "motions:save", backendRouter.generateSave(this.backend, "motionid", "motion") );
+	options.post('/motions/:motionid/move', "motions:move", backendRouter.generateMove(this.backend, "motionid", "classid", "position") );
+	options.post('/motions/:motionid/delete', "motions:delete", backendRouter.generateDelete(this.backend, "motionid") );
 
 	options.put('/motions/:motionid/addBallot', "motions:ballots", function (req, res) {
-		backend.motions.addBallot(req.params.motionid, req.body.ballotid, req.body.ballot, function() {
+		self.backend.addBallot(req.params.motionid, req.body.ballotid, req.body.ballot, function() {
 			res.send(200);
 		});
 	});
 
 	options.post('/motions/:motionid/deleteBallot', "motions:ballots", function (req, res) {
-		backend.motions.deleteBallot(req.params.motionid, req.body.ballotid, function () {
+		self.backend.deleteBallot(req.params.motionid, req.body.ballotid, function () {
 			res.send(200);
 		});
 	});
 
-	global.motionSocket = options.addSocket("/motions", "motions", require("./socket.js"));
+	global.motionSocket = options.addSocket("/motions", "motions", require("./socket.js").apply(this));
 
-	require("./classes.js")(options);
+	this.classes = new ClassesModule(options);
 }

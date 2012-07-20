@@ -1,6 +1,6 @@
 // vim:noet:sw=8:
 
-var FlatStructure = require('./structure/flat.js');
+var FlatStructure = require("../backendStructureFlat.js");
 
 module.exports = new FlatStructure({
 	sanitize : function (item) {
@@ -54,7 +54,7 @@ module.exports.identify = function (timeout, callbackSuccess) {
 module.exports.getTimers = function (id, callback) {
 	core.projectors.getTimers(id, function (timerids) {
 		timerids.forEach(function (timerid, n) {
-			backend.timers.get(timerid, function (timer) {
+			modules.timers.backend.get(timerid, function (timer) {
 				callback(timerid, timer);
 			});
 		});
@@ -78,4 +78,4 @@ module.exports.hideTimer = function (projectorid, timerid, timer, callbackSucces
 			callbackSuccess();
 		}
 	});
- }
+}

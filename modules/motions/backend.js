@@ -90,7 +90,7 @@ exports.deleteBallot = function (motionid, ballotid, callbackSuccess) {
 exports.eachBallot = function (motionid, callback) {
 	core.motions.getBallots(motionid, function (ballotids) {
 		ballotids.forEach(function (ballotid, n) {
-			backend.ballots.get(ballotid, function (ballot) {
+			modules.ballots.backend.get(ballotid, function (ballot) {
 				callback(ballotid, ballot);
 			});
 		});

@@ -2,14 +2,15 @@
 
 var express = require('express'),
     compressor = require('node-minify'),
-    socket = require('./socket.js');
+    socket = require('./socket.js'),
+    Modules = require('./modules');
 
 module.exports = function (options) {
 	var self = this;
 	this.app = express.createServer();
 
 	global.backend = require('./backend');
-	var io = socket.listen(this.app);
+	this.io = socket.listen(this.app);
 
 	// Configuration
 
@@ -78,31 +79,7 @@ module.exports = function (options) {
 		res.redirect(options.start);
 	});
 
-	require('./modules')({
-		get : function (path, permission, route) {
-			self.get(path, self.securityManager.generateCheck(permission, route));
-		},
-		post : function (path, permission, route) {
-			self.post(path, self.securityManager.generateCheck(permission, route));
-		},
-		put : function (path, permission, route) {
-			self.put(path, self.securityManager.generateCheck(permission, route));
-		},
-		addSecurityCheck : function (options) {
-			self.securityManager.addCheck(options);
-		},
-		addSocket : function (path, permission, addCallbacks) {
-			return io.of(path)
-				.authorization(function (handshake, callback) {
-					// VooDoo by http://www.danielbaulig.de/socket-ioexpress/
-					var sessionID = require('cookie').parse(handshake.headers.cookie)['express.sid'];
-					self.securityManager.performChecks(sessionID, permission, function (authorized) {
-						callback(null, authorized);
-					});
-				})
-				.on("connection", addCallbacks);
-		}
-	});
+	global.modules = new Modules(this);
 }
 
 module.exports.prototype.get = function () {

@@ -3,8 +3,10 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	options.put('/pollsites/:pollsiteid/save', "pollsites:save", backendRouter.generateSave(backend.pollsites, "pollsiteid", "pollsite") );
-	options.post('/pollsites/:pollsiteid/delete', "pollsites:delete", backendRouter.generateDelete(backend.pollsites, "pollsiteid") );
+	this.backend = require("./backend.js");
 
-	global.pollsiteSocket = options.addSocket("/pollsites", "pollsites", require("./socket.js"));
+	options.put('/pollsites/:pollsiteid/save', "pollsites:save", backendRouter.generateSave(this.backend, "pollsiteid", "pollsite") );
+	options.post('/pollsites/:pollsiteid/delete', "pollsites:delete", backendRouter.generateDelete(this.backend, "pollsiteid") );
+
+	global.pollsiteSocket = options.addSocket("/pollsites", "pollsites", require("./socket.js").apply(this));
 }

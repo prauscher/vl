@@ -3,5 +3,7 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	options.put('/options/:optionid/save', "ballots:options", backendRouter.generateSave(backend.options, "optionid", "option") );
+	this.backend = require("./options-backend.js");
+
+	options.put('/options/:optionid/save', "ballots:options", backendRouter.generateSave(this.backend, "optionid", "option") );
 }
