@@ -2,11 +2,12 @@
 
 var socketio = require('socket.io');
 
-exports.listen = function (app) {
-	var io = socketio.listen(app);
+module.exports = function () {
+	var self = this;
+	var io = socketio.listen(this.app);
 
 	io.configure(function() {
-		io.set('store', backend.socketIoStore);
+		io.set('store', self.backend.socketIoStore);
 	});
 
 	return io;

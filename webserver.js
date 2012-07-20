@@ -9,8 +9,8 @@ module.exports = function (options) {
 	var self = this;
 	this.app = express.createServer();
 
-	global.backend = require('./backend');
-	this.io = socket.listen(this.app);
+	this.backend = require('./backend');
+	this.io = require("./socket.js").apply(this);
 
 	// Configuration
 
