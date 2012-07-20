@@ -1,98 +1,104 @@
 // vim:noet:sw=8:
 
-function sanitize(item) {
-	return item;
-}
-var db = core.motions;
+module.exports = function () {
+	var self = this;
 
-exports.exists = function (id, callback) {
-	db.exists(id, function (exists) {
-		if (callback) {
-			callback(exists);
-		}
-	});
-}
+	function sanitize(item) {
+		return item;
+	}
+	var db = core.motions;
 
-exports.get = function (id, callback) {
-	db.get(id, function (item) {
-		if (callback) {
-			callback(sanitize(item));
-		}
-	});
-}
+	return {
+		exists : function (id, callback) {
+			db.exists(id, function (exists) {
+				if (callback) {
+					callback(exists);
+				}
+			});
+		},
 
-exports.add = function (id, item, callbackSuccess) {
-	db.save(id, item, function () {
-		core.motionclasses.addMotion(item.classid, id, function (pos) {
-			motionSocket.emit('motion-add:' + item.classid, { motionid : id, position: pos });
+		get : function (id, callback) {
+			db.get(id, function (item) {
+				if (callback) {
+					callback(sanitize(item));
+				}
+			});
+		},
 
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
-		});
-	});
-}
+		add : function (id, item, callbackSuccess) {
+			db.save(id, item, function () {
+				core.motionclasses.addMotion(item.classid, id, function (pos) {
+					self.socket.emit('motion-add:' + item.classid, { motionid : id, position: pos });
 
-exports.save = function (id, item, callbackSuccess) {
-	db.save(id, item, function () {
-		motionSocket.emit('motion-change:' + id, { motion : sanitize(item) });
+					if (callbackSuccess) {
+						callbackSuccess();
+					}
+				});
+			});
+		},
 
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
-	});
-}
-
-exports.delete = function (id, callbackSuccess) {
-	db.delete(id, function () {
-		motionSocket.emit('motion-delete:' + id, {});
-
-		if (callbackSuccess) {
-			callbackSuccess();
-		}
-	});
-}
-
-exports.move = function (id, newclassid, position, callbackSuccess) {
-	exports.get(id, function (item) {
-		db.move(id, item.classid, newclassid, position, function () {
-			item.classid = newclassid;
-			exports.save(id, item, function () {
-				motionSocket.emit('motion-delete:' + id, {});
-				motionSocket.emit('motion-add:' + item.classid, { motionid: id, position: position });
+		save : function (id, item, callbackSuccess) {
+			db.save(id, item, function () {
+				self.socket.emit('motion-change:' + id, { motion : sanitize(item) });
 
 				if (callbackSuccess) {
 					callbackSuccess();
 				}
 			});
-		});
-	});
-}
+		},
 
-exports.addBallot = function (motionid, ballotid, ballot, callbackSuccess) {
-	core.ballots.save(ballotid, ballot, function () {
-		core.motions.addBallot(motionid, ballotid, function () {
-			motionSocket.emit('motion-addballot:' + motionid, { ballotid: ballotid });
+		delete : function (id, callbackSuccess) {
+			db.delete(id, function () {
+				self.socket.emit('motion-delete:' + id, {});
 
-			if (callbackSuccess) {
-				callbackSuccess();
-			}
-		});
-	});
-}
-
-exports.deleteBallot = function (motionid, ballotid, callbackSuccess) {
-	core.motions.deleteBallot(motionid, ballotid, function () {
-		backend.ballots.delete(ballotid, callbackSuccess);
-	});
-}
-
-exports.eachBallot = function (motionid, callback) {
-	core.motions.getBallots(motionid, function (ballotids) {
-		ballotids.forEach(function (ballotid, n) {
-			modules.ballots.backend.get(ballotid, function (ballot) {
-				callback(ballotid, ballot);
+				if (callbackSuccess) {
+					callbackSuccess();
+				}
 			});
-		});
-	});
+		},
+
+		move : function (id, newclassid, position, callbackSuccess) {
+			exports.get(id, function (item) {
+				db.move(id, item.classid, newclassid, position, function () {
+					item.classid = newclassid;
+					exports.save(id, item, function () {
+						self.socket.emit('motion-delete:' + id, {});
+						self.socket.emit('motion-add:' + item.classid, { motionid: id, position: position });
+
+						if (callbackSuccess) {
+							callbackSuccess();
+						}
+					});
+				});
+			});
+		},
+
+		addBallot : function (motionid, ballotid, ballot, callbackSuccess) {
+			core.ballots.save(ballotid, ballot, function () {
+				core.motions.addBallot(motionid, ballotid, function () {
+					self.socket.emit('motion-addballot:' + motionid, { ballotid: ballotid });
+
+					if (callbackSuccess) {
+						callbackSuccess();
+					}
+				});
+			});
+		},
+
+		deleteBallot : function (motionid, ballotid, callbackSuccess) {
+			core.motions.deleteBallot(motionid, ballotid, function () {
+				backend.ballots.delete(ballotid, callbackSuccess);
+			});
+		},
+
+		eachBallot : function (motionid, callback) {
+			core.motions.getBallots(motionid, function (ballotids) {
+				ballotids.forEach(function (ballotid, n) {
+					modules.ballots.backend.get(ballotid, function (ballot) {
+						callback(ballotid, ballot);
+					});
+				});
+			});
+		}
+	}
 }

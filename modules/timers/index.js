@@ -3,7 +3,9 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	this.backend = require("./backend.js");
+	var self = this;
+	this.socket = options.addSocket("/timers", "timers", require("./socket.js").apply(this));
+	this.backend = require("./backend.js").apply(this);
 
 	// Set started-value to current Date, eventually setting value
 	function update(timer) {
@@ -21,7 +23,7 @@ module.exports = function (options) {
 		update(req.body.timer);
 
 		req.body.timer.running = "true";
-		backend.save(req.params.timerid, req.body.timer, function () {
+		self.backend.save(req.params.timerid, req.body.timer, function () {
 			res.send(200);
 		});
 	});
@@ -30,7 +32,7 @@ module.exports = function (options) {
 		update(req.body.timer);
 
 		req.body.timer.running = "false";
-		backend.save(req.params.timerid, req.body.timer, function () {
+		self.backend.save(req.params.timerid, req.body.timer, function () {
 			res.send(200);
 		});
 	});
@@ -40,10 +42,8 @@ module.exports = function (options) {
 
 		req.body.timer.running = "false";
 		req.body.timer.startedValue = req.body.timer.value;
-		backend.save(req.params.timerid, req.body.timer, function () {
+		self.backend.save(req.params.timerid, req.body.timer, function () {
 			res.send(200);
 		});
 	});
-
-	global.timerSocket = options.addSocket("/timers", "timers", require("./socket.js").apply(this));
 }

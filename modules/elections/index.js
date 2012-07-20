@@ -4,7 +4,8 @@ var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
 	var self = this;
-	this.backend = require("./backend.js");
+	this.socket = options.addSocket("/elections", "elections", require("./socket.js").apply(this));
+	this.backend = require("./backend.js").apply(this);
 
 	options.put('/elections/:electionid/save', "elections:save", backendRouter.generateSave(this.backend, "electionid", "election") );
 	options.post('/elections/:electionid/delete', "elections:delete", backendRouter.generateDelete(this.backend, "electionid") );
@@ -20,6 +21,4 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
-
-	global.electionSocket = options.addSocket("/elections", "elections", require("./socket.js").apply(this));
 }

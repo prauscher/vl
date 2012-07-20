@@ -3,7 +3,9 @@
 var backendRouter = require('../backendRouter.js');
 
 module.exports = function (options) {
-	this.backend = require("./backend.js");
+	var self = this;
+	this.socket = options.addSocket("/projectors", "projectors", require("./socket.js").apply(this));
+	this.backend = require("./backend.js").apply(this);
 
 	options.put('/projectors/:projectorid/save', "projectors:save", backendRouter.generateSave(this.backend, "projectorid", "projector") );
 	options.post('/projectors/:projectorid/delete', "projectors:delete", backendRouter.generateDelete(this.backend, "projectorid") );
@@ -41,6 +43,4 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
-
-	global.projectorSocket = options.addSocket("/projectors", "projectors", require("./socket.js").apply(this));
 }

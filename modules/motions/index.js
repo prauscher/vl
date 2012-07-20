@@ -5,7 +5,8 @@ var backendRouter = require('../backendRouter.js'),
 
 module.exports = function (options) {
 	var self = this;
-	this.backend = require("./backend.js");
+	this.socket = options.addSocket("/motions", "motions", require("./socket.js").apply(this));
+	this.backend = require("./backend.js").apply(this);
 
 	options.put('/motions/:motionid/save', "motions:save", backendRouter.generateSave(this.backend, "motionid", "motion") );
 	options.post('/motions/:motionid/move', "motions:move", backendRouter.generateMove(this.backend, "motionid", "classid", "position") );
@@ -22,8 +23,6 @@ module.exports = function (options) {
 			res.send(200);
 		});
 	});
-
-	global.motionSocket = options.addSocket("/motions", "motions", require("./socket.js").apply(this));
 
 	this.classes = new ClassesModule(options);
 }
