@@ -14,7 +14,7 @@ global.config = JSON.parse(fs.readFileSync(process.argv[2]));
 global.app = express();
 var server = http.createServer(app);
 global.io = socketio.listen(server);
-require('./db'); // after global.config exists
+global.model = require('./model.js'); // after global.config exists
 
 // Configuration
 io.set('store', new socketio.RedisStore({
@@ -49,11 +49,6 @@ app.get('/', function(req, res) {
 	res.redirect(config.home);
 });
 
-config.modules.forEach(function(mod) {
-	require('./modules/' + mod);
-});
-
-
 // generate client javascript
 var minify = require('node-minify').minify;
 
@@ -80,4 +75,10 @@ server.on('listening', function() {
 	console.log("Express server listening on http://%s:%d/ in mode %s", config.host || "localhost", config.port, app.get('env'));
 });
 
-server.listen(config.port, config.host);
+model.connect(function() {
+	config.controllers.forEach(function(name) {
+		require('./controllers/' + name);
+	});
+
+	server.listen(config.port, config.host);
+});

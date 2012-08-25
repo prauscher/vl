@@ -6,11 +6,23 @@ $(function() {
         list.empty();
     });
 
-    socket.on('add', function(props) {
-        var tag = $('<tr>').attr("id", "projector:" + props.id);
+    function template(obj) {
+        var tag = $('<tr>').attr("data-id", obj.id);
         tag.append($('<td>')); // color
-        tag.append($('<td>').text(props.title));
+        tag.append($('<td>').text(obj.name));
         tag.append($('<td>')); // options
-        list.append(tag);
+        return tag;
+    }
+
+    socket.on('create', function(obj) {
+        list.append(template(obj));
+    });
+
+    socket.on('update', function(obj) {
+        list.children('[data-id="' + obj.id + '"]').replaceWith(template(obj));
+    });
+
+    socket.on('delete', function(id) {
+        list.children('[data-id="' + id + '"]').remove();
     });
 });

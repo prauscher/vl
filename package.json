@@ -9,6 +9,7 @@
 		"ws": "",
 		"socket.io": "",
 		"cookie": "",
-		"node-minify": ""
+		"node-minify": "",
+		"nohm": ""
 	}
 }
