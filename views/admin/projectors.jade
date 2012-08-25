@@ -1,0 +1,32 @@
+// vim:noet:ts=4:sw=4:
+
+section#projectors.container
+	div.btn-toolbar
+		div.btn-group
+		button#new-projector.btn.btn-success Neu
+	table.table-striped.table-bordered.table-condensed
+		thead
+			tr
+				th
+				th Beamer
+				th(colspan=2) Optionen
+		tbody
+
+div#projector-options.modal
+	div.modal-header
+		button.close(data-dismiss="modal") ×
+		h3 Beamer bearbeiten
+	form.form-horizontal.modal-body
+		.control-group
+			label.control-label Name
+			.controls
+				input(type="text")#title
+		.control-group
+			label.control-label Farbe
+			.controls
+				input(type="hidden")#color
+	div.modal-footer
+		button.btn.btn-danger.pull-left.delete#delete-projector Löschen
+		button.btn(data-dismiss="modal") Schließen
+		button.btn.btn-primary.save#save-projector Speichern
+

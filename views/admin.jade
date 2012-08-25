@@ -1,9 +1,12 @@
+// vim:noet:ts=4:sw=4:
+
 !!!
 html
 	head
-		link(rel='stylesheet',href='/min/admin.css')
-		script(src='/min/admin.js')
+		script(src='/min/libs.js')
 		script(src='/socket.io/socket.io.js')
+		script(src='/min/admin.js')
+		link(rel='stylesheet',href='/style/admin.css')
 		title Versammlungsleiter
 	body
 		div.navbar.navbar-fixed-top
@@ -11,18 +14,12 @@ html
 				div.container
 					a.brand Versammlungsleiter
 					ul.nav
-						li.projectors
-							a#nav-projectors(href="#projectors") Beamereinstellungen
-						li.agenda
-							a#nav-agenda(href="#agenda") Tagesordnung
-						li.timers
-							a#nav-timers(href="#timers") Timer
-						li.motions
-							a#nav-motions(href="#motions") Anträge
-						li.pollsites
-							a#nav-pollsites(href="#pollsites") Wahllokale
-						li.elections
-							a#nav-elections(href="#elections") Wahlen
+						li: a(href="#projectors") Beamereinstellungen
+						li: a(href="#agenda") Tagesordnung
+						li: a(href="#timers") Timer
+						li: a(href="#motions") Anträge
+						li: a(href="#pollsites") Wahllokale
+						li: a(href="#elections") Wahlen
 					a#new-flash.pull-right.btn.btn-danger.btn Info
 					a#identify-projectors.pull-right.btn.btn-info Identifizieren
 					div#showprojector.btn-group.pull-right
@@ -31,319 +28,10 @@ html
 						ul.dropdown-menu
 							li#showprojectors
 								a
-									img.select-projector(src="/images/empty.gif")
-									|  Alle zeigen
+									img.select-projector(src="/img/empty.gif")
+									| Alle zeigen
 							li.divider
 
 		div.visible-desktop(style="width:100%;height:90px;")
 
-		div#ballot.modal
-			div.modal-header
-				button.close(data-dismiss="modal") ×
-				h3 Wahlgang anlegen
-			div.modal-body
-				form.form-horizontal.settings
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-					.control-group
-						label.control-label Stimmen
-						.controls
-							input(type="text",disabled="disabled").span1#countedvotes
-							|  / 
-							input(type="text").span1#maxvotes
-					.control-group
-						label.control-label Status
-						.controls
-							select#status
-								option(value="preparing") In Vorbereitung
-								option(value="voting") Im Wahlgang
-								option(value="counting") Auszählen
-								option(value="done") Ausgewertet
-				div.btn-toolbar
-					button.btn.btn-success.btn-mini.addOption Option hinzufügen
-				ol.options
-			div.modal-footer
-				button.btn.btn-danger.pull-left.delete Löschen
-				button.btn(data-dismiss="modal") Schließen
-				button.btn.btn-primary.save Speichern
-
-		div#flash-options.modal
-			div.modal-header
-				button.close(data-dismiss="modal") ×
-				h3 Bekanntmachung erstellen
-			form.form-horizontal.modal-body
-				.control-group
-					label.control-label Text
-					.controls
-						textarea#text
-				.control-group
-					label.control-label Anzeigezeit
-					.controls
-						input(type="text",value="0:30")#timeout.span1
-				.control-group
-					label.control-label Typ
-					.controls
-						select#type
-							option(value="danger") Error or danger
-							option(value="information") Information
-							option(value="success") Success
-				.control-group
-					label.control-label Beamer
-					.controls#select-projectors
-			div.modal-footer
-				button.btn.btn-primary.save#save-flash Anzeigen
-				button.btn(data-dismiss="modal") Abbrechen
-
-		div#projectors.container
-			div#projectoroptions.btn-toolbar
-				div.btn-group
-					button#new-projector.btn.btn-success Neu
-
-			table#projectors.table-striped.table-bordered.table-condensed
-				tr
-					th
-					th Beamer
-					th(colspan=2) Optionen
-
-			div#projector-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Beamer bearbeiten
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-					.control-group
-						label.control-label Farbe
-						.controls
-							input(type="hidden")#color
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-projector Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-projector Speichern
-
-		div#agenda.container
-			div#slideoptions.btn-toolbar
-				div.btn-group
-					button#new-slide.btn.btn-success Neu
-
-			ol#slides
-
-			div#options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Tagesordnungspunkt bearbeiten
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-					div#slidecontent
-						ul.nav.nav-tabs
-							li
-								a(data-toggle="tab",href="#slidecontent-text").slidecontent-text Text
-							li
-								a(data-toggle="tab",href="#slidecontent-html").slidecontent-html HTML
-							li
-								a(data-toggle="tab",href="#slidecontent-motion").slidecontent-motion Antrag
-							li
-								a(data-toggle="tab",href="#slidecontent-election").slidecontent-election Wahl
-							li
-								a(data-toggle="tab",href="#slidecontent-agenda").slidecontent-agenda Agenda
-						div.tab-content
-							div.tab-pane#slidecontent-text
-								textarea#slidecontent-text-text
-							div.tab-pane#slidecontent-html
-								textarea#slidecontent-html-html
-							div.tab-pane#slidecontent-motion
-								.control-group
-									label.control-label Antrag
-									.controls
-										select#slidecontent-motion-motionid
-								.control-group
-									label.control-label ggf. Wahlgang
-									.controls
-										select#slidecontent-motion-ballotid
-							div.tab-pane#slidecontent-election
-								.control-group
-									label.control-label Wahl
-									.controls
-										select#slidecontent-election-electionid
-								.control-group
-									label.control-label ggf. Wahlgang
-									.controls
-										select#slidecontent-election-ballotid
-							div.tab-pane#slidecontent-agenda
-								| Die Folie listet die untergeordneten Punkte auf.
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-slide Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-slide Speichern
-
-		div#timers.container
-			div#timeroptions.btn-toolbar
-				div.btn-group
-					button#new-timer.btn.btn-success Neu
-
-			table#timers.table-striped.table-bordered.table-condensed
-				tr
-					th 
-					th Timer
-					th Restzeit
-					th(colspan=2) Optionen
-
-			div#timer-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Timer anlegen
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-					.control-group
-						label.control-label Farbe
-						.controls
-							input(type="hidden")#color
-					.control-group
-						label.control-label Zeit
-						.controls
-							input(type="text")#value.span1
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-timer Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-timer Speichern
-
-		div#motions.container
-			div#motionoptions.btn-toolbar
-				div.btn-group
-					a.btn.btn-success.dropdown-toggle(data-toggle="dropdown")
-						Neuer Antrag
-						span.caret
-					ul.dropdown-menu.new-motion-classes
-				div.btn-group
-					button#new-motionclass.btn.btn-success Neue Kategorie
-
-			ol#motions
-
-			div#motion-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Antrag anlegen
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Antragsnummer
-						.controls
-							input(type="text")#motionid.span1
-					.control-group
-						label.control-label Titel
-						.controls
-							input(type="text")#title.span3
-					.control-group
-						label.control-label Antragsteller
-						.controls
-							input(type="text")#submitter.span2
-					.control-group
-						label.control-label Zustand
-						.controls
-							select#status
-								option(value="open")		Offen
-								option(value="accepted")	Angenommen
-								option(value="rejected")	Abgelehnt
-								option(value="withdrawn")	Zurückgezogen
-								option(value="suspended")	Vertagt
-					.control-group
-						label.control-label Antrag
-						.controls
-							textarea#text
-					.control-group
-						label.control-label Begründung
-						.controls
-							textarea#argumentation
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-motion Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-motion Speichern
-
-			div#motionclass-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Antragskategorie anlegen
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-motionclass Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-motionclass Speichern
-
-		div#pollsites.container
-			div#pollsiteoptions.btn-toolbar
-				div.btn-group
-					button#new-pollsite.btn.btn-success Neu
-
-			table#pollsites.table-striped.table-bordered.table-condensed
-				tr
-					th Wahlbüro
-
-			div#pollsite-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Wahlbüro anlegen
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#pollsiteid
-					.control-group
-						label.control-label Passwort
-						.controls
-							input(type="password")#password
-					.control-group
-						label.control-label Max. Stimmen
-						.controls
-							input(type="text").span1#maxvotes
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete#delete-pollsite Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save#save-pollsite Speichern
-
-		div#elections.container
-			div#electionoptions.btn-toolbar
-				div.btn-group
-					button#new-election.btn.btn-success Neu
-
-			table#elections.table-striped.table-bordered.table-condensed
-				tr
-					th Wahlen
-					th Optionen
-
-			div#election-options.modal
-				div.modal-header
-					button.close(data-dismiss="modal") ×
-					h3 Wahlgang anlegen
-				form.form-horizontal.modal-body
-					.control-group
-						label.control-label Name
-						.controls
-							input(type="text")#title
-				div.modal-footer
-					button.btn.btn-danger.pull-left.delete Löschen
-					button.btn(data-dismiss="modal") Schließen
-					button.btn.btn-primary.save Speichern
-
-		script(type="text/javascript")
-			var apiClient = new APIClient();
-			TimerClient(apiClient);
-			apiClient.registerDefaultProjector();
-			apiClient.registerProjectors();
-			apiClient.registerAgenda();
-			apiClient.registerTimers();
-			apiClient.registerMotionClasses();
-			apiClient.registerPollsites();
-			apiClient.registerElections();
+		include admin/projectors.jade

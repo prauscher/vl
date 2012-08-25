@@ -10,15 +10,10 @@ First, install [nodejs](http://nodejs.org/) and [redis](http://redis.io/)
 	cd vl
 	npm install
 
-As socket.io currently ships with an old version of the redis client library, please replace
-node_modules/socket.io/node_modules/redis/lib/util.js with the following content:
-
-	exports.util = require("util");
-
 Configuration
 -------------
 
-Each daemon requires a file for configuration. This files are JSON and may contain the following options:
+The configuration files are JSON and may contain the following options:
 
 * host
 
@@ -32,24 +27,28 @@ Each daemon requires a file for configuration. This files are JSON and may conta
 * setgid
 
   see setuid
-* backend *required*
+* modules
 
-  Which backend-provider to use. Right now, you may only choose "redis" and specify further options in the redis-key.
+  which modules the application should load. Currently, there are "admin" and "viewer"
 
 Running
 -------
 
 After you successfully installed node, redis and the required npm modules, set up the configuration for admin and viewer
-instances. Both config files are JSON and allow the same options, examples are provided in admin.conf and viewer.conf.
+instances. Both config files are JSON and allow the same options, examples are provided the "config" directory.
 
 You can now start the projector interface using
 
-	node viewer.js viewer.conf
+	node app.js config/viewer.conf
 
 Just point your Browser to the given location. Do not kill node, as the server will not daemonize atm.
 
 To run the admin interface use
 
-	node admin.js admin.conf
+	node app.js config/admin.conf
 
 and go ahead just like with the projector interface.
+
+<!--
+vim:noet:ts=4:sw=4:tw=72:
+-->
