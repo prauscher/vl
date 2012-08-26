@@ -1,53 +1,49 @@
 // vim:noet:ts=4:sw=4:
 
-
+var socket = io.of('/projectors');
 
 model.Projector.subscribe('create', function(ev) {
-	io.of('/projectors').emit('create', ev.target.properties);
+	socket.emit('create', ev.target.properties);
 });
 
 model.Projector.subscribe('update', function(ev) {
-	io.of('/projectors').emit('update', ev.target.properties);
+	var diff = { id: ev.target.id, data: {} };
+	ev.target.diff.forEach(function(elem) {
+		diff.data[elem.key] = elem.after;
+	});
+	socket.emit('update', diff);
 });
 
 model.Projector.subscribe('remove', function(ev) {
-	io.of('/projectors').emit('delete', ev.target.id);
+	socket.emit('delete', ev.target.id);
 });
 
-function playbackCreate(modelClass, socket) {
+function playbackCreate(modelClass, client) {
 	modelClass.find(function(err, ids) {
 		ids.forEach(function(id) {
 			modelClass.load(id, function() {
-				socket.emit('create', this.allProperties());
+				client.emit('create', this.allProperties());
 			});
 		});
 	});
 }
 
-app.post('/projectors', function(req, res) {
-	var obj = new model.Projector();
-	for (key in obj.properties) obj.p(key, req.body[key]);
-	obj.save(function() {
-		res.set('Location', '/projector/' + this.id);
-		res.send(200);
-	});
-});
+socket.on('connection', function(client) {
+	client.emit('reset');
+	playbackCreate(model.Projector, client);
 
-app.put('/projector/:id', function(req, res) {
-	model.Projector.load(req.params.id, function() {
-		for (key in this.properties) this.p(key, req.body[key]);
-		this.save(function() {
-			res.send(200);
+	client.on('create', function(data) {
+		var obj = new model.Projector();
+		for (key in data)
+			obj.p(key, data[key]);
+		obj.save();
+	});
+
+	client.on('update', function(diff) {
+		model.Projector.load(diff.id, function() {
+			for (key in diff.data)
+				this.p(key, diff.data[key]);
+			this.save();
 		});
 	});
-});
-
-app.delete('/projector/:id', function(req, res) {
-	model.Projector.remove(req.params.id, function() {
-		res.send(200);
-	});
-});
-
-io.of('/projectors').on('connection', function(socket) {
-	playbackCreate(model.Projector, socket);
 });

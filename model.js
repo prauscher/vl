@@ -5,10 +5,11 @@ nohm.setPrefix('vl');
 nohm.setPublish(true);
 
 var Projector = nohm.model('Projector', {
-    properties: {
-        name: { type: 'string' },
-        color: { type: 'string' }
-    }
+	properties: {
+		name: { type: 'string' },
+		color: { type: 'string' },
+		isVisible: { type: 'boolean', index: true }
+	}
 });
 
 module.exports.Projector = Projector;

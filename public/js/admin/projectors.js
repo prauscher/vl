@@ -1,28 +1,48 @@
+// vim:noet:ts=4:sw=4:
+
 $(function() {
-    var list = $("#projectors table tbody");
-    var socket = io.connect('/projectors');
+	var socket = io.connect('/projectors');
 
-    socket.on('connection', function() {
-        list.empty();
-    });
+	var projectors = {};
+	var list = ko.observableArray();
+	ko.applyBindings({ projectors: list }, $("#projectors table tbody").get(0));
 
-    function template(obj) {
-        var tag = $('<tr>').attr("data-id", obj.id);
-        tag.append($('<td>')); // color
-        tag.append($('<td>').text(obj.name));
-        tag.append($('<td>')); // options
-        return tag;
-    }
+	socket.on('reset', function() {
+		list.removeAll();
+	});
 
-    socket.on('create', function(obj) {
-        list.append(template(obj));
-    });
+	function Projector(obj) {
+		this.id = obj.id;
+		this.name = ko.observable(obj.name);
+		this.color = ko.observable(obj.color);
+		this.isVisible = ko.observable(obj.isVisible);
 
-    socket.on('update', function(obj) {
-        list.children('[data-id="' + obj.id + '"]').replaceWith(template(obj));
-    });
+		this.hide = function() {
+			socket.emit('update', {id: this.id, data: {isVisible: false}});
+		}
 
-    socket.on('delete', function(id) {
-        list.children('[data-id="' + id + '"]').remove();
-    });
+		this.show = function() {
+			socket.emit('update', {id: this.id, data: {isVisible: true}});
+		}
+	}
+
+	$('#new-projector').click(function() {
+		socket.emit('create', {name: 'ladida', color: 'pink', isVisible: false});
+	});
+
+	socket.on('create', function(props) {
+		var obj = new Projector(props);
+		projectors[obj.id] = obj;
+		list.push(obj);
+	});
+
+	socket.on('update', function(diff) {
+		for (key in diff.data)
+			projectors[diff.id][key](diff.data[key]);
+	});
+
+	socket.on('delete', function(id) {
+		list.remove(projectors[id]);
+		delete projectors[id];
+	});
 });
