@@ -16,6 +16,7 @@ module.exports.Projector = Projector;
 module.exports.connect = function(cb) {
 	var readWriteClient = require('redis').createClient(config.redis);
 	readWriteClient.on('connect', function() {
+		module.exports.db = readWriteClient;
 		nohm.setClient(readWriteClient);
 		var pubSubClient = require('redis').createClient(config.redis);
 		pubSubClient.on('connect', function() {
