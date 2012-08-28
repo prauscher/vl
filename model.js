@@ -11,7 +11,17 @@ var Projector = nohm.model('Projector', {
 	}
 });
 
+var Timer = nohm.model('Timer', {
+	properties: {
+		name: { type: 'string' },
+		color: { type: 'string' },
+		running: { type: 'boolean' },
+		lastStarted: { type: 'timestamp' }
+	}
+});
+
 module.exports.Projector = Projector;
+module.exports.Timer = Timer;
 module.exports.connect = function(cb) {
 	var readWriteClient = require('redis').createClient(config.redis);
 	readWriteClient.on('connect', function() {
