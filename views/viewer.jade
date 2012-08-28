@@ -1,9 +1,10 @@
-!!!
+//- vim:noet:ts=4:sw=4:
+doctype 5
 html
 	head
-		title Veranstaltungsleiter
-		link(rel='stylesheet', href='/min/showProjector.css')
-		script(src='/min/showProjector.js')
+		title Projektoransicht
+		link(rel='stylesheet', href='/min/viewer.css')
+		script(src='/min/viewer.js')
 		script(src='/socket.io/socket.io.js')
 
 	body
@@ -49,7 +50,3 @@ html
 			div.content-motion.motion-text
 			div.content-motion.motion-argumentation
 			ol.ballot-options.content-ballot
-
-		script(type="text/javascript")
-			var apiClient = new APIClient();
-			TimerClient(apiClient);
