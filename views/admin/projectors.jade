@@ -18,7 +18,7 @@ section#projectors.container
 				td.options
 					i.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
 					i.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
-					i.icon-star-empty(title="Als Standard setzen")
+					i(data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault", title="Als Standard setzen")
 						span.viewer-controls
 					a(data-bind="attr: { href: '/projector/#!' + id }")
 						i.icon-play-circle(title="Beamer öffnen")

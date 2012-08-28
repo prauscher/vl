@@ -1,7 +1,6 @@
 // vim:noet:ts=4:sw=4:
 
 var nohm = require('nohm').Nohm;
-nohm.setPrefix('vl');
 nohm.setPublish(true);
 
 var Projector = nohm.model('Projector', {

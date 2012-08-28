@@ -21,7 +21,6 @@ model.Projector.subscribe('remove', function(ev) {
 function playbackCreate(list, modelClass, client) {
 	model.db.lrange([list, 0, -1], function(err, ids) {
 		ids.forEach(function(id) {
-			console.log("loading id " + id);
 			modelClass.load(id, function() {
 				client.emit('create', this.allProperties());
 			});
@@ -32,14 +31,15 @@ function playbackCreate(list, modelClass, client) {
 socket.on('connection', function(client) {
 	client.emit('reset');
 	playbackCreate('projectors', model.Projector, client);
+	model.db.get(['default:projector'], function(err, defaultID) {
+		client.emit('setdefault', defaultID);
+	});
 
 	client.on('create', function(data) {
 		var obj = new model.Projector();
-		for (key in data)
-			obj.p(key, data[key]);
+		for (key in data) obj.p(key, data[key]);
 		obj.save(function() {
 			model.db.rpush(['projectors', this.id]);
-			console.log("storing id " + this.id);
 		});
 	});
 
@@ -49,5 +49,10 @@ socket.on('connection', function(client) {
 				this.p(key, diff.data[key]);
 			this.save();
 		});
+	});
+
+	client.on('setdefault', function(id) {
+		model.db.set(['default:projector', id]);
+		socket.emit('setdefault', id);
 	});
 });

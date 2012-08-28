@@ -4,11 +4,14 @@ $(function() {
 	var socket = io.connect('/projectors');
 
 	var projectors = {};
+	var defaultID = ko.observable(null);
 	var list = ko.observableArray();
 	ko.applyBindings({ projectors: list }, $("#projectors table tbody").get(0));
 
 	socket.on('reset', function() {
+		projectors = {};
 		list.removeAll();
+		defaultID(null);
 	});
 
 	function Projector(obj) {
@@ -16,6 +19,9 @@ $(function() {
 		this.name = ko.observable(obj.name);
 		this.color = ko.observable(obj.color);
 		this.isVisible = ko.observable(obj.isVisible);
+		this.isDefault = ko.computed(function() {
+			return this.id == defaultID();
+		}, this);
 
 		this.hide = function() {
 			socket.emit('update', {id: this.id, data: {isVisible: false}});
@@ -23,6 +29,10 @@ $(function() {
 
 		this.show = function() {
 			socket.emit('update', {id: this.id, data: {isVisible: true}});
+		}
+
+		this.setDefault = function() {
+			socket.emit('setdefault', this.id);
 		}
 	}
 
@@ -44,5 +54,9 @@ $(function() {
 	socket.on('delete', function(id) {
 		list.remove(projectors[id]);
 		delete projectors[id];
+	});
+
+	socket.on('setdefault', function(id) {
+		defaultID(id);
 	});
 });
