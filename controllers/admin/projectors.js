@@ -38,6 +38,7 @@ socket.on('connection', function(client) {
 	
 	client.on('remove', function(id) {
 		model.Projector.remove(id);
+		model.db.lrem(['projectors', id, 0]);
 	});
 
 	client.on('setdefault', function(id) {
