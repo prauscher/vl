@@ -1,22 +1,7 @@
 // vim:noet:ts=4:sw=4:
 
 var socket = io.of('/projectors');
-
-model.Projector.subscribe('create', function(ev) {
-	socket.emit('create', ev.target.properties);
-});
-
-model.Projector.subscribe('update', function(ev) {
-	var diff = { id: ev.target.id, data: {} };
-	ev.target.diff.forEach(function(elem) {
-		diff.data[elem.key] = elem.after;
-	});
-	socket.emit('update', diff);
-});
-
-model.Projector.subscribe('remove', function(ev) {
-	socket.emit('remove', ev.target.id);
-});
+propagateModel(model.Projector, socket);
 
 function playbackCreate(list, modelClass, client) {
 	model.db.lrange([list, 0, -1], function(err, ids) {
@@ -51,7 +36,9 @@ socket.on('connection', function(client) {
 		});
 	});
 	
-	client.on('remove', model.Projector.remove);
+	client.on('remove', function(id) {
+		model.Projector.remove(id);
+	});
 
 	client.on('setdefault', function(id) {
 		model.db.set(['default:projector', id]);

@@ -5,13 +5,12 @@ model.initialize('projectors');
 $(function() {
 	$(".select-color").miniColors();
 
-	$(".modal").modal().modal('hide')
-		.on("shown", function() {
-			$(this).find("input:enabled, textarea:enabled").first().focus();
-		});
+	$(".modal").modal().modal('hide').on("shown", function() {
+		$(this).find("input:enabled, textarea:enabled").first().focus();
+	});
 
 	function showTab(id) {
-		$(".nav a").each(function() {
+		$(".nav li > a").each(function() {
 			$(this).parent().toggleClass('active', $(this).attr('href') == id);
 		});
 		$("section").each(function() {
@@ -21,7 +20,5 @@ $(function() {
 
 	$(window).on('hashchange', function() {
 		showTab(location.hash || "#agenda");
-	});
-
-	$(window).trigger('hashchange');
+	}).trigger('hashchange');
 });
