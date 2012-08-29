@@ -8,17 +8,14 @@ $(function() {
 	var list = ko.observableArray();
 	ko.applyBindings({ projectors: list }, $("#projectors table tbody").get(0));
 
-	socket.on('reset', function() {
-		projectors = {};
-		list.removeAll();
-		defaultID(null);
-	});
 
-	function Projector(obj) {
-		this.id = obj.id;
-		this.name = ko.observable(obj.name);
-		this.color = ko.observable(obj.color);
-		this.isVisible = ko.observable(obj.isVisible);
+	// projector model
+
+	function ProjectorModel(props) {
+		this.id = props.id;
+		this.name = ko.observable(props.name);
+		this.color = ko.observable(props.color);
+		this.isVisible = ko.observable(props.isVisible);
 		this.isDefault = ko.computed(function() {
 			return this.id == defaultID();
 		}, this);
@@ -36,12 +33,36 @@ $(function() {
 		}
 	}
 
+
+	// "projector options" dialog model
+
+	var dialogModel = {
+		name: ko.observable("ladida"),
+		color: ko.observable("gugu")
+	};
+
+	var dialog = $("#projector-options");
+	ko.applyBindings(dialogModel, dialog.get(0));
+	dialog.on('hidden', function() { console.log(dialogModel.color()); });
+
+	// bind to html events
+
 	$('#new-projector').click(function() {
 		socket.emit('create', {name: 'ladida', color: 'pink', isVisible: false});
+		dialog.modal('show');
+	});
+
+
+	// bind to signals from server
+
+	socket.on('reset', function() {
+		projectors = {};
+		defaultID(null);
+		list.removeAll();
 	});
 
 	socket.on('create', function(props) {
-		var obj = new Projector(props);
+		var obj = new ProjectorModel(props);
 		projectors[obj.id] = obj;
 		list.push(obj);
 	});

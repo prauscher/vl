@@ -1,17 +1,12 @@
 // vim:noet:ts=4:sw=4:
 
 $(function() {
-	$(".modal").hide()
-		.on("hide", function() {
-			$(this).find(".miniColors").miniColors("destroy");
-		})
+	$(".select-color").miniColors();
+
+	$(".modal").modal().modal('hide')
 		.on("shown", function() {
 			$(this).find("input:enabled, textarea:enabled").first().focus();
 		});
-
-	$(".modal form").unbind("submit").submit(function() {
-		$(this).parent().find(".save").click();
-	});
 
 	function showTab(id) {
 		$(".nav a").each(function() {
