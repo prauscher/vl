@@ -1,7 +1,9 @@
 // vim:noet:ts=4:sw=4:
 
+var utils = require('./utils.js');
+
 var socket = io.of('/projectors');
-propagateModel(model.Projector, socket);
+utils.propagateModel(model.Projector, socket);
 
 function playbackCreate(list, modelClass, client) {
 	model.db.lrange([list, 0, -1], function(err, ids) {
