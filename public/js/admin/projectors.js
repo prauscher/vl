@@ -51,7 +51,7 @@ $(function() {
 			projectors[diff.id][key](diff.data[key]);
 	});
 
-	socket.on('delete', function(id) {
+	socket.on('remove', function(id) {
 		list.remove(projectors[id]);
 		delete projectors[id];
 	});

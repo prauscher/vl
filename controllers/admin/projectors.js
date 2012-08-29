@@ -15,7 +15,7 @@ model.Projector.subscribe('update', function(ev) {
 });
 
 model.Projector.subscribe('remove', function(ev) {
-	socket.emit('delete', ev.target.id);
+	socket.emit('remove', ev.target.id);
 });
 
 function playbackCreate(list, modelClass, client) {
@@ -30,6 +30,7 @@ function playbackCreate(list, modelClass, client) {
 
 socket.on('connection', function(client) {
 	client.emit('reset');
+
 	playbackCreate('projectors', model.Projector, client);
 	model.db.get(['default:projector'], function(err, defaultID) {
 		client.emit('setdefault', defaultID);
