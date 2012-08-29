@@ -38,7 +38,7 @@ socket.on('connection', function(client) {
 
 	client.on('create', function(data) {
 		var obj = new model.Projector();
-		for (key in data) obj.p(key, data[key]);
+		obj.p(data);
 		obj.save(function() {
 			model.db.rpush(['projectors', this.id]);
 		});
@@ -46,8 +46,7 @@ socket.on('connection', function(client) {
 
 	client.on('update', function(diff) {
 		model.Projector.load(diff.id, function() {
-			for (key in diff.data)
-				this.p(key, diff.data[key]);
+			this.p(diff.data);
 			this.save();
 		});
 	});
