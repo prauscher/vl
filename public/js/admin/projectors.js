@@ -9,31 +9,6 @@ $(function() {
 	ko.applyBindings({ projectors: list }, $("#projectors table tbody").get(0));
 
 
-	// projector model
-
-	function ProjectorModel(props) {
-		this.id = props.id;
-		this.name = ko.observable(props.name);
-		this.color = ko.observable(props.color);
-		this.isVisible = ko.observable(props.isVisible);
-		this.isDefault = ko.computed(function() {
-			return this.id == defaultID();
-		}, this);
-
-		this.hide = function() {
-			socket.emit('update', {id: this.id, data: {isVisible: false}});
-		}
-
-		this.show = function() {
-			socket.emit('update', {id: this.id, data: {isVisible: true}});
-		}
-
-		this.setDefault = function() {
-			socket.emit('setdefault', this.id);
-		}
-	}
-
-
 	// "projector options" dialog model
 
 	var dialogModel = {
@@ -65,6 +40,38 @@ $(function() {
 
 	// slightly hacky, depends on internal implementation of jquery-miniColors
 	dialog.find('[name="color"]').data('change', dialogModel.color);
+
+
+	// actual projector model
+
+	function ProjectorModel(props) {
+		this.id = props.id;
+		this.name = ko.observable(props.name);
+		this.color = ko.observable(props.color);
+		this.isVisible = ko.observable(props.isVisible);
+		this.isDefault = ko.computed(function() {
+			return this.id == defaultID();
+		}, this);
+
+		this.hide = function() {
+			socket.emit('update', {id: this.id, data: {isVisible: false}});
+		}
+
+		this.show = function() {
+			socket.emit('update', {id: this.id, data: {isVisible: true}});
+		}
+
+		this.setDefault = function() {
+			socket.emit('setdefault', this.id);
+		}
+
+		this.edit = function() {
+			dialogModel.id(this.id);
+			dialogModel.name(this.name());
+			dialogModel.color(this.color());
+			dialog.modal('show');
+		}
+	}
 
 
 	// bind to html events

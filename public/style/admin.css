@@ -10,7 +10,11 @@
 	border-radius: 4px
 }
 
-#projectors i, #projectors .handover-buttons img, #projectors .title {
+.click-to-edit:hover {
+	text-decoration: underline
+}
+
+i.cmd, .click-to-edit {
 	cursor: pointer;
 }
 

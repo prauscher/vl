@@ -13,12 +13,12 @@ section#projectors.container
 		tbody(data-bind="foreach: projectors")
 			tr
 				td: img.color(data-bind="style: { 'background-color': color() }", src="/img/empty.gif")
-				td(data-bind="text: name()")
+				td.click-to-edit(data-bind="text: name(), click: edit")
 				td.handover-buttons
 				td.options
-					i.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
-					i.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
-					i(data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault", title="Als Standard setzen")
+					i.cmd.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
+					i.cmd.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
+					i.cmd(data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault", title="Als Standard setzen")
 						span.viewer-controls
 					a(data-bind="attr: { href: '/projector/#!' + id }")
 						i.icon-play-circle(title="Beamer öffnen")
