@@ -9,7 +9,7 @@ model.register('projectors', function() {
 		list: ko.observableArray()
 	};
 
-	model.projectors.ProjectorModel = function(props) {
+	var ProjectorModel = function(props) {
 		this.id = props.id;
 		this.name = ko.observable(props.name);
 		this.color = ko.observable(props.color);
@@ -52,7 +52,7 @@ model.register('projectors', function() {
 	});
 
 	socket.on('create', function(props) {
-		var obj = new model.projectors.ProjectorModel(props);
+		var obj = new ProjectorModel(props);
 		model.projectors.byID[obj.id] = obj;
 		model.projectors.list.push(obj);
 	});
