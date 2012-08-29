@@ -51,6 +51,8 @@ socket.on('connection', function(client) {
 			this.save();
 		});
 	});
+	
+	client.on('remove', model.Projector.remove);
 
 	client.on('setdefault', function(id) {
 		model.db.set(['default:projector', id]);
