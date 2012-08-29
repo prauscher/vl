@@ -1,5 +1,7 @@
 // vim:noet:ts=4:sw=4:
 
+model.initialize('projectors');
+
 $(function() {
 	$(".select-color").miniColors();
 

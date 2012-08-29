@@ -66,6 +66,16 @@ new minify({
 	callback: function(err) { if (err) console.log(err); }
 });
 
+new minify({
+	type: 'no-compress',
+	fileIn: [
+		'public/js/model/index.js',
+		'public/js/model/projectors.js'
+	],
+	fileOut: 'public/min/model.js',
+	callback: function(err) { if (err) console.log(err); }
+});
+
 // start server
 server.on('listening', function() {
 	if (process.getuid() == 0) {

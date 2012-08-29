@@ -10,10 +10,10 @@ section#projectors.container
 				th
 				th Beamer
 				th(colspan=2) Optionen
-		tbody(data-bind="foreach: projectors")
+		tbody(data-bind="foreach: $data")
 			tr
 				td: img.color(data-bind="style: { 'background-color': color() }", src="/img/empty.gif")
-				td.click-to-edit(data-bind="text: name(), click: edit")
+				td.click-to-edit(data-bind="text: name(), attr: { 'data-id': id }")
 				td.handover-buttons
 				td.options
 					i.cmd.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
