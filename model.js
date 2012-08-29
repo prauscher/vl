@@ -7,7 +7,7 @@ module.exports.Projector = nohm.model('Projector', {
 	properties: {
 		name: { type: 'string' },
 		color: { type: 'string' },
-		isVisible: { type: 'boolean', index: true }
+		isVisible: { type: 'boolean', defaultValue: false }
 	}
 });
 

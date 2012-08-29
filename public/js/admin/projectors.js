@@ -22,7 +22,7 @@ $(function() {
 				color: this.color()
 			};
 
-			if (this.id)
+			if (this.id())
 				socket.emit('update', { id: this.id(), data: data });
 			else
 				socket.emit('create', data);
@@ -36,7 +36,6 @@ $(function() {
 
 	var dialog = $("#projector-options");
 	ko.applyBindings(dialogModel, dialog.get(0));
-	dialog.on('hidden', function() { console.log(dialogModel.color()); });
 
 	// slightly hacky, depends on internal implementation of jquery-miniColors
 	dialog.find('[name="color"]').data('change', dialogModel.color);
