@@ -24,9 +24,6 @@ $(function() {
 	var dialog = $("#projector-options");
 	ko.applyBindings(dialogModel, dialog.get(0));
 
-	// slightly hacky, depends on internal implementation of jquery-miniColors
-	dialog.find('[name="color"]').data('change', dialogModel.color);
-
 	$('#new-projector').click(function() {
 		dialogModel.id(null);
 		dialogModel.name('');

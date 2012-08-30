@@ -35,7 +35,7 @@ div#projector-options.modal
 		.control-group
 			label.control-label Farbe
 			.controls
-				input.select-color(type="hidden",name="color",data-bind="value: color")
+				input(type="hidden",name="color",data-bind="value: color, miniColors: {}")
 	div.modal-footer
 		button.btn.btn-danger.pull-left(data-bind="visible: id(), click: remove") Löschen
 		button.btn(data-dismiss="modal") Schließen

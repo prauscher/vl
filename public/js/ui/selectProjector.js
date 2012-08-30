@@ -2,13 +2,13 @@
 
 $.widget("custom.selectProjector", {
 	options : {
-		prefix : "Projector ",
-		clickProjector : null,
-		defaultActive : false,
-		except : [ ]
+		prefix: "Projector ",
+		clickProjector: null,
+		defaultActive: false,
+		except: [ ]
 	},
 
-	addProjector : function (projectorid, projector) {
+	createProjector : function (projectorid, projector) {
 		var self = this;
 		this.element.append($("<img>")
 			.attr("src", "/images/empty.gif")
@@ -30,16 +30,8 @@ $.widget("custom.selectProjector", {
 			.attr("title", this.options.prefix + projector.title);
 	},
 
-	deleteProjector : function (projectorid) {
+	removeProjector : function (projectorid) {
 		this.element.find(".select-projector-" + projectorid).remove();
-	},
-
-	toggleActive : function (projectorid, active) {
-		this.element.find(".select-projector-" + projectorid).toggleClass("active", active);
-	},
-
-	isActive : function (projectorid) {
-		return this.element.find(".select-projector-" + projectorid).hasClass("active");
 	},
 
 	_create : function () {

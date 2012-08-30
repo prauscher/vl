@@ -3,8 +3,6 @@
 model.initialize('projectors');
 
 $(function() {
-	$(".select-color").miniColors();
-
 	$(".modal").modal().modal('hide').on("shown", function() {
 		$(this).find("input:enabled, textarea:enabled").first().focus();
 	});

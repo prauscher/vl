@@ -64,7 +64,7 @@ model.register('projectors', function() {
 	});
 
 	socket.on('remove', function(id) {
-		list.remove(model.projectors.byID[id]);
+		model.projectors.list.remove(model.projectors.byID[id]);
 		delete model.projectors.byID[id];
 	});
 

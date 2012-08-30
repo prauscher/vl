@@ -60,7 +60,8 @@ new minify({
 		'public/libs/jquery.cookie.js',
 		'public/libs/jquery.mjs.nestedSortable.js',
 		'public/libs/jquery-miniColors/jquery.miniColors.min.js',
-		'public/libs/knockout-2.1.0.js'
+		'public/libs/knockout-2.1.0.js',
+		'public/js/ko-miniColors.js'
 	],
 	fileOut: 'public/min/libs.js',
 	callback: function(err) { if (err) console.log(err); }
