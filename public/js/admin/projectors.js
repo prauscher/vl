@@ -31,13 +31,20 @@ $(function() {
 		dialog.modal('show');
 	});
 
-	$('#projectors table tbody').on('click', '.click-to-edit', function() {
-		var self = ko.dataFor(this);
-		dialogModel.id(self.id);
-		dialogModel.name(self.name());
-		dialogModel.color(self.color());
-		dialog.modal('show');
-	});
+	$('#projectors table tbody')
+		.on('click', '.click-to-edit', function() {
+			var self = ko.dataFor(this);
+			dialogModel.id(self.id);
+			dialogModel.name(self.name());
+			dialogModel.color(self.color());
+			dialog.modal('show');
+		})
+		.on('click', '.handover-buttons .projector-button', function() {
+			// too complicated to implement this directly in the template
+			var source = ko.dataFor(this).projector;
+			var target = ko.dataFor($(this).parent('.handover-buttons').get(0));
+			target.takeOver(source);
+		});
 
 	ko.applyBindings({ list: model.projectors.list }, $('#projectors table tbody').get(0));
 });

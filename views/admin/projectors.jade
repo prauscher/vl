@@ -1,7 +1,13 @@
-//- vim:noet:ts=4:sw=4:
+//- vim:noet:ts=4:sw=4:tw=0
 
 script(type="text/html",id="projector-button")
-	img.color(data-bind="style: { 'background-color': color() }", src="/img/empty.gif")
+	img.color.projector-button(src="/img/empty.gif", data-bind="style: { 'background-color': projector.color() }, attr: { title: prefix + projector.name() }")
+
+script(type="text/html",id="projector-buttons")
+	//	ko foreach: list
+	//		ko template: { name: 'projector-button', data: { projector: $data, prefix: $parent.prefix } }
+	//		/ko
+	//	/ko
 
 section#projectors.container
 	div.btn-toolbar
@@ -15,13 +21,15 @@ section#projectors.container
 				th(colspan=2) Optionen
 		tbody(data-bind="foreach: list")
 			tr
-				td(data-bind="template: 'projector-button'")
+				td(data-bind="template: { name: 'projector-button', data: { projector: $data, prefix: '' } }")
 				td.click-to-edit(data-bind="text: name(), attr: { 'data-id': id }")
-				td(data-bind="template: { name: 'projector-button', foreach: $root.list }")
+				td.handover-buttons(data-bind="template: { name: 'projector-buttons', data: { list: $parent.list, prefix: 'Übernehmen von '} }")
 				td.options
-					i.cmd.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
-					i.cmd.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
-					i.cmd(data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault", title="Als Standard setzen")
+					i.cmd.icon-eye-open(title="Auf Startseite anzeigen",
+						data-bind="visible: !isVisible(), click: show")
+					i.cmd.icon-eye-close(title="Auf Startseite verstecken",
+						data-bind="visible: isVisible(), click: hide")
+					i.cmd(title="Als Standard setzen", data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault")
 					span.viewer-controls
 					a(data-bind="attr: { href: '/projector/#!' + id }")
 						i.icon-play-circle(title="Beamer öffnen")

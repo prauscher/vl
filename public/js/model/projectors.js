@@ -29,6 +29,10 @@ model.register('projectors', function() {
 		this.setDefault = function() {
 			socket.emit('setdefault', this.id);
 		}
+
+		this.takeOver = function(other) {
+			console.log(this.id + " took over from " + other.id);
+		}
 	}
 
 	model.projectors.save = function(id, data) {
