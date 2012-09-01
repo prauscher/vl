@@ -39,5 +39,5 @@ $(function() {
 		dialog.modal('show');
 	});
 
-	ko.applyBindings(model.projectors.list, $('#projectors table tbody').get(0));
+	ko.applyBindings({ list: model.projectors.list }, $('#projectors table tbody').get(0));
 });

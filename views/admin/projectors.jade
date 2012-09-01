@@ -13,11 +13,11 @@ section#projectors.container
 				th
 				th Beamer
 				th(colspan=2) Optionen
-		tbody(data-bind="foreach: $data")
+		tbody(data-bind="foreach: list")
 			tr
 				td(data-bind="template: 'projector-button'")
 				td.click-to-edit(data-bind="text: name(), attr: { 'data-id': id }")
-				td(data-bind="template: { name: 'projector-button', foreach: $root }")
+				td(data-bind="template: { name: 'projector-button', foreach: $root.list }")
 				td.options
 					i.cmd.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
 					i.cmd.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
