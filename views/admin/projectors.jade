@@ -1,4 +1,7 @@
-// vim:noet:ts=4:sw=4:
+//- vim:noet:ts=4:sw=4:
+
+script(type="text/html",id="projector-button")
+	img.color(data-bind="style: { 'background-color': color() }", src="/img/empty.gif")
 
 section#projectors.container
 	div.btn-toolbar
@@ -12,14 +15,14 @@ section#projectors.container
 				th(colspan=2) Optionen
 		tbody(data-bind="foreach: $data")
 			tr
-				td: img.color(data-bind="style: { 'background-color': color() }", src="/img/empty.gif")
+				td(data-bind="template: 'projector-button'")
 				td.click-to-edit(data-bind="text: name(), attr: { 'data-id': id }")
-				td.handover-buttons
+				td(data-bind="template: { name: 'projector-button', foreach: $root }")
 				td.options
 					i.cmd.icon-eye-open(data-bind="visible: !isVisible(), click: show", title="Auf Startseite anzeigen")
 					i.cmd.icon-eye-close(data-bind="visible: isVisible(), click: hide", title="Auf Startseite verstecken")
 					i.cmd(data-bind="css: { 'icon-star': isDefault(), 'icon-star-empty': !isDefault() }, click: setDefault", title="Als Standard setzen")
-						span.viewer-controls
+					span.viewer-controls
 					a(data-bind="attr: { href: '/projector/#!' + id }")
 						i.icon-play-circle(title="Beamer öffnen")
 
@@ -40,4 +43,3 @@ div#projector-options.modal
 		button.btn.btn-danger.pull-left(data-bind="visible: id(), click: remove") Löschen
 		button.btn(data-dismiss="modal") Schließen
 		button.btn.btn-primary(data-bind="click: save") Speichern
-
