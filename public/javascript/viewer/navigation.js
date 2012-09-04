@@ -9,7 +9,7 @@ function goToNavigation() {
 	switch (parameters.shift()) {
 	case "election":
 		if (parameters.length > 1) {
-			configureBallot(paremeters[1]);
+			configureBallot(parameters[1]);
 		} else {
 			configureElection(parameters[0]);
 		}

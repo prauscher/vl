@@ -48,7 +48,8 @@ function ShowBallotList(options) {
 	apiClient.on(options.initEvent, function (id, ballotid) {
 		var showBallotOptions = generateShowBallotOptions(id);
 		if (ballotLists[id]) {
-			ballotLists[id].sortedList("add", ballotid, $("<li>").append($("<a>")) );
+			var elem = $("<li>").append($("<a>"));
+			ballotLists[id].sortedList("add", ballotid, elem);
 
 			apiClient.on("updateBallot", function (_ballotid, ballot) {
 				if (ballotid == _ballotid) {
