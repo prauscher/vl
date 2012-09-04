@@ -23,7 +23,7 @@ function configureProjector(projectorid) {
 $(function () {
 	apiClient.on('error:projectorNotFound', function (projectorid) {
 		if (projectorid == currentProjectorID) {
-			showError("Der Projector wurde nicht gefunden");
+			showError("Der Projektor wurde nicht gefunden");
 		}
 	});
 
@@ -32,7 +32,7 @@ $(function () {
 			if (projector.currentslideid) {
 				configureSlide(projector.currentslideid);
 			} else {
-				showError("Der Projector ist nicht konfiguriert", "Es ist keine Folie für den Projector konfiguriert");
+				showError("Der Projektor ist nicht konfiguriert", "Es ist keine Folie für den Projektor konfiguriert");
 			}
 			setViewerData(projector.zoom, projector.scroll);
 			$("#identify").css("background-color", projector.color).text(projector.title);
@@ -41,7 +41,7 @@ $(function () {
 
 	apiClient.on("deleteProjector", function (projectorid) {
 		if (projectorid == currentProjectorID) {
-			showError("Der Projector wurde gelöscht");
+			showError("Der Projektor wurde gelöscht");
 		}
 	});
 

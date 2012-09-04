@@ -22,7 +22,7 @@ $(function () {
 		if (projectorid) {
 			configureProjector(projectorid);
 		} else {
-			showError("Kein Projector als Default gesetzt");
+			showError("Kein Projektor als Default gesetzt");
 		}
 	});
 });
