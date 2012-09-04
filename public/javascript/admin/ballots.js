@@ -73,7 +73,7 @@ function ShowBallotList(options) {
 	this.generateButton = function (id) {
 		var showBallotOptions = generateShowBallotOptions(id);
 		ballotLists[id] = $("<ul>").addClass("dropdown-menu").sortedList()
-			.append($("<li>").append($("<a>").text("Hinzufügen").click(function () {
+			.append($("<li>").append($("<a>").text("Wahlgang hinzufügen").click(function () {
 				var ballotid = generateID();
 				var ballot = {
 					countedvotes : 0,
@@ -86,7 +86,7 @@ function ShowBallotList(options) {
 			.append($("<li>").addClass("divider")) );
 		options.registerBallots(id);
 
-		return $("<span>").addClass("dropdown")
+		return $("<span>").addClass("dropdown").attr('title', 'Wahlgänge')
 			.append($("<i>").addClass("show-ballots").addClass("icon-list").css("cursor", "pointer").attr("data-toggle", "dropdown"))
 			.append(ballotLists[id]);
 	}
@@ -97,8 +97,8 @@ $(function() {
 		$("#ballot.ballot-" + ballotid + " .options").sortedList("add", "option-" + optionid, position, $("<li>")
 			.append($("<i>").addClass("icon-move").addClass("move"))
 			.append($("<span>").addClass("id").hide().text(optionid))
-			.append($("<input>").attr("type", "text").addClass("title"))
-			.append($("<input>").attr("type", "text").addClass("link"))
+			.append($("<input>").attr("type", "text").addClass("title").attr('placeholder', "Name"))
+			.append($("<input>").attr("type", "text").addClass("link").attr('placeholder', "URL"))
 			.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In der Ansicht verstecken"))
 			.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In der Ansicht anzeigen"))
 			.append($("<i>").addClass("delete").addClass("icon-trash").attr("title","Löschen").click(function () {
