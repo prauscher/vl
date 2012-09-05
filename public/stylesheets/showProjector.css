@@ -32,6 +32,41 @@ body
 #timers>div
 	{float:right; height:100%; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; margin-left:30px;}
 
+@-webkit-keyframes blinker {
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+@-moz-keyframes blinker {
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+@-o-keyframes blinker {
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+#timers>div.timer-expired {
+  -webkit-animation-name: blinker;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-duration: .5s;
+
+  -moz-animation-name: blinker;
+  -moz-animation-direction: alternate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: ease-in-out;
+  -moz-animation-duration: .5s;
+
+  -o-animation-name: blinker;
+  -o-animation-direction: alternate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-timing-function: ease-in-out;
+  -o-animation-duration: .5s;
+}
+
 .content-text
 	{white-space:pre-line;}
 
