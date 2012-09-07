@@ -195,5 +195,20 @@ exports.listen = function (app) {
 		});
 	}
 
+	io.registerVotes = function() {
+		return io.of("/votes").on("connection", function(socket) {
+			socket.on("registervotes", function(data) {
+				var position = 0;
+				backend.ballots.eachOption(data.ballotid, function (optionid, option) {
+					backend.pollsites.eachPollsite(function(pollsiteid, pollsite) {
+						backend.votes.getVote(data.ballotid, optionid, pollsiteid, function(votes) {
+							socket.emit('votes-set:' + data.ballotid + ':' + optionid + ':' + pollsiteid, {votes: votes});
+						});
+					});
+				});
+			});
+		});
+	}
+
 	return io;
 }

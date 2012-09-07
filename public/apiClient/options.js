@@ -20,6 +20,11 @@ APIClient.prototype.registerOption = function (optionid) {
 	this.listen("/ballots", 'option-delete:' + optionid, function (data) {
 		self.unregisterOption(optionid);
 		self.callCallback("deleteOption", [ optionid ]);
+		for (var ballotid in self.ballot_options) {
+			var index = $.inArray(self.ballot_options[ballotid], optionid);
+			if (index > -1)
+				self.ballot_options[ballotid].splice(index, 1);
+		}
 	});
 	this.emit("/ballots", 'registeroption', { optionid: optionid });
 }

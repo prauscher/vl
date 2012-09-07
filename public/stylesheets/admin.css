@@ -10,6 +10,8 @@
 	cursor: pointer;
 }
 
+#votes tbody tr th { text-align: right }
+
 .untitled { color: silver }
 .untitled:before { content: "‹" }
 .untitled:after { content: "›" }

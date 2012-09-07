@@ -36,6 +36,8 @@ function goToNavigation() {
 		switchNavigation("pollsites");
 	} else if (location.hash == "#elections") {
 		switchNavigation("elections");
+	} else if (location.hash == "#votes") {
+		switchNavigation("votes");
 	} else {
 		switchNavigation("agenda");
 	}

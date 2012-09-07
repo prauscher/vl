@@ -1,13 +1,26 @@
 // vim:noet:sw=8:
 
 APIClient.prototype.ballots = {};
+APIClient.prototype.ballot_options = {};
 
 APIClient.prototype.getBallot = function (ballotid, callback) {
 	callback(this.ballots[ballotid]);
 }
 
+APIClient.prototype.eachBallotOption = function(ballotid, callback) {
+	var self = this;
+	$(this.ballot_options[ballotid]).each(function(i, optionid) {
+		self.getOption(optionid, function(option) {
+			callback(optionid, option);
+		});
+	});
+}
+
 APIClient.prototype.registerBallot = function (ballotid) {
 	var self = this;
+
+	this.ballot_options[ballotid] = [];
+
 	this.listen("/ballots", 'err:ballot-not-found:' + ballotid, function (data) {
 		console.log("[APIClient] Ballot not found: " + ballotid);
 		self.callCallback("error:ballotNotFound", [ ballotid ]);
@@ -23,13 +36,15 @@ APIClient.prototype.registerBallot = function (ballotid) {
 	});
 	this.listen("/ballots", 'option-add:' + ballotid, function (data) {
 		self.registerOption(data.optionid);
-
 		self.callCallback("initBallotOption", [ ballotid, data.optionid, data.position ]);
+		self.ballot_options[ballotid].splice(data.position, 0, [data.optionid]);
 	});
 	this.emit("/ballots", 'registerballot', { ballotid : ballotid });
 }
 
 APIClient.prototype.unregisterBallot = function (ballotid) {
+	delete this.ballot_options[ballotid];
+
 	this.unlisten("/ballots", 'err:ballot-not-found:' + ballotid);
 	this.unlisten("/ballots", 'ballot-change:' + ballotid);
 	this.unlisten("/ballots", 'ballot-delete:' + ballotid);

@@ -30,6 +30,22 @@ function ShowBallotList(options) {
 						return false;
 					}
 				});
+				$(modal).find(".show-votes").unbind('click').click(function() {
+					var tbody = $("#votes tbody");
+					tbody.find("tr").remove();
+					apiClient.eachPollsite(function(pollsiteid, pollsite) {
+						tbody.append($("<tr>").addClass('pollsite-' + pollsiteid).append($("<th>").text(pollsiteid)));
+					});
+
+					var thead_tr = $("#votes thead tr");
+					thead_tr.find("th").remove();
+					apiClient.eachBallotOption(id, function(optionid, option) {
+						thead_tr.append($("<th>").text(option.title));
+						tbody.find("tr").append($("<td>").addClass('option-' + optionid));
+					});
+					
+					$("#votes").modal();
+				});
 
 				apiClient.registerBallot(id);
 			},

@@ -24,7 +24,7 @@ $(function () {
 	});
 
 	apiClient.on("initElection", function (electionid) {
-		$("#elections tbody").sortedList("add", electionid, $("<tr>").attr("id", "election-" + electionid)
+		$("#elections-list tbody").sortedList("add", electionid, $("<tr>").attr("id", "election-" + electionid)
 			.append($("<td>").addClass("title").css("cursor", "pointer"))
 			.append($("<td>").addClass("options")
 				.append(ballotList.generateButton(electionid))));
@@ -32,7 +32,7 @@ $(function () {
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {
-		$("#elections tbody").sortedList("get", electionid).find(".title")
+		$("#elections-list tbody").sortedList("get", electionid).find(".title")
 			.text(election.title)
 			.unbind("click")
 			.click(function () {
@@ -41,10 +41,10 @@ $(function () {
 	});
 
 	apiClient.on("deleteElection", function (electionid) {
-		$("#elections tbody").sortedList("remove", electionid);
+		$("#elections-list tbody").sortedList("remove", electionid);
 	});
 
-	$("#elections tbody").sortedList();
+	$("#elections-list tbody").sortedList();
 
 	$("#new-election").click(function () {
 		showElectionOptions(null, {

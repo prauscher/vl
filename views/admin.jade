@@ -1,3 +1,5 @@
+//- vim:noet:sw=8:
+
 !!!
 html
 	head
@@ -41,6 +43,7 @@ html
 			div.modal-header
 				button.close(data-dismiss="modal") ×
 				h3 Wahlgang anlegen
+				button.btn.btn-mini.btn-info.show-votes Ergebnisse anzeigen
 			div.modal-body
 				form.form-horizontal.settings
 					.control-group
@@ -68,6 +71,20 @@ html
 				button.btn.btn-danger.pull-left.delete Löschen
 				button.btn(data-dismiss="modal") Schließen
 				button.btn.btn-primary.save Speichern
+
+		div#votes.modal
+			div.modal-header
+				button.close(data-dismiss="modal") ×
+				h3 Wahlergebnisse
+			div.modal-body
+				table.table-striped.table-condensed
+					thead
+						tr
+							td &nbsp;
+					tbody
+			div.modal-footer
+				button.btn(data-dismiss="modal") Schließen
+
 
 		div#flash-options.modal
 			div.modal-header
@@ -318,11 +335,13 @@ html
 				div.btn-group
 					button#new-election.btn.btn-success Neu
 
-			table#elections.table-striped.table-bordered.table-condensed
-				tr
-					th Wahl
-					th Optionen
-
+			table#elections-list.table-striped.table-bordered.table-condensed
+				thead
+					tr
+						th Wahl
+						th Optionen
+				tbody
+					
 			div#election-options.modal
 				div.modal-header
 					button.close(data-dismiss="modal") ×

@@ -58,6 +58,7 @@ exports.createServer = function () {
 		global.motionSocket	= io.registerMotions();
 		global.electionSocket	= io.registerElections();
 		global.ballotSocket	= io.registerBallots();
+		global.votesSocket	= io.registerVotes();
 	}
 
 	// callback is temporary out of usage. will fix this later
