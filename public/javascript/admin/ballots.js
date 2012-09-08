@@ -43,8 +43,12 @@ function ShowBallotList(options) {
 						thead_tr.append($("<th>").text(option.title));
 						tbody.find("tr").append($("<td>").addClass('option-' + optionid));
 					});
-					
-					$("#votes").modal();
+
+					apiClient.registerVotes(id);
+
+					$("#votes").data('ballotid', id).modal().on('hidden', function() {
+						apiClient.unregisterVotes(id);
+					});
 				});
 
 				apiClient.registerBallot(id);
@@ -148,4 +152,10 @@ $(function() {
 	});
 
 	$("#ballot .options").sortedList();
+
+	apiClient.on("votesSet", function(ballotid, optionid, pollsiteid, votes) {
+		if ($("#votes").data('ballotid') != ballotid) return;
+
+		$("#votes tbody tr.pollsite-" + pollsiteid + " td.option-" + optionid).text(votes);
+	});
 });

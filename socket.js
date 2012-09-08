@@ -200,9 +200,9 @@ exports.listen = function (app) {
 			socket.on("registervotes", function(data) {
 				var position = 0;
 				backend.ballots.eachOption(data.ballotid, function (optionid, option) {
-					backend.pollsites.eachPollsite(function(pollsiteid, pollsite) {
-						backend.votes.getVote(data.ballotid, optionid, pollsiteid, function(votes) {
-							socket.emit('votes-set:' + data.ballotid + ':' + optionid + ':' + pollsiteid, {votes: votes});
+					backend.pollsites.getAll(function(pollsiteid, pollsite) {
+						backend.votes.getVotes(data.ballotid, optionid, pollsiteid, function(votes) {
+							socket.emit('votes-set:' + data.ballotid, {ballotid: data.ballotid, optionid: optionid, pollsiteid: pollsiteid, votes: votes});
 						});
 					});
 				});

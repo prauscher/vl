@@ -1,0 +1,29 @@
+//- vim:noet:sw=8:
+
+!!!
+html
+	head
+		script(src='/socket.io/socket.io.js')
+		script(src='/min/postVotes.js')
+		title Wahltool
+	body
+		form
+			p
+				| Wahlbüro: 
+				select#pollsite
+			p
+				input#select-elections(type="radio", name="select-type", value="election")
+				| Wahl 
+				select#election(disabled="disabled")
+			p
+				input#select-motions(type="radio", name="select-type", value="motion")
+				| Antrag 
+				select#motion(disabled="disabled")
+			p
+				| Wahlgang:
+				select#ballot
+			p
+				| Ergebnis: 
+				input#votes
+			p
+				button(type="submit") Absenden

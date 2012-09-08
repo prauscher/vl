@@ -71,6 +71,10 @@ exports.createServer = function () {
 			res.render('admin');
 		}));
 
+		app.get('/postVotes', generateCallback(function (req, res) {
+			res.render('postVotes');
+		}));
+
 		app.post('/identify-projectors',	generateCallback(routes.projectors.identify) );
 
 		app.put('/agenda/:slideid/save',	generateCallback(routes.agenda.save) );
@@ -156,6 +160,7 @@ exports.createServer = function () {
 				"public/apiClient/elections.js",
 				"public/apiClient/ballots.js",
 				"public/apiClient/options.js",
+				"public/apiClient/votes.js",
 				"public/javascript/admin/index.js",
 				"public/javascript/admin/navigation.js",
 				"public/javascript/admin/projectors.js",
@@ -196,6 +201,7 @@ exports.createServer = function () {
 				"public/apiClient/ballots.js",
 				"public/apiClient/options.js",
 				"public/apiClient/timerClient.js",
+				"public/apiClient/votes.js",
 				"public/javascript/viewer/index.js",
 				"public/javascript/viewer/navigation.js",
 				"public/javascript/viewer/viewerdata.js",
@@ -208,6 +214,28 @@ exports.createServer = function () {
 				"public/javascript/viewer/ballots.js"
 			],
 			fileOut: "public/min/showProjector.js"
+		});
+
+		new compressor.minify({
+			type: 'no-compress',
+			fileIn: [
+				"public/libs/jquery-1.7.2.min.js",
+				"public/libs/jquery-ui-1.8.21.custom.min.js",
+				"public/apiClient/timerClient.js",
+				"public/apiClient/index.js",
+				"public/apiClient/projectors.js",
+				"public/apiClient/agenda.js",
+				"public/apiClient/timers.js",
+				"public/apiClient/motionclasses.js",
+				"public/apiClient/motions.js",
+				"public/apiClient/pollsites.js",
+				"public/apiClient/elections.js",
+				"public/apiClient/ballots.js",
+				"public/apiClient/options.js",
+				"public/apiClient/votes.js",
+				"public/javascript/postVotes/index.js"
+			],
+			fileOut: "public/min/postVotes.js"
 		});
 
 		app.listen(config.port, config.host, function() {
