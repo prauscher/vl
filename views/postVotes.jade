@@ -15,15 +15,18 @@ html
 				input#select-elections(type="radio", name="select-type", value="election")
 				| Wahl 
 				select#election(disabled="disabled")
+				select#election-ballot.select-ballot(disabled="disabled")
 			p
 				input#select-motions(type="radio", name="select-type", value="motion")
 				| Antrag 
 				select#motion(disabled="disabled")
+				select#motion-ballot.select-ballot(disabled="disabled")
 			p
-				| Wahlgang:
-				select#ballot
-			p
-				| Ergebnis: 
-				input#votes
+				table
+					thead
+						tr
+							th Option
+							th Ergebnis
+					tbody#options
 			p
 				button(type="submit") Absenden

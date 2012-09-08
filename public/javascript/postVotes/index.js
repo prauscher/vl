@@ -8,7 +8,6 @@ $(function() {
 	});
 
 	apiClient.on("deletePollsite", function(pollsiteid, pollsite) {
-		console.log(pollsiteid);
 		$("#pollsite").children("option[value='" + pollsiteid + "']").remove();
 	});
 
@@ -66,21 +65,89 @@ $(function() {
 
 	$("input[name='select-type']").change(function() {
 		var value = $("input[name='select-type']:checked").val();
+
 		$("#election").prop('disabled', value != "election");
 		$("#motion").prop('disabled', value != "motion");
+
+		$("#election-ballot").prop('disabled', value != "election");
+		$("#motion-ballot").prop('disabled', value != "motion");
 
 		if (value == "election") $("#election").change();
 		if (value == "motion") $("#motion").change();
 	});
 
+	var electionid = null;
+	var motionid = null;
+	var ballotids = [];
+
 	$("#election").change(function() {
 		// register for ballots here
-		console.log($(this).val());
 	});
 
 	$("#motion").change(function() {
-		// register for ballots here
-		console.log($(this).val());
+		if (motionid) {
+			apiClient.unregisterMotionBallots(motionid);
+		}
+		$(ballotids).each(function(idx, value) {
+			apiClient.unregisterBallot(value);
+		});
+		ballotids = [];
+		motionid = $(this).val();
+		apiClient.registerMotionBallots(motionid);
+		$("motion-ballot").empty().change();
+	});
+
+	apiClient.on("initElectionBallot", function(electionid, ballotid) {
+		$("#election-ballot").append($("<option>").attr('value', ballotid));
+		ballotids.push(ballotid);
+		apiClient.registerBallot(ballotid);
+	});
+	
+	apiClient.on("initMotionBallot", function(motionid, ballotid) {
+		$("#motion-ballot").append($("<option>").attr('value', ballotid));
+		ballotids.push(ballotid);
+		apiClient.registerBallot(ballotid);
+	});
+
+	apiClient.on("updateBallot", function(ballotid, ballot) {
+		$(".select-ballot [value='" + ballotid + "']").text(ballot.title);
+	});
+	
+	apiClient.on("deleteBallot", function(ballotid, ballot) {
+		$(".select-ballot [value='" + ballotid + "']").remove();
+	});
+
+	var ballotid = null;
+
+	$("#election-ballot").change(function() {
+	});
+
+	$("#motion-ballot").change(function() {
+		if (ballotid) {
+			apiClient.eachBallotOption(ballotid, function(optionid) {
+				apiClient.unregisterOption(optionid);
+			});
+		}
+		$('#options').empty();
+		ballotid = $(this).val();
+		apiClient.eachBallotOption(ballotid, function(optionid) {
+			apiClient.registerOption(optionid);
+		});
+	});
+
+	apiClient.on("initBallotOption", function(ballotid, optionid) {
+		$("#options").append($("<tr>").attr('id', 'option-' + optionid)
+			.append($("<td>").addClass('title'))
+			.append($("<td>").addClass('results').append($("<input>"))));
+	});
+
+	apiClient.on("updateOption", function(optionid, option) {
+		$("#options tr#option-" + optionid).toggle(option.hidden != "false");
+		$("#options tr#option-" + optionid + " td.title").text(option.title);
+	});
+	
+	apiClient.on("deleteOption", function(optionid) {
+		$("#options tr#option-" + optionid).remove();
 	});
 
 	apiClient.registerMotionClasses();
