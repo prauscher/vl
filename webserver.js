@@ -71,9 +71,11 @@ exports.createServer = function () {
 			res.render('admin');
 		}));
 
-		app.get('/postVotes', generateCallback(function (req, res) {
+		app.get('/votes', generateCallback(function (req, res) {
 			res.render('postVotes');
 		}));
+
+		app.post('/votes', generateCallback(routes.votes.setVotes));
 
 		app.post('/identify-projectors',	generateCallback(routes.projectors.identify) );
 

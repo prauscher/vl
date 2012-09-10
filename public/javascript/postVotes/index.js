@@ -85,9 +85,8 @@ $(function() {
 	});
 
 	$("#motion").change(function() {
-		if (motionid) {
+		if (motionid)
 			apiClient.unregisterMotionBallots(motionid);
-		}
 		$(ballotids).each(function(idx, value) {
 			apiClient.unregisterBallot(value);
 		});
@@ -117,32 +116,33 @@ $(function() {
 		$(".select-ballot [value='" + ballotid + "']").remove();
 	});
 
-	var ballotid = null;
+	var current_ballotid = null;
 
 	$("#election-ballot").change(function() {
 	});
 
 	$("#motion-ballot").change(function() {
-		if (ballotid) {
-			apiClient.eachBallotOption(ballotid, function(optionid) {
+		if (current_ballotid) {
+			apiClient.eachBallotOption(current_ballotid, function(optionid) {
 				apiClient.unregisterOption(optionid);
 			});
 		}
 		$('#options').empty();
-		ballotid = $(this).val();
-		apiClient.eachBallotOption(ballotid, function(optionid) {
+		current_ballotid = $(this).val();
+		apiClient.eachBallotOption(current_ballotid, function(optionid) {
 			apiClient.registerOption(optionid);
 		});
 	});
 
 	apiClient.on("initBallotOption", function(ballotid, optionid) {
+		if (ballotid != current_ballotid) return;
 		$("#options").append($("<tr>").attr('id', 'option-' + optionid)
 			.append($("<td>").addClass('title'))
-			.append($("<td>").addClass('results').append($("<input>"))));
+			.append($("<td>").addClass('results').append($("<input>").data('optionid', optionid))));
 	});
 
 	apiClient.on("updateOption", function(optionid, option) {
-		$("#options tr#option-" + optionid).toggle(option.hidden != "false");
+		$("#options tr#option-" + optionid).toggle(option.hidden != "true");
 		$("#options tr#option-" + optionid + " td.title").text(option.title);
 	});
 	
@@ -153,4 +153,20 @@ $(function() {
 	apiClient.registerMotionClasses();
 	apiClient.registerPollsites();
 	apiClient.registerElections();
+
+	$("form").submit(function() {
+		$("#options input").each(function() {
+			$.ajax({
+				type: 'POST',
+				url: '/votes',
+				data: {
+					ballotid: current_ballotid,
+					optionid: $(this).data('optionid'),
+					pollsiteid: $("#pollsite").val(),
+					votes: $(this).val()
+				}
+			});
+		});
+		return false;
+	});
 });
