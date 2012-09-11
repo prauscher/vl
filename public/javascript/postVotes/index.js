@@ -81,31 +81,33 @@ $(function() {
 	var ballotids = [];
 
 	$("#election").change(function() {
-		// register for ballots here
+		if (electionid)
+			apiClient.unregisterElectionBallots(electionid);
+
+		ballotids = [];
+		electionid = $(this).val();
+		apiClient.registerElectionBallots(electionid);
+		$("#election-ballot").empty().append($("<option>").text('--').attr('value', '')).change();
 	});
 
 	$("#motion").change(function() {
 		if (motionid)
 			apiClient.unregisterMotionBallots(motionid);
-		$(ballotids).each(function(idx, value) {
-			apiClient.unregisterBallot(value);
-		});
+
 		ballotids = [];
 		motionid = $(this).val();
 		apiClient.registerMotionBallots(motionid);
-		$("motion-ballot").empty().change();
+		$("#motion-ballot").empty().append($("<option>").text('--').attr('value', '')).change();
 	});
 
 	apiClient.on("initElectionBallot", function(electionid, ballotid) {
 		$("#election-ballot").append($("<option>").attr('value', ballotid));
 		ballotids.push(ballotid);
-		apiClient.registerBallot(ballotid);
 	});
 	
 	apiClient.on("initMotionBallot", function(motionid, ballotid) {
 		$("#motion-ballot").append($("<option>").attr('value', ballotid));
 		ballotids.push(ballotid);
-		apiClient.registerBallot(ballotid);
 	});
 
 	apiClient.on("updateBallot", function(ballotid, ballot) {
@@ -118,36 +120,18 @@ $(function() {
 
 	var current_ballotid = null;
 
-	$("#election-ballot").change(function() {
-	});
-
-	$("#motion-ballot").change(function() {
-		if (current_ballotid) {
-			apiClient.eachBallotOption(current_ballotid, function(optionid) {
-				apiClient.unregisterOption(optionid);
-			});
-		}
+	$("#motion-ballot, #election-ballot").change(function() {
 		$('#options').empty();
 		current_ballotid = $(this).val();
-		apiClient.eachBallotOption(current_ballotid, function(optionid) {
-			apiClient.registerOption(optionid);
+		if (current_ballotid == '') {
+			current_ballotid = null;
+			return;
+		}
+		apiClient.eachBallotOption(current_ballotid, function(optionid, option) {
+			$("#options").append($("<tr>").attr('id', 'option-' + optionid)
+				.append($("<td>").text(option.title))
+				.append($("<td>").append($("<input>").data('optionid', optionid))));
 		});
-	});
-
-	apiClient.on("initBallotOption", function(ballotid, optionid) {
-		if (ballotid != current_ballotid) return;
-		$("#options").append($("<tr>").attr('id', 'option-' + optionid)
-			.append($("<td>").addClass('title'))
-			.append($("<td>").addClass('results').append($("<input>").data('optionid', optionid))));
-	});
-
-	apiClient.on("updateOption", function(optionid, option) {
-		$("#options tr#option-" + optionid).toggle(option.hidden != "true");
-		$("#options tr#option-" + optionid + " td.title").text(option.title);
-	});
-	
-	apiClient.on("deleteOption", function(optionid) {
-		$("#options tr#option-" + optionid).remove();
 	});
 
 	apiClient.registerMotionClasses();
@@ -156,6 +140,7 @@ $(function() {
 
 	$("form").submit(function() {
 		$("#options input").each(function() {
+			console.log();
 			$.ajax({
 				type: 'POST',
 				url: '/votes',

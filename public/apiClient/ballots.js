@@ -35,9 +35,10 @@ APIClient.prototype.registerBallot = function (ballotid) {
 		self.callCallback("deleteBallot", [ ballotid ] );
 	});
 	this.listen("/ballots", 'option-add:' + ballotid, function (data) {
+		console.log("option-add", { ballot: ballotid, data: data });
 		self.registerOption(data.optionid);
 		self.callCallback("initBallotOption", [ ballotid, data.optionid, data.position ]);
-		self.ballot_options[ballotid].splice(data.position, 0, [data.optionid]);
+		self.ballot_options[ballotid].splice(data.position, 0, data.optionid);
 	});
 	this.emit("/ballots", 'registerballot', { ballotid : ballotid });
 }
