@@ -50,6 +50,7 @@ exports.deleteBallot = function (motionid, ballotid, callback) {
 
 exports.getBallots = function (motionid, callback) {
 	db.lrange('motions:' + motionid + ':ballots', 0, -1, function (err, ballotids) {
+		if (!ballotids) ballotids = [];
 		callback(ballotids);
 	});
 }
