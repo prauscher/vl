@@ -42,7 +42,8 @@ $(function () {
 				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass(starIcon).addClass("set-default").attr("title", "Als Standard setzen"))
 				.append($("<span>").addClass("viewerOptions"))
-				.append($("<a>").attr("href","/projector#projector:" + projectorid).append($("<i>").addClass("icon-play-circle").attr("title", "Projector öffnen"))) ) );
+				.append($("<a>").attr("href","/projector#projector:" + projectorid).append($("<i>").addClass("icon-play-circle").attr("title", "Projector öffnen")))
+				.append($("<a>").attr("href","/timer#projector:" + projectorid).append($("<i>").addClass("icon-bell").attr("title", "Timeransicht öffnen"))) ) );
 	});
 
 	apiClient.on("updateProjector", function(projectorid, projector) {
