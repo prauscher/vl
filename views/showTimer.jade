@@ -1,0 +1,22 @@
+!!!
+html
+	head
+		title Timeransicht
+		link(rel='stylesheet', href='/min/showTimer.css')
+		script(src='/min/showTimer.js')
+		script(src='/socket.io/socket.io.js')
+
+	body
+		div#error
+			.message
+			.notes
+		div#waiting
+		div#identify
+
+		div#flashs
+
+		div#timers
+
+		script(type="text/javascript")
+			var apiClient = new APIClient();
+			TimerClient(apiClient);

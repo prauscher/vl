@@ -52,6 +52,10 @@ exports.createServer = function () {
 			res.render('showProjector', {});
 		});
 
+		app.get('/timer', function(req, res) {
+			res.render('showTimer', {});
+		});
+
 		global.projectorSocket	= io.registerProjector();
 		global.timerSocket	= io.registerTimers();
 		global.agendaSocket	= io.registerAgenda();
@@ -216,6 +220,39 @@ exports.createServer = function () {
 				"public/javascript/viewer/ballots.js"
 			],
 			fileOut: "public/min/showProjector.js"
+		});
+
+		new compressor.minify({
+			type: 'no-compress',
+			fileIn: [
+				"public/stylesheets/showTimer.css"
+			],
+			fileOut: "public/min/showTimer.css"
+		});
+
+		new compressor.minify({
+			type: 'no-compress',
+			fileIn: [
+				"public/libs/jquery-1.7.2.min.js",
+				"public/libs/jquery-ui-1.8.21.custom.min.js",
+				"public/libs/viewerOptions.js",
+				"public/apiClient/index.js",
+				"public/apiClient/projectors.js",
+				"public/apiClient/agenda.js",
+				"public/apiClient/timers.js",
+				"public/apiClient/motionclasses.js",
+				"public/apiClient/motions.js",
+				"public/apiClient/elections.js",
+				"public/apiClient/ballots.js",
+				"public/apiClient/options.js",
+				"public/apiClient/timerClient.js",
+				"public/apiClient/votes.js",
+				"public/javascript/showTimer/index.js",
+				"public/javascript/showTimer/navigation.js",
+				"public/javascript/showTimer/defaultprojector.js",
+				"public/javascript/showTimer/projectors.js"
+			],
+			fileOut: "public/min/showTimer.js"
 		});
 
 		new compressor.minify({
