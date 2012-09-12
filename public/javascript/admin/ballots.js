@@ -119,7 +119,7 @@ $(function() {
 			.append($("<i>").addClass("icon-move").addClass("move"))
 			.append($("<span>").addClass("id").hide().text(optionid))
 			.append($("<input>").attr("type", "text").addClass("title").attr('placeholder', "Name"))
-			.append($("<input>").attr("type", "text").addClass("link").attr('placeholder', "URL"))
+			.append($("<input>").attr("type", "text").addClass("link").attr('placeholder', "URL").hide())
 			.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In der Ansicht verstecken"))
 			.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In der Ansicht anzeigen"))
 			.append($("<i>").addClass("delete").addClass("icon-trash").attr("title","Löschen").click(function () {
