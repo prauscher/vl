@@ -250,7 +250,8 @@ exports.createServer = function () {
 				"public/javascript/showTimer/index.js",
 				"public/javascript/showTimer/navigation.js",
 				"public/javascript/showTimer/defaultprojector.js",
-				"public/javascript/showTimer/projectors.js"
+				"public/javascript/showTimer/projectors.js",
+				"public/javascript/showTimer/timers.js"
 			],
 			fileOut: "public/min/showTimer.js"
 		});

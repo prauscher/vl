@@ -63,39 +63,17 @@ $(function () {
 		}
 	});
 
-	apiClient.on("updateTimer", function (timerid, timer) {
-		$("#timers #timer-" + timerid).css("background-color", timer.color);
-	});
-
-	apiClient.on("countdownTimer", function (timerid, currentValue) {
-		$("#timers #timer-" + timerid)
-			.text(formatTime(currentValue))
-			.toggleClass("timer-expired", currentValue == 0);
-	});
-
-	apiClient.on("deleteTimer", function(timerid) {
-		$("#timers #timer-" + timerid).remove();
-	});
-
 	apiClient.on("showTimerProjector", function (projectorid, timerid, timer) {
 		if (projectorid == currentProjectorID) {
-			this.registerTimer(timerid);
-			if ($("#timers #timer-" + timerid).length < 1) {
-				var timerContainer = $("<div>").attr("id", "timer-" + timerid).addClass("timer");
-
-				// Insert hidden to allow effects
-				timerContainer.hide();
-				$("#timers").append(timerContainer);
-			}
-			this.callCallback("updateTimer", [ timerid, timer ] );
-			$("#timers #timer-" + timerid).show();
+			addTimer(timerid, timer);
+			apiClient.registerTimer(timerid);
 		}
 	});
 
 	apiClient.on("hideTimerProjector", function (projectorid, timerid, timer) {
 		if (projectorid == currentProjectorID) {
-			this.unregisterTimer(timerid);
-			$("#timers #timer-" + timerid).hide();
+			apiClient.unregisterTimer(timerid);
+			removeTimer(timerid);
 		}
 	});
 });
