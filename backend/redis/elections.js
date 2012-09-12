@@ -20,6 +20,7 @@ module.exports.deleteBallot = function (electionid, ballotid, callback) {
 
 module.exports.getBallots = function (electionid, callback) {
 	db.lrange('elections:' + electionid + ':ballots', 0, -1, function (err, ballotids) {
+		if (!ballotids) ballotids = [];
 		callback(ballotids);
 	});
 }
