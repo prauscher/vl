@@ -99,6 +99,7 @@ $(function () {
 				}
 			}),
 			"options": $("<span>")
+				.append($("<i>").addClass("duplicate").addClass("icon-plus-sign").attr("title","Duplizieren"))
 				.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Als nicht erledigt markieren"))
 				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Als erledigt markieren"))
 				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In Agendaansicht verstecken"))
@@ -134,6 +135,9 @@ $(function () {
 		options.children(".ishidden").unbind("click").toggle(slide.hidden == "true").click(function () {
 			slide.hidden = false;
 			apiClient.saveSlide(slideid, slide);
+		});
+		options.children(".duplicate").unbind("click").click(function() {
+			showSlideOptions(null, slide);
 		});
 	});
 
