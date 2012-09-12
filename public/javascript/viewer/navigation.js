@@ -43,6 +43,7 @@ $(function () {
 });
 
 $(function () {
+	/*
 	$("#options-button").properMenu();
 	$("#options-button").properMenu("addItem", "projectors");
 	$("#options-button").properMenu("setItem", "projectors", {
@@ -53,7 +54,7 @@ $(function () {
 	$("#options-button").properMenu("setItem", "agenda", {
 		title: "Tagesordnung",
 		href: "#"
-	});
+	});*/
 
 	apiClient.on("initProjector", function (projectorid, projector) {
 		$("#options-button").properMenu("addItem", "projector-" + projectorid, "projectors");
