@@ -39,5 +39,5 @@ function update(timer) {
 	if (timer.running == "true") {
 		timer.startedValue = Math.max(0, timer.startedValue - (now.getTime() - new Date(timer.started).getTime()) / 1000);
 	}
-	timer.started = now;
+	timer.started = now + "";
 }

@@ -8,11 +8,6 @@ $(function () {
 			{ property : "color", field : "#color", type : "color" },
 			{ property : "value", field : "#value", type : "time" }
 		],
-		fillItem : function (modal, id, item) {
-			if (! item.startedValue) {
-				item.startedValue = item.value;
-			}
-		},
 		saveCallback : apiClient.saveTimer,
 		deleteCallback : apiClient.deleteTimer
 	});
@@ -97,9 +92,9 @@ $(function () {
 
 	$("#new-timer").click(function () {
 		showTimerOptions(null, {
-			running : false,
+			running : "false",
 			value : 0,
-			startValue : 0,
+			startedValue : 0,
 			color : generateColor()
 		});
 	});
