@@ -31,7 +31,7 @@ $(function () {
 			{ property : "submitter", field : "#submitter", type : "text" },
 			{ property : "status", field : "#status", type : "select" },
 			{ property : "text", field : "#text", type : "text" },
-			{ property : "argumentation", field : "argumentation", type : "text" }
+			{ property : "argumentation", field : "#argumentation", type : "text" }
 		],
 		saveCallback : apiClient.saveMotion,
 		deleteCallback : apiClient.deleteMotion
