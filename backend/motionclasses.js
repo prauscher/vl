@@ -34,7 +34,7 @@ module.exports.eachMotion = function (id, callback) {
 	var self = this;
 	core.motionclasses.getMotions(id, function (motionids) {
 		motionids.forEach(function (motionid) {
-			self.get(motionid, function (motion) {
+			backend.motions.get(motionid, function (motion) {
 				callback(motionid, motion);
 			});
 		});
