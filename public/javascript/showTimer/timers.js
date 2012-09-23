@@ -42,8 +42,8 @@ $(function () {
 
 	apiClient.on("countdownTimer", function (timerid, currentValue) {
 		$("#timers #timer-" + timerid)
-			.text(formatTime(currentValue))
-			.toggleClass("timer-expired", currentValue == 0);
+			.text("⌛ " + formatTime(currentValue))
+			.toggleClass("timer-expired", currentValue <= 10);
 	});
 
 	apiClient.on("deleteTimer", function(timerid) {
