@@ -4,7 +4,7 @@ var redis = require('redis'),
     socketio = require('socket.io'),
     config = require('../../config.js');
 
-global.db = redis.createClient();
+global.db = redis.createClient(config.redis.port, config.redis.host, config.redis);
 
 global.db._lmove = function(item, sourceKey, destinationKey, destinationPosition, callback) {
 	db.lrem(sourceKey, 0, item, function(err) {
