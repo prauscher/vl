@@ -50,7 +50,7 @@ function showView(type, options) {
 		$('#title').text(options.motion.title);
 		$(".motionid").text(options.motionid);
 		$(".motion-text").empty().append(numberLines(options.motion.text));
-		$(".motion-argumentation").text(options.motion.argumentation);
+		$(".motion-argumentation").html(options.motion.argumentation);
 		$(".motion-submitter").text(options.motion.submitter);
 		$(".motion-status *").hide();
 		$(".motion-status .status-" + options.motion.status).show();
