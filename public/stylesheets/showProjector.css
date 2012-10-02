@@ -119,4 +119,4 @@ body
 .line-numbers .number
 	{display:block; color: teal; font: 90% monospace; width:1.5em; text-align:right; margin-right:0.5em; float:left;}
 .line-numbers .line
-	{display:block; margin-left:1.5em; float:left;}
+	{display:block; margin-left:1.5em;}
