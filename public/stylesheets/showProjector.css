@@ -12,7 +12,7 @@
 body
 	{font-family:sans-serif; background: white; margin:130px 20px 20px 20px; font-size:1.75em; overflow:hidden;}
 #header
-	{position:fixed; top:0px; left:0px; height:110px; width:100%; background-color:#ee9922; background-image:url(/images/logo.png); background-repeat:no-repeat; background-position:10px 10px; opacity:0.9;}
+	{position:fixed; top:0px; left:0px; height:140px; width:100%; opacity:0.9; background-image:url(/images/header.png); background-repeat:no-repeat;}
 #options, #projector-controls
 	{position:fixed; top:0px; height:18px; background-color:#cccccc; border-bottom-left-radius:5px; border-bottom-right-radius:5px; padding:2px; opacity:0.8;}
 #options
@@ -26,11 +26,11 @@ body
 #flashs>div
 	{padding: 2em; font-weight:bold; font-size: 200% }
 #currentTime
-	{position:fixed; top:50px; right:30px; height:40px; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; background-color:#cccccc;}
+	{position:fixed; top:110px; right:30px; width:120px; height:35px; padding:10px 20px; border-bottom-left-radius:10px; border-bottom-right-radius:10px; background-color:#ff8800; color:#ffffff;}
 #timers
-	{position:fixed; top:50px; right:180px; height:40px;}
+	{position:fixed; top:55px; right:30px; height:35px;}
 #timers>div
-	{float:right; height:100%; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; margin-left:30px;}
+	{float:right; height:100%; width:120px; padding:10px 20px; border-top-left-radius:10px; border-top-right-radius:10px; margin-left:30px; color:white;}
 
 @-webkit-keyframes blinker {
   from { opacity: 1.0; }
@@ -76,7 +76,7 @@ body
 	{color:#777777;}
 
 .sidebar
-	{position:absolute; top:130px; right:1em; width:10em; border-radius:0.5em; background-color:#ccc;}
+	{position:absolute; top:200px; right:1em; width:10em; border-radius:0.5em; background-color:#ccc;}
 .sidebar>*
 	{padding:0.2em; margin-bottom:0.3em;}
 .sidebar .sidebar-header
@@ -95,7 +95,7 @@ body
 	{text-align:right;}
 
 .flash-danger
-	{background-color:#b94a48;}
+	{background-color:#b94a48; color:white;}
 .flash-information
 	{background-color:#3a87ad;}
 .flash-success

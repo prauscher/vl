@@ -5,8 +5,7 @@
 #error .notes
 	{top:70%; position:absolute; text-align:center; left:0px; right:0px; font-size:1.3em;}
 #waiting
-	{position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:lightgray; opacity:0.6; background-position:center; background-image:url(/images/waiting.gif); background-repeat:no-repeat; 
-z-index:90;}
+	{position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:lightgray; opacity:0.6; background-position:center; background-image:url(/images/waiting.gif); background-repeat:no-repeat; z-index:90;}
 #identify
 	{position:fixed; left:15%; right:15%; top:35%; margin-top:-1px; opacity:0.7; border-radius:30px; padding:50px; color:white; font-size:3em; text-align:center; z-index:100;}
 
@@ -18,8 +17,10 @@ body
 }
 #flashs>div
 	{padding: 2em; font-weight:bold; font-size: 200% }
-#timers>div
-	{float:left; height:100%; padding:15px 30px; border-radius:20px; margin:30px; font-size:8em;}
+#timers>div, #currentTime
+	{float:left; height:100%; padding:15px 30px; border-radius:20px; margin:30px; font-size:8em; color:#ffffff;}
+#currentTime
+	{background-color:#ff8800; color:#ffffff;}
 
 @-webkit-keyframes blinker {
   from { opacity: 1.0; }
@@ -57,7 +58,7 @@ body
 }
 
 .flash-danger
-	{background-color:#b94a48;}
+	{background-color:#b94a48; color:white;}
 .flash-information
 	{background-color:#3a87ad;}
 .flash-success
