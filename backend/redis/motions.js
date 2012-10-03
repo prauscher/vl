@@ -25,7 +25,7 @@ exports.move = function(motionid, oldclassid, newclassid, position, callbackSucc
 }
 
 exports.delete = function(motionid, callbackSuccess) {
-	db.hget('motions:' + motionid, 'class', function (err, motionclassid) {
+	db.hget('motions:' + motionid, 'classid', function (err, motionclassid) {
 		db.lrem('motionclasses:' + motionclassid + ':motions', 0, motionid, function (err) {
 			db.del('motions:' + motionid, function (err) {
 				db.del('motions:' + motionid + ':ballots');
