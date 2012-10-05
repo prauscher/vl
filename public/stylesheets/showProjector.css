@@ -21,7 +21,7 @@ body
 	{right:20px;}
 
 #flashs	{
-    position:fixed; top:110px; left:0px; width:100%; z-index:80;
+    position:fixed; top:190px; left:0px; width:100%; z-index:80;
 }
 #flashs>div
 	{padding: 2em; font-weight:bold; font-size: 200% }
