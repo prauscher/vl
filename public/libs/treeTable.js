@@ -66,7 +66,7 @@ $.widget("ui.treeTable", {
 			parentList = this.element;
 			positionString = parseInt(position) + 1;
 		} else {
-			var parent = this.get(parenttype, parentid).parent();
+			var parent = this._getOuter(parenttype, parentid);
 			if (parent.children("ol").length == 0) {
 				parent.append($("<ol>"));
 			}
@@ -113,8 +113,12 @@ $.widget("ui.treeTable", {
 		}
 	},
 
+	_getOuter : function (type, id) {
+		return this.element.find("#" + (this.prefix + type + "-" + id));
+	},
+
 	get : function (type, id, element) {
-		var item = this.element.find("#" + (this.prefix + type + "-" + id)).children("." + this.prefix + type);
+		var item = this._getOuter(type, id).children("." + this.prefix + type);
 		if (element) {
 			item = item.children("." + this.prefix + element);
 		}
