@@ -1,6 +1,8 @@
 vl
 ==
 
+NOTE: Branch 'master' is the actively developed version again. Please fork if you want custom versions for your assembly.
+
 Install
 -------
 
