@@ -17,7 +17,8 @@ $(function () {
 	var showMotionClassOptions = generateShowOptionsModal({
 		modal : "#motions #motionclass-options",
 		fields: [
-			{ property : "title", field : "#title", type : "text" }
+			{ property : "title", field : "#title", type : "text" },
+			{ property : "slideid", field : "#motionclass-slideid", type : "select" },
 		],
 		saveCallback : apiClient.saveMotionClass,
 		deleteCallback : apiClient.deleteMotionClass
@@ -86,6 +87,22 @@ $(function () {
 	apiClient.on("deleteMotion", function (motionid) {
 		$("ol#motions").treeTable("remove", "motion", motionid);
 	});
+
+	apiClient.on("initSlide", function (slideid, parentid, position) {
+		$("#motionclass-options #motionclass-slideid").sortedList("add", slideid,
+			$("<option>").attr("value", slideid) )
+	});
+
+	apiClient.on("updateSlide", function (slideid, slide) {
+		$("#motionclass-options #motionclass-slideid").sortedList("get", slideid).text(slide.title);
+	});
+
+	apiClient.on("deleteSlide", function (slideid) {
+		$("#motionclass-options #motionclass-slideid").sortedList("remove", slideid);
+	});
+
+	$("#motionclass-options #motionclass-slideid").sortedList();
+	$("#motionclass-options #motionclass-slideid").sortedList("add", "", $("<option>").attr("value", "").text("(kein)"));
 
 	apiClient.on("initMotionClass", function (motionclassid) {
 		$(".new-motion-classes").sortedList("add", motionclassid, $("<li>").append("<a>") );
