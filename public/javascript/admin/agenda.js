@@ -118,6 +118,8 @@ $(function () {
 			showSlideOptions(slideid, slide);
 		});
 
+		$("#agenda ol#slides").treeTable("get", "slide", slideid, "title").toggleClass('slide-done', slide.isdone == 'true');
+
 		var options = $("#agenda ol#slides").treeTable("get", "slide", slideid, "options");
 		options.children(".isundone").unbind("click").toggle(slide.isdone != "true").click(function () {
 			slide.isdone = true;

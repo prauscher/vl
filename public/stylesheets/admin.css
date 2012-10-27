@@ -28,6 +28,8 @@
 .set-default.icon-star
 	{opacity:1;}
 
+.slide-done { color: darkgreen; font-style: italic; text-decoration: line-through }
+
 .isundone.icon-ok-circle
 	{opacity:0.5;}
 
