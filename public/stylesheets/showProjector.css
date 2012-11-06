@@ -47,7 +47,7 @@ body
   to { opacity: 0.0; }
 }
 
-#timers>div.timer-expired {
+#timers>div.timer-expired, #connection-lost {
   -webkit-animation-name: blinker;
   -webkit-animation-direction: alternate;
   -webkit-animation-iteration-count: infinite;
@@ -66,6 +66,9 @@ body
   -o-animation-timing-function: ease-in-out;
   -o-animation-duration: .5s;
 }
+
+#connection-lost { position: absolute; top: 5px; right: 5px; height: 30px; width: 30px; background-color: red; opacity: 0.8; z-index: 2; padding: 3px; display: inline-block; font: 9px monospace; text-align: right }
+
 
 .content-text
 	{white-space:pre-line;}

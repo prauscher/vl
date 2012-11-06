@@ -4,21 +4,24 @@ function APIClient() {
 	this.callbacks = {};
 	this.sockets = {};
 
-	this.socket = io.connect().socket;
+	this.socket = io.connect('').socket;
+
+	this.socket.on('reconnect', function() {
+		self.callCallback('reconnect', []);
+	});
+
+	var self = this;
+
+	this.socket.on('reconnecting', function(nextDelay, count) {
+		console.log('reconnecting...');
+		console.log(count);
+		if (count == 2)
+			self.callCallback('lostConnection', []);
+	});
 }
 
 APIClient.prototype.getSocket = function (path, callback) {
-	if (this.sockets[path]) {
-		callback(this.sockets[path]);
-	} else {
-		console.log("[APIClient] connecting to " + path);
-		var socket = this.socket.of(path)
-			.on("connect", function () {
-				console.log("[APIClient] connected to " + path);
-				callback(this);
-			});
-		this.sockets[path] = socket;
-	}
+	callback(this.socket.of(path));
 }
 
 APIClient.prototype.listen = function (path, event, callback) {

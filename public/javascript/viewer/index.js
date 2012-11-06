@@ -78,4 +78,14 @@ function showError(message, notes) {
 $(function () {
 	clearView();
 	$("#identify").hide();
+	$("#connection-lost").hide();
+
+	apiClient.on('reconnect', function() {
+		location.reload();
+	});
+
+	apiClient.on('lostConnection', function() {
+		$("#connection-lost").text('check net').show();
+	});
+
 });

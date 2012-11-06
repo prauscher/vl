@@ -53,7 +53,7 @@ $(function () {
 	});
 
 	apiClient.on("flashProjector", function (projectorid, flash) {
-		if (projectorid == currentProjectorID) {
+		if (projectorid == currentProjectorID || projectorid == null) {
 			var flashContainer = $("<div>")
 				.addClass("flash-" + flash.type)
 				.text(flash.text);
