@@ -109,4 +109,9 @@ $(function () {
 	$(".modal form").unbind("submit").submit(function() {
 		$(this).parent().find(".save").click();
 	});
+
+	apiClient.on('lostConnection', function() {
+		alert("Die Netzwerkverbindung ist abgerissen. Um eine Beschädigung der Daten zu vermeiden wird hier abgebrochen.");
+		location.reload();
+	});
 });
