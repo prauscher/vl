@@ -82,8 +82,14 @@ $.widget("ui.treeTable", {
 		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type)
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
-			.append($("<span>").addClass(this.prefix + "move").css("float","left").css("width", moveWidth + "px")
+			.append($("<span>").addClass(this.prefix + "move").css("float","left")
 				.append($("<i>").addClass("icon-move")))
+			.append($("<span>").addClass(this.prefix + "expand").css("float","left").css("width", moveWidth + "px")
+				.append($("<i>").addClass("icon-minus-sign").click(function () {
+					var childList = $("#" + self.prefix + type + "-" + id).children("ol");
+					childList.toggle();
+					$(this).toggleClass("icon-minus-sign", ! childList.is(":hidden")).toggleClass("icon-plus-sign", childList.is(":hidden"));
+				})) )
 			.append(contentItem);
 
 		if (!position || position == 0) {
