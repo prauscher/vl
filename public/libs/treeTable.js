@@ -61,18 +61,15 @@ $.widget("ui.treeTable", {
 		}
 		contentItem.append($("<div>").css("clear", "left"));
 
-		var parentList = null, positionString = "";
+		var parentList = null;
 		if (parentid == null) {
 			parentList = this.element;
-			positionString = parseInt(position) + 1;
 		} else {
 			var parent = this._getOuter(parenttype, parentid);
 			if (parent.children("ol").length == 0) {
 				parent.append($("<ol>"));
 			}
 			parentList = parent.children("ol");
-			var parentPosition = parent.children("." + this.prefix + "position").text();
-			positionString = parentPosition + "." + (parseInt(position) + 1);
 		}
 
 		var moveWidth = this.options.moveWidth;
@@ -85,20 +82,7 @@ $.widget("ui.treeTable", {
 		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type)
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
-			.append($("<span>").addClass(this.prefix + "position").text(positionString).hide())
-			.append($("<span>").addClass(this.prefix + "pos").css({"float":"left", "width":"20px","text-align":"right","color":"gray","font-size":"7pt"}).text(parseInt(position) + 1))
-			.append($("<span>").addClass(this.prefix + "move").css("float","left").css("width", moveWidth + "px").click(function () {
-					var currentList = self.element;
-					var positions = prompt("New Position?", positionString).split(".");
-					var position = parseInt(positions[positions.length-1]) - 1;
-
-					// TODO move to other parent
-
-					if (!self.options.move[type] || !self.options.move[type][parenttype]) {
-						return false;
-					}
-					return self.options.move[type][parenttype](id, parentid, position);
-				})
+			.append($("<span>").addClass(this.prefix + "move").css("float","left").css("width", moveWidth + "px")
 				.append($("<i>").addClass("icon-move")))
 			.append(contentItem);
 
