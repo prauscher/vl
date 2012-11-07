@@ -111,7 +111,16 @@ $(function () {
 	});
 
 	apiClient.on('lostConnection', function() {
-		alert("Die Netzwerkverbindung ist abgerissen. Um eine Beschädigung der Daten zu vermeiden wird hier abgebrochen.");
+		var modal = $("<div>").addClass("modal hide").append(
+			$("<div>").addClass("modal-header").append(
+				$("<button>").addClass("close").attr("data-dismiss", "modal").html("&times;"),
+				$("<h3>").text("Verbindung abgerissen") ),
+			$("<div>").addClass("modal-body").append(
+				$("<p>").text("Die Netzwerkverbindung ist abgerissen. Um eine Beschädigung der Daten zu vermeiden wird hier abgebrochen.") ),
+			$("<div>").addClass("modal-footer").append(
+				$("<a>").addClass("btn").attr("data-dismiss","modal").text("Verstecken") ) );
+		$("body").append(modal);
+		modal.modal();
 		location.reload();
 	});
 });
