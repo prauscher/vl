@@ -29,6 +29,7 @@
 	{opacity:1;}
 
 .slide-done { color: darkgreen; font-style: italic; text-decoration: line-through }
+.motion-done { color: darkgreen; font-style: italic; text-decoration: line-through }
 
 .isundone.icon-ok-circle
 	{opacity:0.5;}
