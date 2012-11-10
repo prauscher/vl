@@ -58,7 +58,17 @@ function ShowBallotList(options) {
 			},
 			addCallback : function (ballotid, ballot) {
 			},
-			saveCallback : apiClient.saveBallot,
+			saveCallback : function(ballotid, ballot, callback) {
+				if (ballot.status == 'done') {
+					apiClient.eachSlide(function (slideid, slide) {
+						if ((slide.type == 'motion' && slide.motionBallotid == ballotid) || (slide.type == 'election' && slide.electionBallotid == ballotid)) {
+							slide.isdone = true;
+							apiClient.saveSlide(slideid, slide);
+						}
+					});
+				}
+				apiClient.saveBallot(ballotid, ballot, callback);
+			},
 			deleteCallback : function (ballotid, callback) {
 				options.deleteBallot(id, ballotid, callback);
 			}
