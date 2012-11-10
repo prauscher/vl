@@ -34,7 +34,17 @@ $(function () {
 			{ property : "text", field : "#text", type : "text" },
 			{ property : "argumentation", field : "#argumentation", type : "text" }
 		],
-		saveCallback : apiClient.saveMotion,
+		saveCallback : function(motionid, motion, callback) {
+			if (motion.status != 'open') {
+				apiClient.eachSlide(function (slideid, slide) {
+					if (slide.type == 'motion' && slide.motionid == motionid) {
+						slide.isdone = true;
+						apiClient.saveSlide(slideid, slide);
+					}
+				});
+		  }
+			apiClient.saveMotion(motionid, motion, callback);
+		},
 		deleteCallback : apiClient.deleteMotion
 	});
 
