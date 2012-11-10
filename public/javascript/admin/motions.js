@@ -18,6 +18,7 @@ $(function () {
 		modal : "#motions #motionclass-options",
 		fields: [
 			{ property : "title", field : "#title", type : "text" },
+			{ property : "idPrefix", field : "#motionclass-idPrefix", type : "text" },
 			{ property : "slideid", field : "#motionclass-slideid", type : "select" },
 		],
 		saveCallback : apiClient.saveMotionClass,

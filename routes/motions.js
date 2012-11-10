@@ -14,11 +14,20 @@ exports.save = backendRouter.generateSave(backend.motions, "motionid", "motion",
 					motionid: motionid,
 					title: motionid + ": " + motion.title
 				});
-				console.log("TODO: create slide for " + motionid + " below " + motionclass.slideid);
 			}
 		});
 	}
 });
+
+exports.saveEmpty = function (req, res) {
+	backend.motionclasses.get(req.body["motion"].classid, function (motionclass) {
+		backend.motionclasses.getNextMotionID(req.body["motion"].classid, function (nextMotionID) {
+			req.params["motionid"] = motionclass.idPrefix + nextMotionID;
+			exports.save(req, res);
+		});
+	});
+}
+
 exports.move = backendRouter.generateMove(backend.motions, "motionid", "classid", "position");
 exports.delete = backendRouter.generateDelete(backend.motions, "motionid");
 

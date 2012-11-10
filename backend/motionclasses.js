@@ -40,3 +40,9 @@ module.exports.eachMotion = function (id, callback) {
 		});
 	});
 }
+
+module.exports.getNextMotionID = function (id, callback) {
+	core.motionclasses.getNextMotionID(id, function(nextMotionID) {
+		callback && callback(nextMotionID);
+	});
+}

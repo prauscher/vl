@@ -104,6 +104,7 @@ exports.createServer = function () {
 		app.post('/motionclasses/:motionclassid/delete',	generateCallback(routes.motionclasses.delete) );
 		app.post('/motionclasses/:motionclassid/move',		generateCallback(routes.motionclasses.move) );
 
+		app.put('/motions//save',			generateCallback(routes.motions.saveEmpty) );
 		app.put('/motions/:motionid/save',		generateCallback(routes.motions.save) );
 		app.post('/motions/:motionid/delete',		generateCallback(routes.motions.delete) );
 		app.post('/motions/:motionid/move',		generateCallback(routes.motions.move) );

@@ -26,6 +26,12 @@ exports.getChildren = function (motionclassid, callback) {
 	})
 }
 
+exports.getNextMotionID = function (motionclassid, callback) {
+	db.incr("motionclasses:" + motionclassid + ":nextMotionID", function (err, nextMotionID) {
+		callback(nextMotionID);
+	});
+}
+
 exports.getMotions = function (motionclassid, callback) {
 	db.lrange("motionclasses:" + motionclassid + ":motions", 0, -1, function (err, motionids) {
 		callback(motionids);
