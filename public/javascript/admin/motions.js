@@ -74,6 +74,7 @@ $(function () {
 			title: $("<span>"),
 			options: $("<span>")
 				.append(ballotList.generateButton(motionid))
+				.append($("<i>").addClass("icon-plus-sign").attr('title', 'Duplizieren').click(function() { apiClient.getMotion(motionid, function(motion) { showMotionOptions(null, motion); }); }))
 				.append($("<a>").attr("href", "/projector#motion:" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
