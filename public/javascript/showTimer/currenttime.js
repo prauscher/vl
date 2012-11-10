@@ -10,7 +10,7 @@ function updateCurrentTime() {
 	if (minutes < 10) {
 		minutes = "0" + minutes;
 	}
-	$("#currentTime").text("⌚ " + hours + ":" + minutes);
+	$("#currentTime .timer").text("⌚ " + hours + ":" + minutes);
 }
 
 $(function () {

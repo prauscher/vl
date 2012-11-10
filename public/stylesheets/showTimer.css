@@ -18,7 +18,11 @@ body
 #flashs>div
 	{padding: 2em; font-weight:bold; font-size: 200% }
 #timers>div, #currentTime
-	{float:left; height:100%; padding:15px 30px; border-radius:20px; margin:30px; font-size:8em; color:#ffffff;}
+	{float:left; height:100%; padding:15px 30px; border-radius:20px; margin:30px; color:#ffffff;}
+#timers>div .label, #currentTime .label
+	{font-size:2em;}
+#timers>div .timer, #currentTime .timer
+	{font-size:8em;}
 #currentTime
 	{background-color:#ff8800; color:#ffffff;}
 

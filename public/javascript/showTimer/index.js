@@ -16,6 +16,7 @@ function showView() {
 function addTimer(timerid, timer) {
 	if ($("#timers #timer-" + timerid).length < 1) {
 		var timerContainer = $("<div>").attr("id", "timer-" + timerid).addClass("timer");
+		timerContainer.append($("<div>").addClass("label"), $("<div>").addClass("timer"));
 
 		// Insert hidden to allow effects
 		timerContainer.hide();

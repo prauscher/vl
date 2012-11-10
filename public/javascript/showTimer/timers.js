@@ -37,11 +37,12 @@ $(function () {
 	});
 
 	apiClient.on("updateTimer", function (timerid, timer) {
-		$("#timers #timer-" + timerid).css("background-color", timer.color);
+		$("#timers #timer-" + timerid).css("background-color", timer.color)
+			.children(".label").text(timer.title);
 	});
 
 	apiClient.on("countdownTimer", function (timerid, currentValue) {
-		$("#timers #timer-" + timerid)
+		$("#timers #timer-" + timerid).children(".timer")
 			.text("⌛ " + formatTime(currentValue))
 			.toggleClass("timer-expired", currentValue <= 10);
 	});
