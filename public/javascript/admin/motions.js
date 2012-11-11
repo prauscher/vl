@@ -75,6 +75,7 @@ $(function () {
 			title: $("<span>"),
 			options: $("<span>")
 				.append(ballotList.generateButton(motionid))
+				.append($("<i>").addClass("icon-plus-sign").attr('title', 'Duplizieren').click(function() { apiClient.getMotion(motionid, function(motion) { showMotionOptions(null, motion); }); }))
 				.append($("<a>").attr("href", "/projector#motion:" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
@@ -86,7 +87,7 @@ $(function () {
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).unbind("click").click(function() {
+		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).toggleClass("motion-done", motion.status != 'open').unbind("click").click(function() {
 			showMotionOptions(motionid, motion);
 		});
 	});
