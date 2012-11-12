@@ -87,7 +87,7 @@ body
   -o-animation-duration: .2s;
 }
 
-#connection-lost { position: absolute; top: 5px; right: 5px; height: 40px; width: 120px; background-color: red; opacity: 0.8; z-index: 2; padding: 3px; display: inline-block; font: 9px monospace; text-align: right }
+#connection-lost { position: absolute; top: 0px; left:0px; height: 20px; width: 100%; background-color: red; opacity: 0.8; z-index: 2; padding: 3px; display: inline-block; font: 9px monospace; text-align: right }
 
 
 .content-text
