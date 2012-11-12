@@ -26,11 +26,11 @@ body
 #flashs>div
 	{padding: 2em; font-weight:bold; font-size: 200% }
 #currentTime
-	{position:fixed; top:55px; right:30px; width:120px; height:35px; padding:10px 10px 10px 30px; border-top-left-radius:10px; border-top-right-radius:10px; background-color:#ff8800; color:#ffffff;}
+	{position:fixed; top:25px; right:30px; width:120px; height:35px; padding:10px 10px 10px 30px; border-radius:10px; background-color:#ff8800; color:#ffffff;}
 #timers
-	{position:fixed; top:55px; right:180px; height:35px;}
+	{position:fixed; top:25px; right:180px; height:35px;}
 #timers>div
-	{float:right; height:100%; width:120px; padding:10px 10px 10px 30px; margin-left:-10px; border-top-left-radius:10px; color:white;}
+	{float:right; height:100%; width:120px; padding:10px 10px 10px 30px; margin-left:-10px; border-top-left-radius:10px; border-bottom-left-radius:10px; color:white;}
 
 @-webkit-keyframes blinker {
   from { opacity: 1.0; }
