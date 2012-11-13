@@ -144,7 +144,7 @@ body
 	body
 		{font-size:1.75em; overflow:hidden; margin:130px 20px 20px 20px;}
 	.sidebar
-		{position:absolute; top:200px; right:1em; width:10em; border-radius:0.5em; background-color:#ccc;}
+		{float:right; width:10em; border-radius:0.5em; background-color:#ccc;}
 	.sidebar>*
 		{padding:0.2em; margin-bottom:0.3em;}
 	.sidebar .sidebar-header
