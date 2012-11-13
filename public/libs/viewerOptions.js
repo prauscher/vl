@@ -19,10 +19,10 @@ $.widget("custom.viewerOptions", {
 		}
 
 		this.element.children(".reset").unbind("click").click(generateCaller(1, 0));
-		this.element.children(".zoom-in").unbind("click").click(generateCaller(this.options.zoom * 1.1, this.options.scroll));
-		this.element.children(".zoom-out").unbind("click").click(generateCaller(this.options.zoom / 1.1, this.options.scroll));
-		this.element.children(".scroll-up").unbind("click").click(generateCaller(this.options.zoom, this.options.scroll - 1));
-		this.element.children(".scroll-down").unbind("click").click(generateCaller(this.options.zoom, this.options.scroll + 1));
+		this.element.children(".zoom-in").unbind("click").click(generateCaller(parseFloat(this.options.zoom) * 1.1, parseInt(this.options.scroll)));
+		this.element.children(".zoom-out").unbind("click").click(generateCaller(parseFloat(this.options.zoom) / 1.1, parseInt(this.options.scroll)));
+		this.element.children(".scroll-up").unbind("click").click(generateCaller(parseFloat(this.options.zoom), parseInt(this.options.scroll) - 1));
+		this.element.children(".scroll-down").unbind("click").click(generateCaller(parseFloat(this.options.zoom), parseInt(this.options.scroll) + 1));
 	},
 
 	_create: function () {
