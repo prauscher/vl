@@ -28,7 +28,7 @@ $(function () {
 			.append($("<td>").addClass("title").css("cursor", "pointer"))
 			.append($("<td>").addClass("options")
 				.append(ballotList.generateButton(electionid))));
-//				.append($("<a>").attr("href", "/projector#election:" + electionid).append($("<i>").addClass("icon-play-circle").attr("title", "Wahl anzeigen"))) ) );
+//				.append($("<a>").attr("href", "/projector#election:" + electionid).append($("<i>").addClass("icon icon-play-circle").attr("title", "Wahl anzeigen"))) ) );
 	});
 
 	apiClient.on("updateElection", function (electionid, election) {

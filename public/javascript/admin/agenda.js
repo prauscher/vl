@@ -92,7 +92,7 @@ $(function () {
 
 	$("#agenda ol#slides").treeTable({
 		styles: {
-			slide: { title: {width: "350px", cursor: "pointer"} }
+			slide: { title: {width: "500px", cursor: "pointer"} }
 		}
 	});
 	$("#agenda ol#slides").treeTable("onMove", "slide", ["slide", null], function (slideid, parentid, position) {
@@ -112,12 +112,12 @@ $(function () {
 				}
 			}),
 			"options": $("<span>")
-				.append($("<i>").addClass("duplicate").addClass("icon-plus-sign").attr("title","Duplizieren").click(function() { apiClient.getSlide(slideid, function(slide) { showSlideOptions(null, slide); }); }))
-				.append($("<i>").addClass("isdone").addClass("icon-ok-circle").attr("title","Als nicht erledigt markieren"))
-				.append($("<i>").addClass("isundone").addClass("icon-ok-circle").attr("title","Als erledigt markieren"))
-				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","In Agendaansicht verstecken"))
-				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","In Agendaansicht anzeigen"))
-				.append($("<a>").attr("href", "/projector#slide:" + slideid).append($("<i>").addClass("icon-play-circle").attr("title", "Folie öffnen")))
+				.append($("<i>").addClass("duplicate").addClass("icon icon-plus-sign").attr("title","Duplizieren").click(function() { apiClient.getSlide(slideid, function(slide) { showSlideOptions(null, slide); }); }))
+				.append($("<i>").addClass("isdone").addClass("icon icon-ok-circle").attr("title","Als nicht erledigt markieren"))
+				.append($("<i>").addClass("isundone").addClass("icon icon-ok-circle").attr("title","Als erledigt markieren"))
+				.append($("<i>").addClass("isvisible").addClass("icon icon-eye-open").attr("title","In Agendaansicht verstecken"))
+				.append($("<i>").addClass("ishidden").addClass("icon icon-eye-close").attr("title","In Agendaansicht anzeigen"))
+				.append($("<a>").attr("href", "/projector#slide:" + slideid).append($("<i>").addClass("icon icon-play-circle").attr("title", "Folie öffnen")))
 		});
 		for (var projectorid in projectorsCurrentSlide) {
 			if (projectorsCurrentSlide[projectorid] == slideid) {

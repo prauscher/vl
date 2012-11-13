@@ -69,10 +69,10 @@ $.widget("ui.treeTable", {
 			if (parent.children("ol").length == 0) {
 				parent.append($("<ol>"));
 				parent.children("." + this.prefix + "expand").empty().append(
-					$("<i>").addClass("icon-minus-sign").click(function () {
+					$("<i>").addClass("icon icon-minus-sign").click(function () {
 						var childList = parent.children("ol");
 						childList.toggle();
-						$(this).toggleClass("icon-minus-sign", ! childList.is(":hidden")).toggleClass("icon-plus-sign", childList.is(":hidden"));
+						$(this).toggleClass("icon icon-minus-sign", ! childList.is(":hidden")).toggleClass("icon icon-plus-sign", childList.is(":hidden"));
 					})
 				);
 			}
@@ -90,7 +90,7 @@ $.widget("ui.treeTable", {
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
 			.append($("<span>").addClass(this.prefix + "move").css("float","left")
-				.append($("<i>").addClass("icon-move")))
+				.append($("<i>").addClass("icon icon-move")))
 			.append($("<span>").addClass(this.prefix + "expand").css("float","left").css("width","16px").html("&nbsp;") )
 			.append($("<span>").css("float","left").css("width", moveWidth + "px").html("&nbsp;"))
 			.append(contentItem);

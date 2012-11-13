@@ -51,8 +51,8 @@ $(function () {
 
 	$("ol#motions").treeTable({
 		styles: {
-			motionclass: { icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} },
-			motion: {icon: {width: "20px"}, title: {width: "350px", cursor: "pointer"} }
+			motionclass: { icon: {width: "20px"}, title: {width: "500px", cursor: "pointer"} },
+			motion: {icon: {width: "20px"}, title: {width: "500px", cursor: "pointer"} }
 		}
 	});
 	$("ol#motions").treeTable("onMove", "motion", "motionclass", function (motionid, classid, position) {
@@ -64,19 +64,19 @@ $(function () {
 
 	apiClient.on("initMotionClass", function (motionclassid, parentid, position) {
 		$("ol#motions").treeTable("add", "motionclass", motionclassid, "motionclass", parentid, position, {
-			icon: $("<i>").addClass("icon").addClass("icon-folder-open"),
+			icon: $("<i>").addClass("icon").addClass("icon icon-folder-open"),
 			title: $("<span>")
 		});
 	});
 
 	apiClient.on("initMotion", function (motionid, classid, position) {
 		$("ol#motions").treeTable("add", "motion", motionid, "motionclass", classid, position, {
-			icon: $("<i>").addClass("icon").addClass("icon-file"),
+			icon: $("<i>").addClass("icon").addClass("icon icon-file"),
 			title: $("<span>"),
 			options: $("<span>")
 				.append(ballotList.generateButton(motionid))
-				.append($("<i>").addClass("icon-plus-sign").attr('title', 'Duplizieren').click(function() { apiClient.getMotion(motionid, function(motion) { showMotionOptions(null, motion); }); }))
-				.append($("<a>").attr("href", "/projector#motion:" + motionid).append($("<i>").addClass("icon-play-circle").attr("title", "Antrag öffnen")))
+				.append($("<i>").addClass("icon icon-plus-sign").attr('title', 'Duplizieren').click(function() { apiClient.getMotion(motionid, function(motion) { showMotionOptions(null, motion); }); }))
+				.append($("<a>").attr("href", "/projector#motion:" + motionid).append($("<i>").addClass("icon icon-play-circle").attr("title", "Antrag öffnen")))
 		});
 	});
 

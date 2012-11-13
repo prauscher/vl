@@ -15,12 +15,10 @@ body
 	{font-size:1.5em;}
 #header
 	{position:fixed; top:0px; left:0px; height:140px; width:100%; opacity:0.9; background-image:url(/images/header.png); background-repeat:no-repeat;}
-#options, #projector-controls
-	{position:fixed; top:0px; height:18px; background-color:#cccccc; border-bottom-left-radius:5px; border-bottom-right-radius:5px; padding:2px; opacity:0.8;}
-#options
-	{right:120px;}
 #projector-controls
-	{right:20px;}
+	{position:fixed; top:0px; height:18px; background-color:#cccccc; border-bottom-left-radius:5px; border-bottom-right-radius:5px; padding:2px; opacity:0.8; right:20px; margin-top:-0.3em;}
+#projector-controls .icon
+	{font-size:0.7em; display:inline-block; margin:0px 3px;}
 
 #flashs	{
     position:fixed; top:190px; left:0px; width:100%; z-index:80;
@@ -120,6 +118,7 @@ body
 .flash-success
 	{background-color:#468847;}
 
+/**
 #projector-controls>*, #options-button
 	{width:14px; height:14px; background-image:url(/libs/bootstrap/img/glyphicons-halflings.png); background-repeat:no-repeat; display:block; float:left;}
 .icon-repeat
@@ -134,6 +133,7 @@ body
 	{background-position:-313px -119px;}
 #options-button
 	{background-position:-432px 0px;}
+**/
 
 .line-numbers .number
 	{display:block; color: teal; font: 90% monospace; width:1.5em; text-align:right; margin-right:0.5em; float:left;}

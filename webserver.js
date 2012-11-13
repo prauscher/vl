@@ -137,7 +137,7 @@ exports.createServer = function () {
 			fileIn: [
 				"public/libs/jquery-miniColors/jquery.miniColors.css",
 				"public/libs/bootstrap/css/bootstrap.min.css",
-				"public/libs/bootstrap/css/bootstrap-responsive.min.css",
+				"public/libs/fontAwesome/css/font-awesome.css",
 				"public/stylesheets/admin.css"
 			],
 			fileOut: "public/min/admin.css"
@@ -185,6 +185,7 @@ exports.createServer = function () {
 		new compressor.minify({
 			type: 'no-compress',
 			fileIn: [
+				"public/libs/fontAwesome/css/font-awesome.css",
 				"public/stylesheets/showProjector.css"
 			],
 			fileOut: "public/min/showProjector.css"

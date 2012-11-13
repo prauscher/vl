@@ -16,15 +16,15 @@ $(function () {
 	apiClient.on("setDefaultProjector", function (projectorid) {
 		if (currentDefaultProjector != null) {
 			$("#projectors tbody").sortedList("get", currentDefaultProjector).find(".set-default")
-				.removeClass("icon-star").addClass("icon-star-empty");
+				.removeClass("icon icon-star").addClass("icon icon-star-empty");
 		}
 		currentDefaultProjector = projectorid;
 		$("#projectors tbody").sortedList("get", projectorid).find(".set-default")
-			.removeClass("icon-star-empty").addClass("icon-star");
+			.removeClass("icon icon-star-empty").addClass("icon icon-star");
 	});
 
 	apiClient.on("initProjector", function (projectorid, projector) {
-		var starIcon = (projectorid == currentDefaultProjector) ? "icon-star" : "icon-star-empty";
+		var starIcon = (projectorid == currentDefaultProjector) ? "icon icon-star" : "icon icon-star-empty";
 
 		$("#projectors tbody").sortedList("add", projectorid, $("<tr>")
 			.append($("<td>").append($("<img>").attr("src", "/images/empty.gif").addClass("color")))
@@ -38,12 +38,12 @@ $(function () {
 				}
 			}))
 			.append($("<td>").addClass("options")
-				.append($("<i>").addClass("isvisible").addClass("icon-eye-open").attr("title","Auf Startseite verstecken"))
-				.append($("<i>").addClass("ishidden").addClass("icon-eye-close").attr("title","Auf Startseite anzeigen"))
+				.append($("<i>").addClass("isvisible").addClass("icon icon-eye-open").attr("title","Auf Startseite verstecken"))
+				.append($("<i>").addClass("ishidden").addClass("icon icon-eye-close").attr("title","Auf Startseite anzeigen"))
 				.append($("<i>").addClass(starIcon).addClass("set-default").attr("title", "Als Standard setzen"))
 				.append($("<span>").addClass("viewerOptions"))
-				.append($("<a>").attr("href","/projector#projector:" + projectorid).append($("<i>").addClass("icon-play-circle").attr("title", "Projector öffnen")))
-				.append($("<a>").attr("href","/timer#projector:" + projectorid).append($("<i>").addClass("icon-bell").attr("title", "Timeransicht öffnen"))) ) );
+				.append($("<a>").attr("href","/projector#projector:" + projectorid).append($("<i>").addClass("icon icon-play-circle").attr("title", "Projector öffnen")))
+				.append($("<a>").attr("href","/timer#projector:" + projectorid).append($("<i>").addClass("icon icon-bell").attr("title", "Timeransicht öffnen"))) ) );
 	});
 
 	apiClient.on("updateProjector", function(projectorid, projector) {

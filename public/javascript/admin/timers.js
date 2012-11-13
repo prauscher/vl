@@ -68,10 +68,10 @@ $(function () {
 				}
 			}))
 			.append($("<td>")
-				.append($("<i>").addClass("start").addClass("icon-play").attr("title", "Starten"))
-				.append($("<i>").addClass("pause").addClass("icon-pause").attr("title", "Pausieren"))
-				.append($("<i>").addClass("stop").addClass("icon-stop").attr("title", "Stoppen"))
-				.append($("<a>").append($("<i>").addClass("icon-play-circle").attr("title", "Anzeigen")).attr("href", "/timer#timer:" + timerid)) ) );
+				.append($("<i>").addClass("start").addClass("icon icon-play").attr("title", "Starten"))
+				.append($("<i>").addClass("pause").addClass("icon icon-pause").attr("title", "Pausieren"))
+				.append($("<i>").addClass("stop").addClass("icon icon-stop").attr("title", "Stoppen"))
+				.append($("<a>").append($("<i>").addClass("icon icon-play-circle").attr("title", "Anzeigen")).attr("href", "/timer#timer:" + timerid)) ) );
 	});
 
 	apiClient.on("deleteTimer", function (timerid) {

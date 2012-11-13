@@ -1,5 +1,8 @@
+.icon
+	{font-size:1.5em; margin:0px 3px;}
+
 .select-projector, #timers .color, #projectors .color, #elections .color {
-	border:1px solid #777777; margin:1px; width:13px; height:13px;
+	border:1px solid #777777; margin:1px; width:18px; height:18px;
 }
 
 #timers .color {

@@ -27,11 +27,11 @@ $.widget("custom.viewerOptions", {
 
 	_create: function () {
 		this.element
-			.append($("<i>").addClass("icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
-			.append($("<i>").addClass("icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
-			.append($("<i>").addClass("icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
-			.append($("<i>").addClass("icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
-			.append($("<i>").addClass("icon-chevron-down").addClass("scroll-down").attr("title", "Hinabscrollen"))
+			.append($("<i>").addClass("icon icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
+			.append($("<i>").addClass("icon icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
+			.append($("<i>").addClass("icon icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
+			.append($("<i>").addClass("icon icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
+			.append($("<i>").addClass("icon icon-chevron-down").addClass("scroll-down").attr("title", "Hinabscrollen"))
 		this._refresh();
 	},
 
