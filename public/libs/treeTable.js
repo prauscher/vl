@@ -72,7 +72,7 @@ $.widget("ui.treeTable", {
 					$("<i>").addClass("icon icon-minus-sign").click(function () {
 						var childList = parent.children("ol");
 						childList.toggle();
-						$(this).toggleClass("icon icon-minus-sign", ! childList.is(":hidden")).toggleClass("icon icon-plus-sign", childList.is(":hidden"));
+						$(this).toggleClass("icon-minus-sign", ! childList.is(":hidden")).toggleClass("icon-plus-sign", childList.is(":hidden"));
 					})
 				);
 			}
