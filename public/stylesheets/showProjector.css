@@ -11,6 +11,8 @@
 
 body
 	{font-family:sans-serif; background: white;}
+#title
+	{font-size:1.5em;}
 #header
 	{position:fixed; top:0px; left:0px; height:140px; width:100%; opacity:0.9; background-image:url(/images/header.png); background-repeat:no-repeat;}
 #options, #projector-controls
