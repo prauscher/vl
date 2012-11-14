@@ -125,6 +125,9 @@ $(function () {
 				$("<a>").addClass("btn").attr("data-dismiss","modal").text("Verstecken") ) );
 		$("body").append(modal);
 		modal.modal();
+	});
+
+	apiClient.on('reconnect', function () {
 		location.reload();
 	});
 });
