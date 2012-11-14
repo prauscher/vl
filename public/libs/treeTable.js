@@ -91,7 +91,7 @@ $.widget("ui.treeTable", {
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
 			.append($("<span>").addClass(this.prefix + "move").css("float","left")
 				.append($("<i>").addClass("icon icon-move")))
-			.append($("<span>").addClass(this.prefix + "expand").css("float","left").css("width","16px").html("&nbsp;") )
+			.append($("<span>").addClass(this.prefix + "expand").css("float","left").css("width","2em").html("&nbsp;") )
 			.append($("<span>").css("float","left").css("width", moveWidth + "px").html("&nbsp;"))
 			.append(contentItem);
 
