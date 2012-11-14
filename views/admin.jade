@@ -242,6 +242,8 @@ html
 					ul.dropdown-menu.new-motion-classes
 				div.btn-group
 					button#new-motionclass.btn.btn-success Neue Kategorie
+				div.btn-group
+					button#showAllMotions.btn Alle anzeigen
 
 			ol#motions
 
@@ -258,6 +260,10 @@ html
 						label.control-label Titel
 						.controls
 							input(type="text")#title.span3
+					.control-group
+						label.control-label Deaktiviert
+						.controls
+							input(type="checkbox")#hide
 					.control-group
 						label.control-label Antragsteller
 						.controls

@@ -29,6 +29,7 @@ $(function () {
 		modal : "#motions #motion-options",
 		idfield : "#motionid",
 		fields : [
+			{ property : "hide", field : "#hide", type : "checkbox" },
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "submitter", field : "#submitter", type : "text" },
 			{ property : "status", field : "#status", type : "select" },
@@ -43,7 +44,7 @@ $(function () {
 						apiClient.saveSlide(slideid, slide);
 					}
 				});
-		  }
+			}
 			apiClient.saveMotion(motionid, motion, callback);
 		},
 		deleteCallback : apiClient.deleteMotion
@@ -137,5 +138,12 @@ $(function () {
 
 	$("#new-motionclass").click(function () {
 		showMotionClassOptions(null, {});
+	});
+
+	$("#showAllMotions").click(function () {
+		apiClient.eachMotionClass(function (motionclassid, motionclass) {
+			apiClient.getHiddenMotions(motionclassid);
+		});
+		$(this).attr("disabled","disabled");
 	});
 });

@@ -108,8 +108,21 @@ exports.listen = function (app) {
 				// Send motions
 				var motionPosition = 0;
 				backend.motionclasses.eachMotion(data.motionclassid, function (motionid, motion) {
-					socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
+					if (! motion.hide || motion.hide != "true") {
+						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
+					}
 				});
+			});
+
+			socket.on('gethiddenmotions', function (data) {
+				// Send motions
+				var motionPosition = 0;
+				backend.motionclasses.eachMotion(data.motionclassid, function (motionid, motion) {
+					if (motion.hide && motion.hide == "true") {
+						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
+					}
+				});
+
 			});
 
 			socket.on('registermotion', function (data) {

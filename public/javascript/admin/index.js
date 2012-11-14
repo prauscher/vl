@@ -49,6 +49,8 @@ function generateShowOptionsModal(options) {
 					object.val(item[field.property]).miniColors();
 				} else if (field.type == "select") {
 					object.val(item[field.property]).attr("data-initValue", item[field.property]);
+				} else if (field.type == "checkbox") {
+					object.prop("checked", item[field.property] && item[field.property] == "true");
 				}
 			}
 		}
@@ -71,6 +73,8 @@ function generateShowOptionsModal(options) {
 						item[field.property] = object.val();
 					} else if (field.type == "select") {
 						item[field.property] = object.val();
+					} else if (field.type == "checkbox") {
+						item[field.property] = object.is(":checked");
 					}
 				}
 			}

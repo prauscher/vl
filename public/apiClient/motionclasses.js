@@ -66,6 +66,10 @@ APIClient.prototype.registerMotionClass = function (motionclassid) {
 	this.emit("/motions", 'registermotionclass', { motionclassid: motionclassid });
 }
 
+APIClient.prototype.getHiddenMotions = function (motionclassid) {
+	this.emit("/motions", 'gethiddenmotions', { motionclassid: motionclassid });	
+}
+
 APIClient.prototype.unregisterMotionClass = function (motionclassid) {
 	this.unlisten("/motions", 'err:motionclass-not-found:' + motionclassid);
 	this.unlisten("/motions", 'motionclass-add:' + motionclassid);
