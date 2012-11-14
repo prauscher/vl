@@ -50,7 +50,7 @@ function generateShowOptionsModal(options) {
 				} else if (field.type == "select") {
 					object.val(item[field.property]).attr("data-initValue", item[field.property]);
 				} else if (field.type == "checkbox") {
-					object.prop("checked", item[field.property] && item[field.property] == "true");
+					object.prop("checked", !!item[field.property] && item[field.property] == "true");
 				}
 			}
 		}
