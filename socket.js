@@ -74,8 +74,9 @@ exports.listen = function (app) {
 					var position = 0;
 					backend.agenda.eachChildren(data.slideid, function(subslideid, subslide) {
 						if (!subslide.hide || subslide.hide != "true") {
-							socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position++});
+							socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position});
 						}
+						position++;
 					});
 				}
 			});
@@ -85,8 +86,9 @@ exports.listen = function (app) {
 				var position = 0;
 				backend.agenda.eachChildren(data.slideid, function (subslideid, subslide) {
 					if (subslide.hide && subslide.hide == "true") {
-						socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position++});
+						socket.emit('slide-add:' + data.slideid, {slideid: subslideid, position: position});
 					}
+					position++;
 				});
 			});
 		});
@@ -121,8 +123,9 @@ exports.listen = function (app) {
 				var motionPosition = 0;
 				backend.motionclasses.eachMotion(data.motionclassid, function (motionid, motion) {
 					if (! motion.hide || motion.hide != "true") {
-						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
+						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition });
 					}
+					motionPosition++;
 				});
 			});
 
@@ -131,8 +134,9 @@ exports.listen = function (app) {
 				var motionPosition = 0;
 				backend.motionclasses.eachMotion(data.motionclassid, function (motionid, motion) {
 					if (motion.hide && motion.hide == "true") {
-						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition++ });
+						socket.emit('motion-add:' + data.motionclassid, { motionid: motionid, position: motionPosition });
 					}
+					motionPosition++;
 				});
 
 			});
