@@ -146,6 +146,8 @@ html
 			div#slideoptions.btn-toolbar
 				div.btn-group
 					button#new-slide.btn.btn-success Neu
+				div.btn-group
+					button#showAllSlides.btn Alle anzeigen
 
 			ol#slides
 
@@ -158,6 +160,10 @@ html
 						label.control-label Name
 						.controls
 							input(type="text")#title
+					.control-group
+						label.control-label Deaktiviert
+						.controls
+							input(type="checkbox")#hide
 					div#slidecontent
 						ul.nav.nav-tabs
 							li

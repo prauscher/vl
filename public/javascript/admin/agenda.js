@@ -6,6 +6,7 @@ $(function () {
 	var showSlideOptions = generateShowOptionsModal({
 		modal : "#agenda #options",
 		fields : [
+			{ property : "hide", field : "#hide", type : "checkbox" },
 			{ property : "title", field : "#title", type : "text" },
 			{ property : "text", field : "#slidecontent-text-text", type : "text" },
 			{ property : "html", field : "#slidecontent-html-html", type : "text" },
@@ -201,5 +202,12 @@ $(function () {
 			isdone : false,
 			type : "text"
 		});
+	});
+
+	$("#showAllSlides").click(function () {
+		apiClient.eachSlide(function (slideid, slide) {
+			apiClient.getHiddenChildren(slideid);
+		});
+		$(this).attr("disabled","disabled");
 	});
 });

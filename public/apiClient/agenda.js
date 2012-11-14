@@ -61,6 +61,10 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	this.emit("/agenda", 'registerslide', { slideid: slideid, sendChildren: (typeof maxdepth == 'undefined' || maxdepth > 0) });
 }
 
+APIClient.prototype.getHiddenChildren = function (slideid) {
+	this.emit("/agenda", 'gethiddenchildren', { slideid: slideid });
+}
+
 APIClient.prototype.unregisterSlide = function (slideid) {
 	this.unlisten("/agenda", 'err:slide-not-found:' + slideid);
 	this.unlisten("/agenda", 'slide-add:' + slideid);
