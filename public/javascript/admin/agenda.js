@@ -205,6 +205,7 @@ $(function () {
 	});
 
 	$("#showAllSlides").click(function () {
+		apiClient.getHiddenAgenda();
 		apiClient.eachSlide(function (slideid, slide) {
 			apiClient.getHiddenChildren(slideid);
 		});

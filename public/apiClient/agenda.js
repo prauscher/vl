@@ -61,6 +61,10 @@ APIClient.prototype.registerSlide = function (slideid, maxdepth) {
 	this.emit("/agenda", 'registerslide', { slideid: slideid, sendChildren: (typeof maxdepth == 'undefined' || maxdepth > 0) });
 }
 
+APIClient.prototype.getHiddenAgenda = function () {
+	this.emit("/agenda", 'gethiddenagenda', {});
+}
+
 APIClient.prototype.getHiddenChildren = function (slideid) {
 	this.emit("/agenda", 'gethiddenchildren', { slideid: slideid });
 }

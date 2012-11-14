@@ -56,7 +56,10 @@ exports.listen = function (app) {
 				// client may ask for children
 				var position = 0;
 				backend.agenda.eachChildren(null, function(slideid, slide) {
-					socket.emit('slide-add', {slideid: slideid, position: position++});
+					if (!slide.hide || slide.hide != "true") {
+						socket.emit('slide-add', {slideid: slideid, position: position});
+					}
+					position++;
 				});
 			});
 
@@ -79,6 +82,16 @@ exports.listen = function (app) {
 						position++;
 					});
 				}
+			});
+
+			socket.on('gethiddenagenda', function (data) {
+				var position = 0;
+				backend.agenda.eachChildren(null, function(slideid, slide) {
+					if (slide.hide && slide.hide == "true") {
+						socket.emit('slide-add', {slideid: slideid, position: position});
+					}
+					position++;
+				});
 			});
 
 			socket.on('gethiddenchildren', function (data) {
