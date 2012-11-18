@@ -96,7 +96,7 @@ $.widget("ui.treeTable", {
 			.append(contentItem);
 
 		var preItem = null;
-		for (var pos = position; pos > 0 && (preItem == null || preItem.length == 0); pos--) {
+		for (var pos = position; pos > 0 && preItem == null; pos--) {
 			preItem = parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + pos));
 			if (preItem.length == 0) {
 				preItem = null;
