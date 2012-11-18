@@ -18,13 +18,13 @@ $.widget("custom.sortedList", {
 			} else {
 				var preItem = null;
 				for (var pos = position; pos > 0 && preItem == null; pos--) {
-					preItem = $(this.options.classPrefix + "pos" + pos);
+					preItem = this.element.children("." + this.options.classPrefix + "pos" + pos);
 					if (preItem.length == 0) {
 						preItem = null;
 					}
 				}
 				if (preItem == null) {
-					preItem.prepend(item);
+					this.element.prepend(item);
 				} else {
 					preItem.after(item);
 				}
