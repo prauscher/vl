@@ -86,7 +86,7 @@ $.widget("ui.treeTable", {
 			current = current.parent().parent();
 		}
 
-		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type)
+		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type).addClass(this.prefix + "pos" + position)
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
 			.append($("<span>").addClass(this.prefix + "move").css("float","left")
@@ -95,14 +95,17 @@ $.widget("ui.treeTable", {
 			.append($("<span>").css("float","left").css("width", moveWidth + "px").html("&nbsp;"))
 			.append(contentItem);
 
-		if (!position || position == 0) {
-			if (parentList.children("li." + (this.prefix + type)).length > 0) {
-				parentList.children("li." + (this.prefix + type) + ":eq(0)").before(item);
-			} else {
-				parentList.prepend(item);
+		var preItem = null;
+		for (var pos = position; pos > 0 && (preItem == null || preItem.length == 0); pos--) {
+			preItem = parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + pos));
+			if (preItem.length == 0) {
+				preItem = null;
 			}
+		}
+		if (preItem == null) {
+			parentList.prepend(item);
 		} else {
-			parentList.children("li." + (this.prefix + type) + ":eq(" + (position-1) + ")").after(item);
+			preItem.after(item);
 		}
 	},
 
