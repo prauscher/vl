@@ -30,8 +30,8 @@ $.widget("custom.viewerOptions", {
 			.append($("<i>").addClass("icon icon-repeat").addClass("reset").attr("title", "Ansicht zurücksetzen"))
 			.append($("<i>").addClass("icon icon-zoom-in").addClass("zoom-in").attr("title", "Schrift vergrößern"))
 			.append($("<i>").addClass("icon icon-zoom-out").addClass("zoom-out").attr("title", "Schrift verkleinern"))
-			.append($("<i>").addClass("icon icon-chevron-up").addClass("scroll-up").attr("title", "Hinaufscrollen"))
-			.append($("<i>").addClass("icon icon-chevron-down").addClass("scroll-down").attr("title", "Hinabscrollen"))
+			.append($("<i>").addClass("icon icon-chevron-up").addClass("scroll-down").attr("title", "Hinabscrollen"))
+			.append($("<i>").addClass("icon icon-chevron-down").addClass("scroll-up").attr("title", "Hinaufscrollen"))
 		this._refresh();
 	},
 
