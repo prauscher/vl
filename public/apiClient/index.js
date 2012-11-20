@@ -4,7 +4,9 @@ function APIClient() {
 	this.callbacks = {};
 	this.sockets = {};
 
-	this.socket = io.connect('').socket;
+	this.socket = io.connect('', {
+		'reconnection delay': Math.random() * 300 + 350
+	}).socket;
 
 	this.socket.on('reconnect', function() {
 		self.callCallback('reconnect', []);
