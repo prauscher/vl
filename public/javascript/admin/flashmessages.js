@@ -1,6 +1,12 @@
 // vim:noet:sw=8:
 
 $(function () {
+	$("#clear-flash").click(function () {
+		apiClient.eachProjector(function (projectorid, projector) {
+			apiClient.clearProjectorFlash(projectorid);
+		});
+	});
+
 	$("#new-flash").click(function () {
 		$("#flash-options #select-projectors").selectProjector({
 			prefix : "Anzeigen auf ",

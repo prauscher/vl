@@ -59,7 +59,9 @@ $(function () {
 				.text(flash.text);
 
 			window.setTimeout(function () {
-				flashContainer.slideUp(300);
+				flashContainer.slideUp(300, function () {
+					$(this).remove();
+				});
 			}, flash.timeout * 1000);
 
 			// Insert hidden to allow effects
@@ -67,6 +69,14 @@ $(function () {
 			$("#flashs").append(flashContainer);
 
 			flashContainer.show(300);
+		}
+	});
+
+	apiClient.on("clearProjectorFlashs", function (projectorid) {
+		if (projectorid == currentProjectorID || projectorid == null) {
+			$("#flashs").children("*").slideUp(300, function () {
+				$(this).remove();
+			});
 		}
 	});
 

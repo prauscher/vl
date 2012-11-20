@@ -25,7 +25,14 @@ html
 							a#nav-pollsites(href="#pollsites") Wahllokale
 						li.elections
 							a#nav-elections(href="#elections") Wahlen
-					a#new-flash.pull-right.btn.btn-danger.btn Info
+					div.pull-right.btn-group
+						a.btn.btn-danger.dropdown-toggle(data-toggle="dropdown") Info
+							span.caret
+						ul.dropdown-menu
+							li
+								a#new-flash Neu
+							li
+								a#clear-flash Alle verstecken
 					a#identify-projectors.pull-right.btn.btn-info Identifizieren
 					div#showprojector.btn-group.pull-right
 						a.btn.dropdown-toggle(data-toggle="dropdown") Beamer

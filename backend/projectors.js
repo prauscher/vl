@@ -44,6 +44,14 @@ module.exports.flash = function (projectorid, flash, callbackSuccess) {
 	}
 }
 
+module.exports.clearFlash = function (projectorid, callbackSuccess) {
+	projectorSocket.emit('projector-clearFlash:' + projectorid, {});
+
+	if (callbackSuccess) {
+		callbackSuccess();
+	}
+}
+
 module.exports.identify = function (timeout, callbackSuccess) {
 	projectorSocket.emit('projector-identify', { timeout : timeout });
 	if (callbackSuccess) {

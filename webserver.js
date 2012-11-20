@@ -87,12 +87,13 @@ exports.createServer = function () {
 		app.post('/agenda/:slideid/delete',	generateCallback(routes.agenda.delete) );
 		app.post('/agenda/:slideid/move',	generateCallback(routes.agenda.move) );
 
-		app.put('/projectors',			generateCallback(routes.projectors.setDefault) );
-		app.put('/projectors/:projectorid/save',	generateCallback(routes.projectors.save) );
-		app.post('/projectors/:projectorid/delete',	generateCallback(routes.projectors.delete) );
-		app.post('/projectors/:projectorid/showtimer',	generateCallback(routes.projectors.showTimer) );
-		app.post('/projectors/:projectorid/hidetimer',	generateCallback(routes.projectors.hideTimer) );
-		app.post('/projectors/:projectorid/flash',	generateCallback(routes.projectors.flash) );
+		app.put('/projectors',					generateCallback(routes.projectors.setDefault) );
+		app.put('/projectors/:projectorid/save',		generateCallback(routes.projectors.save) );
+		app.post('/projectors/:projectorid/delete',		generateCallback(routes.projectors.delete) );
+		app.post('/projectors/:projectorid/showtimer',		generateCallback(routes.projectors.showTimer) );
+		app.post('/projectors/:projectorid/hidetimer',		generateCallback(routes.projectors.hideTimer) );
+		app.post('/projectors/:projectorid/flash',		generateCallback(routes.projectors.flash) );
+		app.post('/projectors/:projectorid/clearFlashs',	generateCallback(routes.projectors.clearFlash) );
 
 		app.put('/timers/:timerid/save',	generateCallback(routes.timers.save) );
 		app.post('/timers/:timerid/delete',	generateCallback(routes.timers.delete) );

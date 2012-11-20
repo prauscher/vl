@@ -62,6 +62,9 @@ APIClient.prototype.registerProjector = function (projectorid) {
 	this.listen("/projectors", 'projector-flash:' + projectorid, function (data) {
 		self.callCallback("flashProjector", [ projectorid, data.flash ]);
 	});
+	this.listen("/projectors", 'projector-clearFlash:' + projectorid, function (data) {
+		self.callCallback("clearProjectorFlashs", [ projectorid ]);
+	});
 	this.listen("/projectors", 'projector-showtimer:' + projectorid, function (data) {
 		self.callCallback("showTimerProjector", [ projectorid, data.timerid, data.timer ]);
 		self.projectorTimers[projectorid].push(data.timerid);
@@ -158,6 +161,15 @@ APIClient.prototype.flashProjector = function (projectorid, flash, callbackSucce
 		type: 'POST',
 		url: '/projectors/' + projectorid + '/flash',
 		data: { flash: flash },
+		success: callbackSuccess
+	});
+}
+
+APIClient.prototype.clearProjectorFlash = function (projectorid, callbackSuccess) {
+	$.ajax({
+		type: 'POST',
+		url: '/projectors/' + projectorid + '/clearFlashs',
+		data: {},
 		success: callbackSuccess
 	});
 }

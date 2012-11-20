@@ -21,6 +21,12 @@ exports.flash = function (req, res) {
 	});
 };
 
+exports.clearFlash = function (req, res) {
+	backend.projectors.clearFlash(req.params.projectorid, function () {
+		res.send(200);
+	});
+}
+
 exports.showTimer = function (req, res) {
 	backend.timers.get(req.body.timerid, function (timer) {
 		backend.projectors.showTimer(req.params.projectorid, req.body.timerid, timer, function() {
