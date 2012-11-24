@@ -43,8 +43,9 @@ $(function () {
 			});
 
 		   $(modal).find('#slidecontent-motion-motionid').change(function() {
-		  		apiClient.getMotion($(this).val(), function(m) {
-					if (m) $(modal).find("#title").val(m.title);
+				var mid = $(this).val();
+				apiClient.getMotion(mid, function(m) {
+					if (m) $(modal).find("#title").val(mid + ": " + m.title);
 		  		});
 			});
 
