@@ -1,5 +1,5 @@
 .icon
-	{font-size:1.5em; margin:0px 3px;}
+	{font-size:1.5em; margin:0px 3px; cursor: pointer; }
 
 .select-projector, #timers .color, #projectors .color, #elections .color {
 	border:1px solid #777777; margin:1px; width:18px; height:18px;
@@ -20,7 +20,7 @@
 .untitled:after { content: "›" }
 
 .select-projector
-	{ opacity: 0.5; border-style: dashed }
+	{ opacity: 0.5; border-style: dashed; cursor: pointer; }
 .select-projector.active
 	{ opacity: 1; border-style: solid }
 .select-projector.disabled
