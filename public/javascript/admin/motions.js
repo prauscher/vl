@@ -88,9 +88,15 @@ $(function () {
 	});
 
 	apiClient.on("updateMotion", function (motionid, motion) {
-		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title).toggleClass("motion-done", motion.status != 'open').unbind("click").click(function() {
-			showMotionOptions(motionid, motion);
-		});
+		$("ol#motions").treeTable("get", "motion", motionid, "title").text(motionid + ": " + motion.title)
+			.toggleClass("motion-open", motion.status == 'open')
+			.toggleClass("motion-accepted", motion.status == 'accepted')
+			.toggleClass("motion-rejected", motion.status == 'rejected')
+			.toggleClass("motion-withdrawn", motion.status == 'withdrawn')
+			.toggleClass("motion-suspended", motion.status == 'suspended')
+			.unbind("click").click(function() {
+				showMotionOptions(motionid, motion);
+			});
 	});
 
 	apiClient.on("deleteMotionClass", function (motionclassid) {
