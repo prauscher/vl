@@ -122,7 +122,10 @@ $(function () {
 			$("<div>").addClass("modal-body").append(
 				$("<p>").text("Die Netzwerkverbindung ist abgerissen. Um eine Beschädigung der Daten zu vermeiden wird hier abgebrochen.") ),
 			$("<div>").addClass("modal-footer").append(
-				$("<a>").addClass("btn").attr("data-dismiss","modal").text("Verstecken") ) );
+				$("<a>").addClass("btn btn-info").attr("data-dismiss","modal").text("Verstecken"),
+				$("<a>").addClass("btn btn-inverse").text("Neu laden").click(function () {
+					location.reload();
+				}) ) );
 		$("body").append(modal);
 		modal.modal();
 	});
