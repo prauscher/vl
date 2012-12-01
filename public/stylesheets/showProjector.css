@@ -95,6 +95,8 @@ body
 
 .content-agenda
 	{margin-left:50px;}
+.content-agenda li>a
+	{text-decoration:none; color:black;}
 .content-agenda .done
 	{color:#777777;}
 

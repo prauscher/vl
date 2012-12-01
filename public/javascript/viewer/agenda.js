@@ -61,12 +61,12 @@ $(function () {
 
 	apiClient.on("initSlide", function (slideid, parentid, position) {
 		if (parentid == currentSlideID) {
-			$("#content .content-agenda").sortedList("add", "agenda-" + slideid, position, $("<li>"));
+			$("#content .content-agenda").sortedList("add", "agenda-" + slideid, position, $("<li>").append( $("<a>").attr("href", "#slide:" + slideid) ));
 		}
 	});
 
 	apiClient.on("updateSlide", function (slideid, slide) {
-		$("#content .content-agenda").sortedList("get", "agenda-" + slideid)
+		$("#content .content-agenda").sortedList("get", "agenda-" + slideid).children("a")
 			.text(slide.title)
 			.toggleClass("done", slide.isdone == "true")
 			.toggle(slide.hidden != "true");
