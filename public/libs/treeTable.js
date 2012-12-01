@@ -49,6 +49,18 @@ $.widget("ui.treeTable", {
 		this.options.move[type][parenttype] = callback;
 	},
 
+	_getMaximumPosition : function (parentList, type) {
+		var maxPos = 0;
+		var children = parentList.children("li." + this.prefix + type);
+		for (var i=0; i<children.length; i++) {
+			var pos = $(children[i]).children("." + this.prefix + "position").text();
+			if (pos > maxPos) {
+				maxPos = pos;
+			}
+		}
+		return parseInt(maxPos);
+	},
+
 	add : function (type, id, parenttype, parentid, position, data) {
 		var self = this;
 		var contentItem = $("<div>").addClass(this.prefix + type);
@@ -62,6 +74,8 @@ $.widget("ui.treeTable", {
 		contentItem.append($("<div>").css("clear", "left"));
 
 		var parentList = null;
+		// Avoid errors like 1 + 1 = 11
+		position = parseInt(position);
 		if (parentid == null) {
 			parentList = this.element;
 		} else {
@@ -89,14 +103,26 @@ $.widget("ui.treeTable", {
 		var item = $("<li>").attr("id", this.prefix + type + "-" + id).addClass(this.prefix).addClass(this.prefix + type).addClass(this.prefix + "pos" + position)
 			.append($("<span>").addClass(this.prefix + "type").text(type).hide())
 			.append($("<span>").addClass(this.prefix + "id").text(id).hide())
+			.append($("<span>").addClass(this.prefix + "position").text(position).hide())
 			.append($("<span>").addClass(this.prefix + "move").css("float","left")
 				.append($("<i>").addClass("icon icon-move")))
 			.append($("<span>").addClass(this.prefix + "expand").css("float","left").css("width","2em").html("&nbsp;") )
 			.append($("<span>").css("float","left").css("width", moveWidth + "px").html("&nbsp;"))
 			.append(contentItem);
 
+		if (parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + position)).length > 0) {
+			var maxPosition = this._getMaximumPosition(parentList, type);
+			// Decrease pos. Else we would match 2 elements at the same time
+			for (var pos = maxPosition; pos >= position; pos--) {
+				var currentPosition = parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + pos));
+				currentPosition.removeClass(this.prefix + "pos" + pos);
+				currentPosition.addClass(this.prefix + "pos" + (pos+1));
+				currentPosition.children("." + this.prefix + "position").text(pos+1);
+			}
+		}
+
 		var preItem = null;
-		for (var pos = position; pos > 0 && preItem == null; pos--) {
+		for (var pos = position; pos >= 0 && preItem == null; pos--) {
 			preItem = parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + pos));
 			if (preItem.length == 0) {
 				preItem = null;
@@ -122,6 +148,18 @@ $.widget("ui.treeTable", {
 	},
 
 	remove : function (type, id) {
-		this.get(type, id).parent().remove();
+		var item = this._getOuter(type, id);
+		var parentList = item.parent();
+		var position = parseInt(item.children("." + this.prefix + "position").text());
+
+		var maxPosition = this._getMaximumPosition(parentList, type);
+		for (var pos = position; pos <= maxPosition; pos++) {
+			var currentPosition = parentList.children("li." + (this.prefix + type) + "." + (this.prefix + "pos" + pos));
+			currentPosition.removeClass(this.prefix + "pos" + pos);
+			currentPosition.addClass(this.prefix + "pos" + (pos-1));
+			currentPosition.children("." + this.prefix + "position").text(pos-1);
+		}
+
+		item.remove();
 	}
 });
