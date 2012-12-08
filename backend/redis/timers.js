@@ -7,9 +7,9 @@ module.exports = new FlatStructure({
 	hooks : {
 		delete : function (id) {
 			backend.projectors.getAll(function (projectorid) {
-				db.sismember('projector:' + projectorid + ':timers', id, function (err, ismember) {
+				db.sismember('projectors:' + projectorid + ':timers', id, function (err, ismember) {
 					if (ismember) {
-						db.srem('projector:' + projectorid + ':timers', id);
+						db.srem('projectors:' + projectorid + ':timers', id);
 					}
 				});
 			});
