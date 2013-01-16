@@ -43,7 +43,7 @@ exports.createServer = function () {
 
 	app.setStart = function(path) {
 		app.get('/', function(req,res) {
-			res.redirect(path);
+			res.send('<script type="text/javascript">window.location = \"'+path+'\"</script>');
 		});
 	}
 
@@ -68,8 +68,33 @@ exports.createServer = function () {
 	// callback is temporary out of usage. will fix this later
 	app.addAdmin = function(callback) {
 		function generateCallback(route) {
-			return route;
+			return function (req, res){
+				if (!req.session.user_id) {
+					res.send('<script type="text/javascript">window.location = \"/login\"</script>');
+				} else {
+					route(req, res);
+				}
+			}
 		}
+
+		app.get('/login', function(req, res){
+			res.send('<form method=post><table><tr><td>Username</td><td><input name=name /></td></tr><tr><td>Password</td><td><input name=pass type=password /></td></tr></table><input type=submit value=login />');
+		});
+		app.post('/login', function (req, res) {
+			var post = req.body;
+			var user = require('./login.json');
+			if (post.pass == user[post.name]) {
+				req.session.user_id = post.name;
+				res.send('<script type="text/javascript">window.location = \"/admin\"</script>');
+			} else {
+				res.send('Bad Username/Password!');
+			}
+		});
+                app.get('/logout', function(req, res){
+			delete req.session.user_id;
+			res.send('<script type="text/javascript">window.location = \"/login\"</script>');
+                });
+
 
 		app.get('/admin', generateCallback(function (req, res) {
 			res.render('admin');
