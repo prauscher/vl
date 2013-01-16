@@ -54,4 +54,6 @@ To run the admin interface use
 
 	node admin.js admin.conf
 
+Username and passwort are at login.json. The password are tranmited in cleartext! Use a SSL-Proxy to fix it.
+
 and go ahead just like with the projector interface.
