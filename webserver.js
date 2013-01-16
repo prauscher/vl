@@ -43,7 +43,7 @@ exports.createServer = function () {
 
 	app.setStart = function(path) {
 		app.get('/', function(req,res) {
-			res.redirect(path);
+			res.send('<script type="text/javascript">window.location = \"'+path+'\"</script>');
 		});
 	}
 
@@ -70,7 +70,7 @@ exports.createServer = function () {
 		function generateCallback(route) {
 			return function (req, res){
 				if (!req.session.user_id) {
-					res.redirect('/login');
+					res.send('<script type="text/javascript">window.location = \"/login\"</script>');
 				} else {
 					route(req, res);
 				}
@@ -85,14 +85,14 @@ exports.createServer = function () {
 			var user = require('./login.json');
 			if (post.pass == user[post.name]) {
 				req.session.user_id = post.name;
-				res.redirect('admin');
+				res.send('<script type="text/javascript">window.location = \"/admin\"</script>');
 			} else {
 				res.send('Bad Username/Password!');
 			}
 		});
                 app.get('/logout', function(req, res){
 			delete req.session.user_id;
-			res.redirect('/login');
+			res.send('<script type="text/javascript">window.location = \"/login\"</script>');
                 });
 
 
