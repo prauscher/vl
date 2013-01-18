@@ -74,7 +74,7 @@ exports.createServer = function () {
 						res.send('<script type="text/javascript">window.location = \"/login\"</script>');
 					}else{
 						var user = require('./login.json');
-						if (user["api"]==req.body.api){
+						if (user['api']==req.body.api){
 							route(req, res);
 						}else{
 							res.send('API-KEY FALSE!');
