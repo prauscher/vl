@@ -70,7 +70,16 @@ exports.createServer = function () {
 		function generateCallback(route) {
 			return function (req, res){
 				if (!req.session.user_id) {
-					res.send('<script type="text/javascript">window.location = \"/login\"</script>');
+					if (req.body.api == undefined){
+						res.send('<script type="text/javascript">window.location = \"/login\"</script>');
+					}else{
+						var user = require('./login.json');
+						if (user["api"]==req.body.api){
+							route(req, res);
+						}else{
+							res.send('API-KEY FALSE!');
+						}
+					}
 				} else {
 					route(req, res);
 				}
