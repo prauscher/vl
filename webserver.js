@@ -83,7 +83,7 @@ exports.createServer = function () {
 		app.post('/login', function (req, res) {
 			var post = req.body;
 			var user = require('./login.json');
-			if (post.pass == user[post.name]) {
+			if ((post.pass == user[post.name]) && (user[post.name] != undefined)) {
 				req.session.user_id = post.name;
 				res.send('<script type="text/javascript">window.location = \"/admin\"</script>');
 			} else {
