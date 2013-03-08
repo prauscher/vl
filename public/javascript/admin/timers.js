@@ -1,3 +1,4 @@
+
 // vim:noet:sw=8:
 
 $(function () {
@@ -43,7 +44,9 @@ $(function () {
 		$("#timers tbody").sortedList("get", timerid).find(".stop")
 			.unbind("click")
 			.click(function () {
-				apiClient.stopTimer(timerid, timer);
+				if (confirm('Soll der Timer zurückgesetzt werden?')){
+					apiClient.stopTimer(timerid, timer);
+				}
 			});
 	});
 
